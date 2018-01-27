@@ -90,23 +90,24 @@ app_license = "MIT"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"minda_custom.tasks.all"
-# 	],
-# 	"daily": [
-# 		"minda_custom.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"minda_custom.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"minda_custom.tasks.weekly"
-# 	]
-# 	"monthly": [
-# 		"minda_custom.tasks.monthly"
-# 	]
-# }
+scheduler_events = {
+    # 	"all": [
+    # 		"minda_custom.tasks.all"
+    # 	],
+   	"daily": [
+            "minda_custom.custom.emp_absent_today",
+            # "minda_custom.custom.send_daily_report"
+	],
+    # 	"hourly": [
+    # 		"minda_custom.tasks.hourly"
+    # 	],
+    # 	"weekly": [
+    # 		"minda_custom.tasks.weekly"
+    # 	]
+    # 	"monthly": [
+    # 		"minda_custom.tasks.monthly"
+    # 	]
+}
 
 # Testing
 # -------
