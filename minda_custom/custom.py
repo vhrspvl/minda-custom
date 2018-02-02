@@ -61,6 +61,49 @@ def emp_absent_today():
                 attendance.submit()
                 frappe.db.commit()
 
+
+@frappe.whitelist()
+def update_leave_application():
+    day = add_days(today(), -1)
+    employees = frappe.get_all('Employee', filters={"status": "Active"})
+    for employee in employees:
+        lwp = get_leave(employee.name, day)
+        if lwp:
+            pass
+        else:
+            query = """SELECT emp.name FROM `tabAttendance` att, `tabEmployee` emp
+		               WHERE att.employee = emp.name AND att.status = 'Absent' AND att.attendance_date = '%s'""" % (day)
+            absent_emp = frappe.db.sql(query, as_dict=True)
+            if employee in absent_emp:
+                leave_approvers = [l.leave_approver for l in frappe.db.sql("""select leave_approver from `tabEmployee Leave Approver` where parent = %s""",
+                                                                           (employee.name), as_dict=True)]
+                lap = frappe.new_doc("Leave Application")
+                lap.leave_type = "Leave Without Pay"
+                lap.status = "Approved"
+                lap.follow_via_email = 0
+                lap.description = "Absent Auto Marked"
+                lap.from_date = day
+                lap.to_date = day
+                lap.employee = employee.name
+                if leave_approvers:
+                    lap.leave_approver = leave_approvers[0]
+                else:
+                    lap.leave_approver = "Administrator"
+                lap.posting_date = day
+                lap.company = frappe.db.get_value(
+                    "Employee", employee.name, "company")
+                lap.save(ignore_permissions=True)
+                lap.submit()
+                frappe.db.commit()
+
+
+def get_leave(emp, day):
+    leave = frappe.db.sql("""select name from `tabLeave Application`
+				where employee = %s and %s between from_date and to_date
+				""", (emp, day))
+    return leave
+
+
 #Default Attendance
 # @frappe.whitelist(allow_guest=True)
 # def attendance():

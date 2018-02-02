@@ -11,10 +11,16 @@ from frappe.utils import getdate, cint, add_months, date_diff, add_days, nowdate
     get_datetime_str, cstr, get_datetime, time_diff, time_diff_in_seconds
 from datetime import datetime, timedelta
 
-
+    
 @frappe.whitelist(allow_guest=True)
 def attendance():
     global attendance_date, att_time
+    a_min_time = datetime.strptime('05:30', '%H:%M')
+    a_max_time = datetime.strptime('07:30', '%H:%M')
+    b_min_time = datetime.strptime('13:30', '%H:%M')
+    b_max_time = datetime.strptime('15:30', '%H:%M')
+    g_min_time = datetime.strptime('07:30', '%H:%M')
+    g_max_time = datetime.strptime('09:30', '%H:%M')
     userid = frappe.form_dict.get("userid")
     stgid = frappe.form_dict.get("stgid")
     employee = frappe.db.get_value("Employee", {
@@ -51,11 +57,21 @@ def attendance():
                 attendance = frappe.new_doc("Attendance")
                 in_time = time.strftime("%H:%M:%S", time.gmtime(
                     int(frappe.form_dict.get("att_time"))))
+                intime = datetime.strptime(
+                    in_time, '%H:%M:%S')
+                if intime >= a_min_time and intime <= a_max_time:
+                    shift = "A"
+                if intime >= b_min_time and intime <= b_max_time:
+                    shift = "B"
+                if intime >= g_min_time and intime <= g_max_time:
+                    shift = "G"
                 attendance.update({
                     "employee": employee,
                     "employee_name": doc.employee_name,
+                    "contractor":doc.contractor,
                     "attendance_date": date,
                     "status": "Present",
+                    "shift":shift,
                     "service_tag_id":stgid,
                     "in_time": in_time,
                     "company": doc.company
