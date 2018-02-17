@@ -21,47 +21,44 @@ def execute(filters=None):
     data = []
     row = []
     for emp in get_employees():
-        row = [emp.name, emp.employee_name, emp.designation, emp.department]
+        row = [emp.name, emp.biometric_id,emp.employee_name, emp.contractor, emp.department,emp.line,emp.grade,emp.shift]
         att_details = frappe.db.get_value("Attendance", {'attendance_date': date, 'employee': emp.name}, [
-                                          'name', 'attendance_date', 'status', 'in_time', 'out_time'], as_dict=True)
-        holiday = frappe.get_list("Holiday List", filters={
-            'holiday_date': date})
-        is_leave = check_leave_record(emp.name, date)
-        if holiday:
-            row += ["", "", "", "Holiday", ""]
-        elif is_leave:
-            row += ["", "", "", "On Leave", ""]
-        else:
-            if att_details:
-                if att_details.attendance_date:
-                    row += [att_details.attendance_date]
-                else:
-                    row += [""]
+                                          'name','shift', 'attendance_date', 'status', 'in_time', 'out_time'], as_dict=True)
+        if att_details:
+            # if att_details.shift:
+            #     row += [att_details.shift]
+            # else:
+            #     row += [""]
 
-                if att_details.in_time:
-                    row += [att_details.in_time]
-                else:
-                    row += ["00:00"]
-
-                if att_details.out_time:
-                    row += [att_details.out_time]
-                else:
-                    row += ["00:00"]
-
-                if att_details.status:
-                    row += [att_details.status]
-                else:
-                    row += [""]
-
-                if att_details.in_time > 0 and att_details.status == 'Absent':
-                    row += ['Late']
-                elif att_details.in_time and not att_details.out_time:
-                    row += ['Failed Out Punch']
-                else:
-                    row += [""]
-
+            if att_details.attendance_date:
+                row += [att_details.attendance_date]
             else:
-                row += ["", "", "", "Absent", ""]
+                row += [""]
+
+            if att_details.in_time:
+                row += [att_details.in_time]
+            else:
+                row += ["00:00"]
+
+            if att_details.out_time:
+                row += [att_details.out_time]
+            else:
+                row += ["00:00"]
+
+            if att_details.status:
+                row += [att_details.status]
+            else:
+                row += [""]
+
+            if att_details.in_time > 0 and att_details.status == 'Absent':
+                row += ['Late']
+            elif att_details.in_time and not att_details.out_time:
+                row += ['Failed Out Punch']
+            else:
+                row += [""]
+
+        else:
+            row += ["", "", "","Absent", ""]
 
         data.append(row)
     return columns, data
@@ -70,21 +67,25 @@ def execute(filters=None):
 def get_columns(filters):
     columns = [
         _("Employee") + ":Link/Employee:90",
+        _("Employee ID") + "::150",
         _("Employee Name") + "::150",
-        _("Designation") + "::180",
+        _("Contractor") + "::180",
         _("Department") + "::180",
+        _("Line") + "::180",
+        _("Grade") + "::180",
+        _("Shift") + "::180",
         _("Attendance Date") + ":Date:90",
         _("In Time") + "::120",
         _("Out Time") + "::120",
         _("Status") + "::120",
-        _("Remarks") + "::120",
+        # _("Remarks") + "::120",
     ]
     return columns
 
 
 def get_employees():
     employees = frappe.db.sql(
-        """select name,employee_name,designation,department from tabEmployee where status = 'Active'""", as_dict=1)
+        """select * from tabEmployee where status = 'Active'""", as_dict=1)
     return employees
 
 
