@@ -1,0 +1,30 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2018-02-15 10:27:54.970330", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "modified": "2018-02-15 10:39:55.233683", 
+ "modified_by": "Administrator", 
+ "module": "Minda Custom", 
+ "name": "Linewise Count", 
+ "owner": "Administrator", 
+ "query": "SELECT   \n        `tabProject`.territory As \"Territory::100\",\n        `tabProject`.customer As \"Customer::100\",\n\t`tabProject`.name As \"Project:Link/Project:150\", \n        `tabTask`.subject AS \"Subject::150\", \n\t`tabTask`.name AS \"Task Id:Link/Task:100\",\n\t`tabTask`.r1_count AS \"Vacancies::60\",\n        `tabTask`.r7_count AS \"Sourced/Submitted::70\",\n        `tabTask`.exp_start_date AS \"Expected Start Date::120\",\n        `tabTask`.exp_end_date AS \"Expected End Date :: 120\",\n         datediff(date(current_date),(exp_start_date)) AS \"Age(days)::70\",\n        `tabTask`.status AS \"Task Status::120\",\n        `tabTask`._assign AS \"Assigned To::610\"\nFROM\n \t`tabTask`\n\tINNER JOIN `tabProject` ON `tabTask`.project=`tabProject`.name\nWHERE\n\t`tabProject`.status in ('Open','Overdue','DnD') AND\n\t`tabTask`.status in ('Open','Working','Pending Review','Overdue');", 
+ "ref_doctype": "Attendance", 
+ "report_name": "Linewise Count ", 
+ "report_type": "Script Report", 
+ "roles": [
+  {
+   "role": "System Manager"
+  }, 
+  {
+   "role": "HR User"
+  }, 
+  {
+   "role": "HR Manager"
+  }
+ ]
+}
