@@ -11,7 +11,7 @@ from frappe.utils import getdate, cint, add_months, date_diff, add_days, nowdate
     get_datetime_str, cstr, get_datetime, time_diff, time_diff_in_seconds
 from datetime import datetime, timedelta
 
-    
+
 @frappe.whitelist(allow_guest=True)
 def attendance():
     global attendance_date, att_time
@@ -24,7 +24,7 @@ def attendance():
     userid = frappe.form_dict.get("userid")
     stgid = frappe.form_dict.get("stgid")
     employee = frappe.db.get_value("Employee", {
-        "biometric_id": userid,"status":"Active"})
+        "biometric_id": userid, "status": "Active"})
     if employee:
         date = time.strftime("%Y-%m-%d", time.gmtime(
             int(frappe.form_dict.get("att_time"))))
@@ -35,7 +35,7 @@ def attendance():
         doc = frappe.get_doc("Employee", employee)
 
         attendance_id = frappe.db.get_value("Attendance", {
-                "employee": employee, "attendance_date": date})
+            "employee": employee, "attendance_date": date})
         if attendance_id:
             attendance = frappe.get_doc(
                 "Attendance", attendance_id)
@@ -65,12 +65,12 @@ def attendance():
             attendance.update({
                 "employee": employee,
                 "employee_name": doc.employee_name,
-                "contractor":doc.contractor,
-                "line":doc.line,
+                "contractor": doc.contractor,
+                "line": doc.line,
                 "attendance_date": date,
                 "status": "Present",
-                "shift":shift,
-                "service_tag_id":stgid,
+                "shift": shift,
+                "service_tag_id": stgid,
                 "in_time": in_time,
                 "company": doc.company
             })
@@ -79,14 +79,43 @@ def attendance():
             frappe.db.commit()
             frappe.response.type = "text"
             return "ok"
-
+    else:
+        employee = frappe.form_dict.get("userid")
+        date = time.strftime("%Y-%m-%d", time.gmtime(
+            int(frappe.form_dict.get("att_time"))))
+        ure_id = frappe.db.get_value("Unregistered Employee", {
+            "employee": employee, "attendance_date": date})
+        if ure_id:
+            attendance = frappe.get_doc(
+                "Unregistered Employee", ure_id)
+            out_time = time.strftime("%H:%M:%S", time.gmtime(
+                int(frappe.form_dict.get("att_time"))))
+            times = [out_time, attendance.in_time]
+            attendance.out_time = max(times)
+            attendance.in_time = min(times)
+            attendance.db_update()
+            frappe.db.commit()
+        else:
+            attendance = frappe.new_doc("Unregistered Employee")
+            in_time = time.strftime("%H:%M:%S", time.gmtime(
+                int(frappe.form_dict.get("att_time"))))
+            attendance.update({
+                "employee": employee,
+                "attendance_date": date,
+                "stgid": frappe.form_dict.get("stgid"),
+                "in_time": in_time,
+            })
+            attendance.save(ignore_permissions=True)
+            frappe.db.commit()
+        frappe.response.type = "text"
+        return "ok"
         # query = """SELECT ro.name, ro.shift FROM `tabRoster` ro, `tabRoster Details` rod
-		# WHERE rod.parent = ro.name AND ro.from_date <= '%s' AND ro.to_date >= '%s' 
-		# AND rod.employee = '%s' """ % (attendance_date, attendance_date, doc.employee)
+        # WHERE rod.parent = ro.name AND ro.from_date <= '%s' AND ro.to_date >= '%s'
+        # AND rod.employee = '%s' """ % (attendance_date, attendance_date, doc.employee)
         # roster = frappe.db.sql(query, as_list=1)
 
         # if len(roster) < 1:
-            
+
         # else:
         #     doc.shift = roster[0][1]
 
@@ -162,4 +191,3 @@ def attendance():
         #                 return "ok"
         #             frappe.response.type = "text"
         #             return "ok"
-
