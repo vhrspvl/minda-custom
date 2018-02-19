@@ -7,21 +7,37 @@ from frappe.utils.data import today
 from frappe.utils import formatdate, getdate, cint, add_months, date_diff, add_days
 
 
-
 @frappe.whitelist()
 def send_daily_report():
-	custom_filter = {'date': add_days(today(), -1)}
-	report = frappe.get_doc('Report', "Daily Attendance Report")
-	columns, data = report.get_data(
-	    limit=500 or 500, filters=custom_filter, as_dict=True)
-	html = frappe.render_template(
-	    'frappe/templates/includes/print_table.html', {'columns': columns, 'data': data})
-        frappe.sendmail(
-            recipients=['abdulla.pi@voltechgroup.com'],
-            subject='Employee Attendance Report - ' +
-            formatdate(add_days(today(), -1)),
-            message=html
-        )
+    custom_filter = {'date': add_days(today(), -1)}
+    report = frappe.get_doc('Report', "Daily Attendance Report")
+    columns, data = report.get_data(
+        limit=500 or 500, filters=custom_filter, as_dict=True)
+    html = frappe.render_template(
+        'frappe/templates/includes/print_table.html', {'columns': columns, 'data': data})
+    frappe.sendmail(
+        recipients=['abdulla.pi@voltechgroup.com'],
+        subject='Employee Attendance Report - ' +
+        formatdate(add_days(today(), -1)),
+        message=html
+    )
+
+
+@frappe.whitelist()
+def send_count_report():
+    custom_filter = {'date': add_days(today(), -1)}
+    report = frappe.get_doc('Report', "Linewise Count")
+    columns, data = report.get_data(
+        limit=500 or 500, filters=custom_filter, as_dict=True)
+# html = _("Kindly Find the attached Linewise Count Report for your reference")
+    html = frappe.render_template(
+        'frappe/templates/includes/print_table.html', {'columns': columns, 'data': data})
+    frappe.sendmail(
+        recipients=['abdulla.pi@voltechgroup.com'],
+        subject='Employee Linewise Present COunt Report - ' +
+        formatdate(add_days(today(), -1)),
+        message=html
+    )
 
 
 @frappe.whitelist()
@@ -104,7 +120,7 @@ def get_leave(emp, day):
     return leave
 
 
-#Default Attendance
+# Default Attendance
 # @frappe.whitelist(allow_guest=True)
 # def attendance():
 #     userid = frappe.form_dict.get("userid")
@@ -143,7 +159,7 @@ def get_leave(emp, day):
 #     frappe.response.type = "text"
 #     return "ok"
 
-#Shift Based need to work out
+# Shift Based need to work out
 # @frappe.whitelist(allow_guest=True)
 # def attendance():
 #     userid = frappe.form_dict.get("userid")
