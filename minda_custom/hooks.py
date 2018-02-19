@@ -94,11 +94,11 @@ scheduler_events = {
     # 	"all": [
     # 		"minda_custom.tasks.all"
     # 	],
-   	"daily": [
-            "minda_custom.custom.emp_absent_today",
-            "minda_custom.custom.send_daily_report",
-            "minda_custom.custom.update_leave_application"
-	],
+    "daily": [
+        "minda_custom.custom.emp_absent_today",
+        "minda_custom.custom.send_count_report",
+        "minda_custom.custom.update_leave_application"
+    ],
     # 	"hourly": [
     # 		"minda_custom.tasks.hourly"
     # 	],
@@ -121,4 +121,3 @@ scheduler_events = {
 # override_whitelisted_methods = {
 # 	"frappe.desk.doctype.event.event.get_events": "minda_custom.event.get_events"
 # }
-
