@@ -10,12 +10,13 @@ def execute(filters=None):
     if not filters:
         filters = {}
     data, row = [], []
-
+    total = 0
     columns = [_("Contractor") + ":Link/Contractor:120"]
     columns += get_columns(filters)
+    # columns += [_("Total") + ":Int:120"]
     contractors = frappe.db.sql(
         """select name from `tabContractor` order by name""", as_dict=1)
-    line_list = ["HONDA - A1", "HONDA - A2", "HONDA - A3", "EXPORT - A"]
+    # line_list = ["HONDA - A1", "HONDA - A2", "HONDA - A3", "EXPORT - A"]
 
     for contractor in contractors:
         row = [contractor.name]
@@ -25,8 +26,9 @@ def execute(filters=None):
                     docstatus=1 and status='Present' and contractor=%s and line=%s and attendance_date= %s""", (contractor.name, line["name"], filters.get("date")), as_dict=1)
             for present in att:
                 present_days = present.count
-
+                total += present.count
             row += [present_days]
+        row += [total]
         data.append(row)
 
     return columns, data
@@ -42,6 +44,7 @@ def get_columns(filters):
             # for present in att:
             #     present_days = present.count
             # if present_days > 0:
-        columns.append(_(line["name"]) + "::90")
+        columns.append(_(line["name"]) + ":Int:90")
+    columns.append(_("Total") + ":Int:120")
 
     return columns
