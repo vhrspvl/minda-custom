@@ -97,13 +97,15 @@ scheduler_events = {
     "daily": [
         "minda_custom.custom.emp_absent_today",
         "minda_custom.custom.send_count_report",
+        "minda_custom.custom.send_daily_att_report",
+        "minda_custom.custom.send_daily_linewise_report",
         "minda_custom.custom.update_leave_application"
     ],
-    "cron": {
-        "30 16 * * *": [
-            "minda_custom.custom.xsltest"
-        ]
-    }
+    # "cron": {
+    #     "30 16 * * *": [
+    #         "minda_custom.custom.send_xlsx_report"
+    #     ]
+    # }
     # 	"hourly": [
     # 		"minda_custom.tasks.hourly"
     # 	],

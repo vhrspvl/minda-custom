@@ -6,42 +6,80 @@ import frappe
 from frappe.utils.data import today
 from frappe import _
 from frappe.utils import formatdate, getdate, cint, add_months, date_diff, add_days
-import requests
+from frappe.utils.xlsxutils import make_xlsx
 
 
 @frappe.whitelist()
-def send_daily_report():
+def send_daily_att_report():
     custom_filter = {'date': add_days(today(), -1)}
     report = frappe.get_doc('Report', "Daily Attendance Report")
-    print report
     columns, data = report.get_data(
-        limit=500 or 500, filters=custom_filter, as_dict=True)
-
-    html = frappe.render_template(
-        'frappe/templates/includes/print_table.html', {'columns': columns, 'data': data})
+        limit=100, filters=custom_filter, as_dict=True)
+    spreadsheet_data = get_spreadsheet_data(columns, data)
+    xlsx_file = make_xlsx(spreadsheet_data, "Attendance")
+    data = xlsx_file.getvalue()
+    attachments = [{
+        'fname': add_days(today(), -1) + '.xlsx',
+        'fcontent': data
+    }]
     frappe.sendmail(
-        recipients=['abdulla.pi@voltechgroup.com'],
+        recipients=['hereabdulla@gmail.com'],
         subject='Employee Attendance Report - ' +
         formatdate(add_days(today(), -1)),
-        message=html
+        message='Kindly find the attached Excel Sheet of Daily Attendance Report of' + formatdate(
+            add_days(today(), -1)),
+        attachments=attachments
     )
 
 
-@frappe.whitelist()
-def send_count_report():
+def send_daily_linewise_report():
     custom_filter = {'date': add_days(today(), -1)}
     report = frappe.get_doc('Report', "Linewise Count")
     columns, data = report.get_data(
-        limit=500 or 500, filters=custom_filter, as_dict=True)
-# html = _("Kindly Find the attached Linewise Count Report for your reference")
-    html = frappe.render_template(
-        'frappe/templates/includes/print_table.html', {'columns': columns, 'data': data})
+        limit=100, filters=custom_filter, as_dict=True)
+    spreadsheet_data = get_spreadsheet_data(columns, data)
+    xlsx_file = make_xlsx(spreadsheet_data, "Attendance")
+    data = xlsx_file.getvalue()
+    attachments = [{
+        'fname': add_days(today(), -1) + '.xlsx',
+        'fcontent': data
+    }]
     frappe.sendmail(
-        recipients=['abdulla.pi@voltechgroup.com'],
-        subject='Employee Linewise Present COunt Report - ' +
+        recipients=['hereabdulla@gmail.com'],
+        subject='Employee Attendance Report - ' +
         formatdate(add_days(today(), -1)),
-        message=html
+        message='Kindly find the attached Excel Sheet of Linewise Count Report of' + formatdate(
+            add_days(today(), -1)),
+        attachments=attachments
     )
+
+
+def get_spreadsheet_data(columns, data):
+    out = [[_(df.label) for df in columns], ]
+    for row in data:
+        new_row = []
+        out.append(new_row)
+        for df in columns:
+            new_row.append(frappe.format(row[df.fieldname], df, row))
+
+    return out
+
+
+# @frappe.whitelist()
+# def send_count_report():
+#     custom_filter = {'date': add_days(today(), -1)}
+#     report = frappe.get_doc('Report', "Linewise Count")
+#     columns, data = report.get_data(
+#         limit=500 or 500, filters=custom_filter, as_dict=True)
+# # html = _("Kindly Find the attached Linewise Count Report for your reference")
+#     html = frappe.render_template(
+#         'frappe/templates/includes/print_table.html', {'columns': columns, 'data': data})
+#     frappe.sendmail(
+#         recipients=['abdulla.pi@voltechgroup.com'],
+#         subject='Employee Linewise Present COunt Report - ' +
+#         formatdate(add_days(today(), -1)),
+#         message=html
+#     )
 
 
 @frappe.whitelist()

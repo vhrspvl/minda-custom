@@ -32,33 +32,47 @@ def get_entries(filters):
         getdate(filters.get("from_date"))
 
     query = """SELECT emp.name, emp.biometric_id,emp.employee_name, emp.date_of_joining,
-		(DATEDIFF('%s', '%s')+1) as t_days, 
-		
+		(DATEDIFF('%s', '%s')+1) as t_days,
+
 		(SELECT count(hol.name) FROM `tabHoliday` hol , `tabHoliday List` hdl
 			WHERE  hol.parent = hdl.name AND
-			hol.holiday_date <= '%s' AND hol.holiday_date >= '%s'), 
-		
-		(SELECT count(name) FROM `tabAttendance` 
-			WHERE employee = emp.name AND docstatus = 1 AND status= 'Present' AND attendance_date <= '%s' AND attendance_date >= '%s') 
-		
-		FROM 
+			hol.holiday_date <= '%s' AND hol.holiday_date >= '%s'),
+
+		(SELECT count(name) FROM `tabAttendance`
+			WHERE employee = emp.name AND docstatus = 1 AND status= 'Present' AND attendance_date <= '%s' AND attendance_date >= '%s')
+
+		FROM
 			`tabEmployee` emp
-		
-		WHERE 
+
+		WHERE
 			IFNULL(emp.relieving_date,'2099-12-31') >= '%s' %s""" \
             % (to_date, from_date, to_date, from_date, to_date,
                from_date, to_date, conditions_emp)
 
     data = frappe.db.sql(query, as_list=1)
+
+
+<< << << < Updated upstream
+== == == =
+    frappe.errprint(data)
+>>>>>> > Stashed changes
     for i in range(len(data)):
         for j in range(len(data[i])):
             if data[i][j] is None:
                 data[i][j] = 0
+<< << << < Updated upstream
         pre = data[i][6]
         hol = data[i][5]
         t_days = data[i][4]
         # al = data[i][7]
         # ual = t_days - hol - pre
+== == == =
+        pre = data[i][5]
+        hol = data[i][4]
+        t_days = data[i][3]
+        # al = data[i][7]
+        ual = t_days - hol - pre
+>>>>>> > Stashed changes
 
         # deserved holidays = (holidays/total_working_days )*(presents)
         des_hol = (hol / (t_days - hol)) * pre
