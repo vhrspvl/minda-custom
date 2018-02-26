@@ -19,13 +19,12 @@ def execute(filters=None):
 def get_columns(filters):
     return [
         "Employee#:Link/Employee:100", "Employee Name::150", "DoJ:Date:80", "TD:Int:50",
-        "T-Hol:Int:50", "T-PR:Int:50", "T-OT:Float:50", "T-UL:Int:50", "Att%:Float:100", "Ded Att%:Float:100",
-        "Total Absent:Int:50"
-    ]
+        "T-Hol:Int:50", "T-PR:Int:50", "Total Absent:Int:50", "Att%:Float:100"]
 
 
 def get_entries(filters):
     conditions_emp = get_conditions(filters)[0]
+    frappe.errprint(conditions_emp)
     conditions_att = get_conditions(filters)[1]
 
     from_date = getdate(filters.get("from_date"))
@@ -37,7 +36,7 @@ def get_entries(filters):
 		(DATEDIFF('%s', '%s')+1) as t_days, 
 		
 		(SELECT count(hol.name) FROM `tabHoliday` hol , `tabHoliday List` hdl
-			WHERE hdl.name = emp.holiday_list AND hol.parent = hdl.name AND
+			WHERE  hol.parent = hdl.name AND
 			hol.holiday_date <= '%s' AND hol.holiday_date >= '%s'), 
 		
 		(SELECT count(name) FROM `tabAttendance` 
@@ -52,7 +51,6 @@ def get_entries(filters):
                from_date, to_date, conditions_emp)
 
     data = frappe.db.sql(query, as_list=1)
-    frappe.errprint(data)
     for i in range(len(data)):
         for j in range(len(data[i])):
             if data[i][j] is None:
@@ -61,17 +59,18 @@ def get_entries(filters):
         hol = data[i][4]
         t_days = data[i][3]
         # al = data[i][7]
-        ual = t_days - hol - pre
+        # ual = t_days - hol - pre
 
         # deserved holidays = (holidays/total_working_days )*(presents)
         des_hol = (hol / (t_days - hol)) * pre
         p_att = ((pre + des_hol) / t_days) * 100
-        d_att = ((pre + des_hol - ual) / t_days) * 100
+        d_att = ((pre + des_hol) / t_days) * 100
 
-        data[i].insert(8, ual)
-        data[i].insert(9, p_att)
-        data[i].insert(10, d_att)
-        data[i].insert(11, (t_days - hol - pre))
+        # data[i].insert(6, ual)
+
+        # data[i].insert(7, d_att)
+        data[i].insert(6, (t_days - hol - pre))
+        data[i].insert(7, p_att)
 
     return data
 
