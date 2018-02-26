@@ -4,15 +4,19 @@
 
 import frappe
 from frappe.utils.data import today
+from frappe import _
 from frappe.utils import formatdate, getdate, cint, add_months, date_diff, add_days
 import requests
+
 
 @frappe.whitelist()
 def send_daily_report():
     custom_filter = {'date': add_days(today(), -1)}
     report = frappe.get_doc('Report', "Daily Attendance Report")
+    print report
     columns, data = report.get_data(
         limit=500 or 500, filters=custom_filter, as_dict=True)
+
     html = frappe.render_template(
         'frappe/templates/includes/print_table.html', {'columns': columns, 'data': data})
     frappe.sendmail(
@@ -49,6 +53,7 @@ def update_in_biometric_machine(uid, uname):
             uid, uname, stgid.name)
         r = requests.post(url)
     return r.content
+
 
 @frappe.whitelist()
 def emp_absent_today():

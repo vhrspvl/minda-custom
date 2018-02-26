@@ -14,16 +14,19 @@ def execute(filters=None):
     if not filters.get("date"):
         msgprint(_("Please select date"), raise_exception=1)
 
+    conditions, filters = get_conditions(filters)
     columns = get_columns(filters)
     date = filters.get("date")
     if date and getdate(date) > getdate(nowdate()):
-    	frappe.throw(_("Date cannot be in the Future"))
+        frappe.throw(_("Date cannot be in the Future"))
     data = []
     row = []
-    for emp in get_employees():
-        row = [emp.name, emp.biometric_id,emp.employee_name, emp.contractor, emp.department,emp.line,emp.grade,emp.shift]
+    emp_list = get_employees(conditions, filters)
+    for emp in emp_list:
+        row = [emp.name, emp.biometric_id, emp.employee_name,
+               emp.contractor, emp.department, emp.line, emp.grade, emp.shift]
         att_details = frappe.db.get_value("Attendance", {'attendance_date': date, 'employee': emp.name}, [
-                                          'name','shift', 'attendance_date', 'status', 'in_time', 'out_time'], as_dict=True)
+                                          'name', 'shift', 'attendance_date', 'status', 'in_time', 'out_time'], as_dict=True)
         if att_details:
             # if att_details.shift:
             #     row += [att_details.shift]
@@ -50,15 +53,15 @@ def execute(filters=None):
             else:
                 row += [""]
 
-            if att_details.in_time > 0 and att_details.status == 'Absent':
-                row += ['Late']
-            elif att_details.in_time and not att_details.out_time:
-                row += ['Failed Out Punch']
-            else:
-                row += [""]
+            # if att_details.in_time > 0 and att_details.status == 'Absent':
+            #     row += ['Late']
+            # elif att_details.in_time and not att_details.out_time:
+            #     row += ['Failed Out Punch']
+            # else:
+            #     row += [""]
 
         else:
-            row += ["", "", "","Absent", ""]
+            row += ["", "", "", "Absent"]
 
         data.append(row)
     return columns, data
@@ -83,9 +86,10 @@ def get_columns(filters):
     return columns
 
 
-def get_employees():
+def get_employees(conditions, filters):
+    frappe.errprint(conditions)
     employees = frappe.db.sql(
-        """select * from tabEmployee where status = 'Active'""", as_dict=1)
+        """select * from tabEmployee where %s status = 'Active'""" % conditions, filters, as_dict=1)
     return employees
 
 
@@ -101,3 +105,16 @@ def check_leave_record(employee, date):
             leave_type = leave_record[0].leave_type
 
         return status, leave_type
+
+
+def get_conditions(filters):
+    conditions = ""
+    if filters.get("employee"):
+        conditions += " name = %(employee)s and"
+    if filters.get("contractor"):
+        conditions += " contractor = %(contractor)s and"
+    if filters.get("line"):
+        conditions += " line = %(line)s and"
+    if filters.get("shift"):
+        conditions += " shift = %(shift)s and"
+    return conditions, filters

@@ -19,8 +19,7 @@ def execute(filters=None):
 def get_columns(filters):
     return [
         "Employee#:Link/Employee:100", "Employee Name::150", "DoJ:Date:80", "TD:Int:50",
-        "T-Hol:Int:50", "T-PR:Int:50", "T-OT:Float:50",
-        "T-AL:Int:50", "T-UL:Int:50", "Att%:Float:100", "Ded Att%:Float:100",
+        "T-Hol:Int:50", "T-PR:Int:50", "T-OT:Float:50", "T-UL:Int:50", "Att%:Float:100", "Ded Att%:Float:100",
         "Total Absent:Int:50"
     ]
 
@@ -42,11 +41,7 @@ def get_entries(filters):
 			hol.holiday_date <= '%s' AND hol.holiday_date >= '%s'), 
 		
 		(SELECT count(name) FROM `tabAttendance` 
-			WHERE employee = emp.name AND docstatus = 1 AND attendance_date <= '%s' AND attendance_date >= '%s'), 
-		
-		
-		(SELECT sum(total_leave_days) FROM `tabLeave Application` WHERE status = 'Approved' 
-			AND docstatus = 1 AND employee = emp.name AND from_date <= '%s') as auth_leave, NULL
+			WHERE employee = emp.name AND docstatus = 1 AND status= 'Present' AND attendance_date <= '%s' AND attendance_date >= '%s') 
 		
 		FROM 
 			`tabEmployee` emp
@@ -54,10 +49,10 @@ def get_entries(filters):
 		WHERE 
 			IFNULL(emp.relieving_date,'2099-12-31') >= '%s' %s""" \
             % (to_date, from_date, to_date, from_date, to_date,
-               from_date, to_date, filters.get("from_date"), conditions_emp)
+               from_date, to_date, conditions_emp)
 
     data = frappe.db.sql(query, as_list=1)
-
+    frappe.errprint(data)
     for i in range(len(data)):
         for j in range(len(data[i])):
             if data[i][j] is None:
@@ -65,8 +60,8 @@ def get_entries(filters):
         pre = data[i][5]
         hol = data[i][4]
         t_days = data[i][3]
-        al = data[i][7]
-        ual = t_days - hol - pre - al
+        # al = data[i][7]
+        ual = t_days - hol - pre
 
         # deserved holidays = (holidays/total_working_days )*(presents)
         des_hol = (hol / (t_days - hol)) * pre

@@ -99,6 +99,11 @@ scheduler_events = {
         "minda_custom.custom.send_count_report",
         "minda_custom.custom.update_leave_application"
     ],
+    "cron": {
+        "30 16 * * *": [
+            "minda_custom.custom.xsltest"
+        ]
+    }
     # 	"hourly": [
     # 		"minda_custom.tasks.hourly"
     # 	],
