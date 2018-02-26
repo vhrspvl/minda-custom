@@ -5,7 +5,7 @@
 import frappe
 from frappe.utils.data import today
 from frappe.utils import formatdate, getdate, cint, add_months, date_diff, add_days
-
+import requests
 
 @frappe.whitelist()
 def send_daily_report():
@@ -39,6 +39,16 @@ def send_count_report():
         message=html
     )
 
+
+@frappe.whitelist()
+def update_in_biometric_machine(uid, uname):
+    stgids = frappe.db.get_all("Service Tag")
+    # stgid = 'ST-KY18000181'
+    for stgid in stgids:
+        url = "http://robot.camsunit.com/external/1.0/user/update?uid=%s&uname=%s&stgid=%s" % (
+            uid, uname, stgid.name)
+        r = requests.post(url)
+    return r.content
 
 @frappe.whitelist()
 def emp_absent_today():

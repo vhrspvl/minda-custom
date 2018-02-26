@@ -90,7 +90,7 @@ def attendance():
                 "Unregistered Employee", ure_id)
             out_time = time.strftime("%H:%M:%S", time.gmtime(
                 int(frappe.form_dict.get("att_time"))))
-            times = [out_time, attendance.in_time]
+            times = [out_time, str(attendance.in_time)]
             attendance.out_time = max(times)
             attendance.in_time = min(times)
             attendance.db_update()
