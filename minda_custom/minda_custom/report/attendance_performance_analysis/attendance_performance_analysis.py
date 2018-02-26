@@ -18,13 +18,12 @@ def execute(filters=None):
 
 def get_columns(filters):
     return [
-        "Employee#:Link/Employee:100", "Employee Name::150", "DoJ:Date:80", "TD:Int:50",
-        "T-Hol:Int:50", "T-PR:Int:50", "Total Absent:Int:50", "Att%:Float:100"]
+        "Employee#:Link/Employee:100", "Employee ID::150", "Employee Name::150", "DoJ:Date:80", "Total Days:Int:80",
+        "Holidays:Int:80", "Total-Present:Int:100", "Total Absent:Int:100", "Att%:Float:100"]
 
 
 def get_entries(filters):
     conditions_emp = get_conditions(filters)[0]
-    frappe.errprint(conditions_emp)
     conditions_att = get_conditions(filters)[1]
 
     from_date = getdate(filters.get("from_date"))
@@ -32,7 +31,7 @@ def get_entries(filters):
     total_days = getdate(filters.get("to_date")) - \
         getdate(filters.get("from_date"))
 
-    query = """SELECT emp.name, emp.employee_name, emp.date_of_joining,
+    query = """SELECT emp.name, emp.biometric_id,emp.employee_name, emp.date_of_joining,
 		(DATEDIFF('%s', '%s')+1) as t_days, 
 		
 		(SELECT count(hol.name) FROM `tabHoliday` hol , `tabHoliday List` hdl
@@ -55,9 +54,9 @@ def get_entries(filters):
         for j in range(len(data[i])):
             if data[i][j] is None:
                 data[i][j] = 0
-        pre = data[i][5]
-        hol = data[i][4]
-        t_days = data[i][3]
+        pre = data[i][6]
+        hol = data[i][5]
+        t_days = data[i][4]
         # al = data[i][7]
         # ual = t_days - hol - pre
 
@@ -69,8 +68,8 @@ def get_entries(filters):
         # data[i].insert(6, ual)
 
         # data[i].insert(7, d_att)
-        data[i].insert(6, (t_days - hol - pre))
-        data[i].insert(7, p_att)
+        data[i].insert(7, (t_days - hol - pre))
+        data[i].insert(8, p_att)
 
     return data
 
@@ -79,8 +78,11 @@ def get_conditions(filters):
     conditions_emp = ""
     conditions_att = ""
 
-    if filters.get("branch"):
-        conditions_emp += " AND emp.branch = '%s'" % filters["branch"]
+    if filters.get("contractor"):
+        conditions_emp += " AND emp.contractor = '%s'" % filters["contractor"]
+
+    if filters.get("line"):
+        conditions_emp += " AND emp.line = '%s'" % filters["line"]
 
     if filters.get("department"):
         conditions_emp += " AND emp.department = '%s'" % filters["department"]

@@ -24,10 +24,16 @@ frappe.query_reports["Attendance Performance Analysis"] = {
 			"options": "Employee"
 		},
 		{
-			"fieldname": "branch",
-			"label": __("Branch"),
+			"fieldname": "contractor",
+			"label": __("Contractor"),
 			"fieldtype": "Link",
-			"options": "Branch"
+			"options": "Contractor"
+		},
+		{
+			"fieldname": "line",
+			"label": __("Line"),
+			"fieldtype": "Link",
+			"options": "Line"
 		},
 		{
 			"fieldname": "department",
