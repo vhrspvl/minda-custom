@@ -13,10 +13,8 @@ def execute(filters=None):
     total = 0
     columns = [_("Contractor") + ":Link/Contractor:120"]
     columns += get_columns(filters)
-    # columns += [_("Total") + ":Int:120"]
     contractors = frappe.db.sql(
         """select name from `tabContractor` order by name""", as_dict=1)
-    # line_list = ["HONDA - A1", "HONDA - A2", "HONDA - A3", "EXPORT - A"]
 
     for contractor in contractors:
         row = [contractor.name]

@@ -23,7 +23,8 @@ def send_daily_att_report():
         'fcontent': data
     }]
     frappe.sendmail(
-        recipients=['hereabdulla@gmail.com'],
+        recipients=['loganathan.k@mindasai.com', 'jayapradha@mindasai.com',
+                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com', 'sqlmurugan@mindasai.com', 'abdulla.pi@voltechgroup.com'],
         subject='Employee Attendance Report - ' +
         formatdate(add_days(today(), -1)),
         message='Kindly find the attached Excel Sheet of Daily Attendance Report of' + formatdate(
@@ -45,7 +46,8 @@ def send_daily_linewise_report():
         'fcontent': data
     }]
     frappe.sendmail(
-        recipients=['hereabdulla@gmail.com'],
+        recipients=['loganathan.k@mindasai.com', 'jayapradha@mindasai.com',
+                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com', 'sqlmurugan@mindasai.com', 'abdulla.pi@voltechgroup.com'],
         subject='Employee Attendance Report - ' +
         formatdate(add_days(today(), -1)),
         message='Kindly find the attached Excel Sheet of Linewise Count Report of' + formatdate(
