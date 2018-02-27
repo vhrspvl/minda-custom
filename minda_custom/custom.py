@@ -7,6 +7,7 @@ from frappe.utils.data import today
 from frappe import _
 from frappe.utils import formatdate, getdate, cint, add_months, date_diff, add_days
 from frappe.utils.xlsxutils import make_xlsx
+import requests
 
 
 @frappe.whitelist()
