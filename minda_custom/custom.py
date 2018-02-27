@@ -87,10 +87,19 @@ def get_spreadsheet_data(columns, data):
 @frappe.whitelist()
 def update_in_biometric_machine(uid, uname):
     stgids = frappe.db.get_all("Service Tag")
-    # stgid = 'ST-KY18000181'
     for stgid in stgids:
         url = "http://robot.camsunit.com/external/1.0/user/update?uid=%s&uname=%s&stgid=%s" % (
             uid, uname, stgid.name)
+        r = requests.post(url)
+    return r.content
+
+
+@frappe.whitelist()
+def delete_from_biometric_machine(uid, uname):
+    stgids = frappe.db.get_all("Service Tag")
+    for stgid in stgids:
+        url = "http://robot.camsunit.com/external/1.0/user/delete?uid=%s&stgid=%s" % (
+            uid, stgid.name)
         r = requests.post(url)
     return r.content
 
