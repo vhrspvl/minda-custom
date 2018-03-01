@@ -96,7 +96,6 @@ scheduler_events = {
     # 	],
     "daily": [
         "minda_custom.custom.emp_absent_today",
-        "minda_custom.custom.send_count_report",
         "minda_custom.custom.send_daily_att_report",
         "minda_custom.custom.send_daily_linewise_report",
         "minda_custom.custom.update_leave_application"
