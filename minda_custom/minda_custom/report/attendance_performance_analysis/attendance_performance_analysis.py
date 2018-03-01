@@ -24,7 +24,7 @@ def get_columns(filters):
 
 def get_entries(filters):
     conditions_emp = get_conditions(filters)[0]
-    conditions_att = get_conditions(filters)[1]
+    # conditions_att = get_conditions(filters)[1]
 
     from_date = getdate(filters.get("from_date"))
     to_date = getdate(filters.get("to_date"))
@@ -52,7 +52,7 @@ def get_entries(filters):
     data = frappe.db.sql(query, as_list=1)
 
 
- for i in range(len(data)):
+    for i in range(len(data)):
         for j in range(len(data[i])):
             if data[i][j] is None:
                 data[i][j] = 0
