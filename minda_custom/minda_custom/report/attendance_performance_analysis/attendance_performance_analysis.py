@@ -52,27 +52,13 @@ def get_entries(filters):
     data = frappe.db.sql(query, as_list=1)
 
 
-<< << << < Updated upstream
-== == == =
-    frappe.errprint(data)
->>>>>> > Stashed changes
-    for i in range(len(data)):
+ for i in range(len(data)):
         for j in range(len(data[i])):
             if data[i][j] is None:
                 data[i][j] = 0
-<< << << < Updated upstream
         pre = data[i][6]
         hol = data[i][5]
         t_days = data[i][4]
-        # al = data[i][7]
-        # ual = t_days - hol - pre
-== == == =
-        pre = data[i][5]
-        hol = data[i][4]
-        t_days = data[i][3]
-        # al = data[i][7]
-        ual = t_days - hol - pre
->>>>>> > Stashed changes
 
         # deserved holidays = (holidays/total_working_days )*(presents)
         des_hol = (hol / (t_days - hol)) * pre

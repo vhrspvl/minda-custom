@@ -28,10 +28,19 @@ def execute(filters=None):
         att_details = frappe.db.get_value("Attendance", {'attendance_date': date, 'employee': emp.name}, [
                                           'name', 'shift', 'attendance_date', 'status', 'in_time', 'out_time'], as_dict=True)
         if att_details:
-            # if att_details.shift:
-            #     row += [att_details.shift]
-            # else:
-            #     row += [""]
+            if att_details.shift:
+                if att_details.shift == 'A':
+                    shift = 'Shift - I'
+                elif att_details.shift == 'B':
+                    shift = 'Shift - II'
+                elif att_details.shift == 'C':
+                    shift = 'Shift - III'
+                elif att_details.shift == 'G':
+                    shift = 'General Shift'
+
+                row += [shift]
+            else:
+                row += [""]
 
             if att_details.attendance_date:
                 row += [att_details.attendance_date]
@@ -61,7 +70,7 @@ def execute(filters=None):
             #     row += [""]
 
         else:
-            row += ["", "", "", "Absent"]
+            row += ["", "", "", "", "Absent"]
 
         data.append(row)
     return columns, data
@@ -77,6 +86,7 @@ def get_columns(filters):
         _("Line") + "::180",
         _("Grade") + "::180",
         _("Shift") + "::180",
+        _("Emp.Shift") + "::180",
         _("Attendance Date") + ":Date:90",
         _("In Time") + "::120",
         _("Out Time") + "::120",
