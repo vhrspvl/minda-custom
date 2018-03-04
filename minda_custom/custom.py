@@ -5,7 +5,7 @@
 import frappe
 from frappe.utils.data import today
 from frappe import _
-from frappe.utils import formatdate, getdate, cint, add_months, date_diff, add_days
+from frappe.utils import formatdate, getdate, cint, add_months, date_diff, add_days, flt
 from frappe.utils.xlsxutils import make_xlsx
 import requests
 
@@ -141,6 +141,35 @@ def emp_absent_today():
                 attendance.save(ignore_permissions=True)
                 attendance.submit()
                 frappe.db.commit()
+
+
+@frappe.whitelist()
+def calculate_wages():
+    # day = add_days(today(), -1)
+    day = '2018-02-17'
+    for line in frappe.get_list("Line"):
+        att = frappe.db.sql(
+            """select count(*) as count from `tabAttendance` where
+                        docstatus=1 and status='Present' and line=%s and attendance_date= %s""", (line["name"], day), as_dict=1)
+        for present in att:
+            present_days = present.count
+
+        att = frappe.db.sql(
+            """select count(*) as count from `tabAttendance` where
+                        docstatus=1 and status='Absent' and line=%s and attendance_date= %s""", (line["name"], day), as_dict=1)
+        for absent in att:
+            absent_days = absent.count
+
+        wm = frappe.new_doc("Wage Monitor")
+        wm.date = day
+        wm.line = line["name"]
+        wm.present = present_days
+        wm.absent = absent_days
+        wm.wage = '452'
+        wm.calculated_wages = flt(wm.wage) * flt(wm.present)
+        wm.save(ignore_permissions=True)
+
+        # print absent_days
 
 
 @frappe.whitelist()
