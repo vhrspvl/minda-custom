@@ -96,6 +96,21 @@ def update_in_biometric_machine(uid, uname):
 
 
 @frappe.whitelist()
+def delete_bulk():
+    left_employees = frappe.get_list(
+        "Employee", fields=["biometric_id"], filters={"status": "Left"})
+    for l in left_employees:
+        stgids = frappe.db.get_all("Service Tag")
+        for stgid in stgids:
+            uid = l.biometric_id
+            url = "http://robot.camsunit.com/external/1.0/user/delete?uid=%s&stgid=%s" % (
+                uid, stgid.name)
+            frappe.errprint(url)
+            r = requests.post(url)
+    return r.content
+
+
+@frappe.whitelist()
 def delete_from_biometric_machine(uid, uname):
     stgids = frappe.db.get_all("Service Tag")
     for stgid in stgids:
