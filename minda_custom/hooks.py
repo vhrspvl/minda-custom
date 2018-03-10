@@ -98,7 +98,9 @@ scheduler_events = {
         "minda_custom.custom.emp_absent_today",
         "minda_custom.custom.send_daily_att_report",
         "minda_custom.custom.send_daily_linewise_report",
-        "minda_custom.custom.update_leave_application"
+        "minda_custom.custom.update_leave_application",
+        "minda_custom.custom.calculate_wages",
+        "minda_custom.custom.send_wage_report",
     ],
     # "cron": {
     #     "30 16 * * *": [
