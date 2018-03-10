@@ -105,9 +105,8 @@ def delete_bulk():
             uid = l.biometric_id
             url = "http://robot.camsunit.com/external/1.0/user/delete?uid=%s&stgid=%s" % (
                 uid, stgid.name)
-            frappe.errprint(url)
             r = requests.post(url)
-    return r.content
+            print r.content
 
 
 @frappe.whitelist()
@@ -161,7 +160,7 @@ def emp_absent_today():
 @frappe.whitelist()
 def calculate_wages():
     # day = add_days(today(), -1)
-    day = '2018-02-17'
+    day = '2018-02-13'
     for line in frappe.get_list("Line"):
         att = frappe.db.sql(
             """select count(*) as count from `tabAttendance` where

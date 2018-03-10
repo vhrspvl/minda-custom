@@ -11,22 +11,25 @@ def execute(filters=None):
         filters = {}
     data, row = [], []
     total = 0
+    tlist = []
     columns = [_("Contractor") + ":Link/Contractor:120"]
     columns += get_columns(filters)
     contractors = frappe.db.sql(
         """select name from `tabContractor` order by name""", as_dict=1)
-
+    line_list = ["Main Line - A", "Export - A", "HONDA - C"]
     for contractor in contractors:
         row = [contractor.name]
-        for line in frappe.get_list("Line"):
+        for line in line_list:
             att = frappe.db.sql(
                 """select count(*) as count from `tabAttendance` where
-                    docstatus=1 and status='Present' and contractor=%s and line=%s and attendance_date= %s""", (contractor.name, line["name"], filters.get("date")), as_dict=1)
+                    docstatus=1 and status='Present' and contractor=%s and line=%s and attendance_date= %s""", (contractor.name, line, filters.get("date")), as_dict=1)
             for present in att:
                 present_days = present.count
-                total += present.count
+                total += present_days
+            tlist.append(present_days)
             row += [present_days]
-        row += [total]
+        frappe.errprint(tlist)
+        row += [present_days]
         data.append(row)
 
     return columns, data
@@ -35,14 +38,15 @@ def execute(filters=None):
 def get_columns(filters):
     columns, data = [], []
     # for contractor in frappe.get_list("Contractor"):
-    for line in frappe.get_list("Line"):
+    line_list = ["Main Line - A", "Export - A", "HONDA - C"]
+    for line in line_list:
             # att = frappe.db.sql(
             #     """select count(*) as count from `tabAttendance` where
             #         docstatus=1 and status='Present' and contractor=%s and line=%s and attendance_date= %s""", (contractor.name, line["name"], filters.get("date")), as_dict=1)
             # for present in att:
             #     present_days = present.count
             # if present_days > 0:
-        columns.append(_(line["name"]) + ":Int:90")
+        columns.append(_(line) + ":Int:90")
     columns.append(_("Total") + ":Int:120")
 
     return columns

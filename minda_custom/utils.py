@@ -61,7 +61,7 @@ def attendance():
             elif intime >= g_min_time and intime <= g_max_time:
                 shift = "G"
             else:
-                shift = ""
+                shift = "C"
             attendance.update({
                 "employee": employee,
                 "employee_name": doc.employee_name,

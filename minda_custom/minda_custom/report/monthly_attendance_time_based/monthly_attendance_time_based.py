@@ -32,21 +32,35 @@ def execute(filters=None):
         if not emp_det:
             continue
 
-        row = [emp, emp_det.employee_name, emp_det.biometric_id, emp_det.department, emp_det.contractor,
-               emp_det.line]
+        row1 = [emp, emp_det.employee_name, emp_det.biometric_id, emp_det.department, emp_det.contractor,
+                emp_det.line]
         for day in range(filters["total_days_in_month"]):
             status = att_map.get(emp).get(day + 1, "None")
             in_time = in_time_map.get(emp).get(day + 1)
             out_time = out_time_map.get(emp).get(day + 1)
-            status_map = {"Present":  cstr(in_time) + "/" + cstr(out_time), "Late": "P", "Absent": "00:00", "Half Day": "HD",
+            status_map = {"Present":  cstr(in_time) + +cstr(out_time), "Late": "P", "Absent": "00:00", "Half Day": "HD",
                           "On Leave": "L", "None": "", "Holiday": "<b>H</b>"}
             if status == "None" and holiday_map:
                 emp_holiday_list = emp_det.holiday_list if emp_det.holiday_list else default_holiday_list
                 if emp_holiday_list in holiday_map and (day + 1) in holiday_map[emp_holiday_list]:
                     status = "Holiday"
-            row.append(status_map[status])
+            row1.append(status_map[status])
 
-        data.append(row)
+        row2 = ["", "", "", "", "", ""]
+        for day in range(filters["total_days_in_month"]):
+            status = att_map.get(emp).get(day + 1, "None")
+            in_time = in_time_map.get(emp).get(day + 1)
+            out_time = out_time_map.get(emp).get(day + 1)
+            status_map = {"Present": cstr(out_time), "Late": "P", "Absent": "00:00", "Half Day": "HD",
+                          "On Leave": "L", "None": "", "Holiday": "<b>H</b>"}
+            if status == "None" and holiday_map:
+                emp_holiday_list = emp_det.holiday_list if emp_det.holiday_list else default_holiday_list
+                if emp_holiday_list in holiday_map and (day + 1) in holiday_map[emp_holiday_list]:
+                    status = "Holiday"
+            row2.append(status_map[status])
+
+        data.append(row1)
+        data.append(row2)
 
     return columns, data
 
