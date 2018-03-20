@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 @frappe.whitelist(allow_guest=True)
 def attendance():
     global attendance_date, att_time
-    a_min_time = datetime.strptime('05:30', '%H:%M')
+    a_min_time = time.strptime('05:30', '%H:%M')
     a_max_time = datetime.strptime('07:30', '%H:%M')
     b_min_time = datetime.strptime('13:30', '%H:%M')
     b_max_time = datetime.strptime('15:30', '%H:%M')
@@ -29,29 +29,48 @@ def attendance():
         date = time.strftime("%Y-%m-%d", time.gmtime(
             int(frappe.form_dict.get("att_time"))))
 
-        attendance_date = time.strftime("%Y-%m-%d %X", time.gmtime(
+        time_m = datetime.strftime("%H:%M:%S", time.gmtime(
             int(frappe.form_dict.get("att_time"))))
+
+        time_with_date = time.strftime("%Y-%m-%d %X", time.gmtime(
+            int(frappe.form_dict.get("att_time"))))
+
+        time_with_date_f = datetime.strptime(
+            time_with_date, "%Y-%m-%d %H:%M:%S")
 
         doc = frappe.get_doc("Employee", employee)
 
-        attendance_id = frappe.db.get_value("Attendance", {
-            "employee": employee, "attendance_date": date})
+        if time.strptime(time_m, '%H:%M:%S') < a_min_time:
+            attendance_id = frappe.db.get_value("Attendance", {
+                "employee": employee, "attendance_date": add_days(date, -1)})
+            prev_day = True
+        else:
+            attendance_id = frappe.db.get_value("Attendance", {
+                "employee": employee, "attendance_date": date})
         if attendance_id:
             attendance = frappe.get_doc(
                 "Attendance", attendance_id)
-            out_time = time.strftime("%H:%M:%S", time.gmtime(
-                int(frappe.form_dict.get("att_time"))))
-            times = [out_time, attendance.in_time]
-            attendance.out_time = max(times)
-            attendance.in_time = min(times)
-            attendance.db_update()
-            frappe.db.commit()
-            frappe.response.type = "text"
-            return "ok"
+            out_time = time_m
+            in_time = attendance.in_time
+            # return in_time.seconds
+            times = [out_time, str(in_time)]
+            if not prev_day:
+                attendance.out_time = max(times)
+                attendance.in_time = min(times)
+                attendance.db_update()
+                frappe.db.commit()
+                frappe.response.type = "text"
+                return "ok"
+            else:
+                attendance.out_time = out_time
+                attendance.db_update()
+                frappe.db.commit()
+                frappe.response.type = "text"
+                return "ok"
         else:
             attendance = frappe.new_doc("Attendance")
-            in_time = time.strftime("%H:%M:%S", time.gmtime(
-                int(frappe.form_dict.get("att_time"))))
+            in_time = time_m
+            return type(in_time)
             intime = datetime.strptime(
                 in_time, '%H:%M:%S')
             if intime >= a_min_time and intime <= a_max_time:
@@ -72,6 +91,7 @@ def attendance():
                 "shift": shift,
                 "service_tag_id": stgid,
                 "in_time": in_time,
+                "out_time": "00:00:00",
                 "company": doc.company
             })
             attendance.save(ignore_permissions=True)
