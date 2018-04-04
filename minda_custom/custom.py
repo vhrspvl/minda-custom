@@ -33,6 +33,7 @@ def send_wage_report():
         attachments=attachments
     )
 
+
 def send_daily_att_report():
     custom_filter = {'date': add_days(today(), -1)}
     report = frappe.get_doc('Report', "Daily Attendance Report")
@@ -151,7 +152,7 @@ def emp_absent_today():
         pass
     else:
         query = """SELECT emp.name FROM `tabAttendance` att, `tabEmployee` emp
-		WHERE att.employee = emp.name AND att.attendance_date = '%s'""" % (day)
+		WHERE att.employee = emp.name AND att.attendance_date = '%s' AND att.status = 'Present' """ % (day)
         present_emp = frappe.db.sql(query, as_dict=True)
         for emp in frappe.get_list('Employee', filters={'status': 'Active'}):
             if emp in present_emp:
@@ -173,6 +174,7 @@ def emp_absent_today():
                     "in_time": '00:00',
                     "out_time": '00:00',
                     "status": status,
+                    "line": doc.line,
                     "company": doc.company
                 })
                 attendance.save(ignore_permissions=True)
