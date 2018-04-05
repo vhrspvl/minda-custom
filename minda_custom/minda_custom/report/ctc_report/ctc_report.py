@@ -154,24 +154,24 @@ def execute(filters=None):
                     grand_van_rate += earned_van_rate
                     total_earnings += earned_van_rate
                 else:
-                    row += ["0"]
+                    row += [""]
                 if earned_accomodation:
                     row += [round(earned_accomodation)]
                     grand_accomodation += earned_accomodation
                     total_earnings += earned_accomodation
                 else:
-                    row += ["0"]
+                    row += [""]
                 if earned_line_leader:
                     row += [round(earned_line_leader)]
                     grand_line_leader += earned_line_leader
                     total_earnings += earned_line_leader
                 else:
-                    row += ["0"]
+                    row += [""]
                 if total_earnings:
                     grand_earnings += total_earnings
                     row += [round(total_earnings)]
                 else:
-                    row += ["0"]
+                    row += [""]
             else:
                 row += ["", "", "", "", "", "", ""]
         else:
