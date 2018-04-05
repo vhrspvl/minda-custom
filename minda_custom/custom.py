@@ -11,6 +11,29 @@ import requests
 
 
 @frappe.whitelist()
+def send_wage_report():
+    custom_filter = {'date': add_days(today(), -1)}
+    report = frappe.get_doc('Report', "Wage Monitor Report")
+    columns, data = report.get_data(
+        limit=100, filters=custom_filter, as_dict=True)
+    spreadsheet_data = get_spreadsheet_data(columns, data)
+    xlsx_file = make_xlsx(spreadsheet_data, "Minda Custom")
+    data = xlsx_file.getvalue()
+    attachments = [{
+        'fname': add_days(today(), -1) + '.xlsx',
+        'fcontent': data
+    }]
+    frappe.sendmail(
+        recipients=['loganathan.k@mindasai.com', 'jayapradha@mindasai.com',
+                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com', 'sqlmurugan@mindasai.com', 'abdulla.pi@voltechgroup.com'],
+        subject='Wage Monitor Report - ' +
+        formatdate(add_days(today(), -1)),
+        message='Kindly find the attached Excel Sheet of Daily Attendance Report of' + formatdate(
+            add_days(today(), -1)),
+        attachments=attachments
+    )
+
+
 def send_daily_att_report():
     custom_filter = {'date': add_days(today(), -1)}
     report = frappe.get_doc('Report', "Daily Attendance Report")
@@ -96,6 +119,21 @@ def update_in_biometric_machine(uid, uname):
 
 
 @frappe.whitelist()
+def delete_bulk():
+    left_employees = frappe.get_list(
+        "Employee", fields=["biometric_id"], filters={"status": "Left"})
+    for l in left_employees:
+        stgids = frappe.db.get_all("Service Tag")
+        for stgid in stgids:
+            uid = l.biometric_id
+            url = "http://robot.camsunit.com/external/1.0/user/delete?uid=%s&stgid=%s" % (
+                uid, stgid.name)
+            frappe.errprint(url)
+            r = requests.post(url)
+            print r.content
+
+
+@frappe.whitelist()
 def delete_from_biometric_machine(uid, uname):
     stgids = frappe.db.get_all("Service Tag")
     for stgid in stgids:
@@ -114,7 +152,7 @@ def emp_absent_today():
         pass
     else:
         query = """SELECT emp.name FROM `tabAttendance` att, `tabEmployee` emp
-		WHERE att.employee = emp.name AND att.attendance_date = '%s'""" % (day)
+		WHERE att.employee = emp.name AND att.attendance_date = '%s' AND att.status = 'Present' """ % (day)
         present_emp = frappe.db.sql(query, as_dict=True)
         for emp in frappe.get_list('Employee', filters={'status': 'Active'}):
             if emp in present_emp:
@@ -136,6 +174,7 @@ def emp_absent_today():
                     "in_time": '00:00',
                     "out_time": '00:00',
                     "status": status,
+                    "line": doc.line,
                     "company": doc.company
                 })
                 attendance.save(ignore_permissions=True)
@@ -145,8 +184,8 @@ def emp_absent_today():
 
 @frappe.whitelist()
 def calculate_wages():
-    # day = add_days(today(), -1)
-    day = '2018-02-17'
+    day = add_days(today(), -1)
+    # day = '2018-03-04'
     for line in frappe.get_list("Line"):
         att = frappe.db.sql(
             """select count(*) as count from `tabAttendance` where

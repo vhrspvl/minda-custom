@@ -12,7 +12,7 @@ from frappe.utils import cstr, cint, getdate
 def execute(filters=None):
     if not filters:
         filters = {}
-    data, row = [], []
+    data, row1, row2 = [], [], []
     total = 0
     columns = [_("Date") + "::120"]
     columns += get_columns(filters)
@@ -28,52 +28,45 @@ def execute(filters=None):
     for fday in dateformat:
         row1 = [cstr(fday)]
         for line in frappe.get_list("Line"):
-            # att = frappe.db.sql(
-            #     """select count(*) as count from `tabAttendance` where
-            #     docstatus=1 and status='Present' and line=%s and attendance_date= %s""", (line["name"], filters.get("date")), as_dict=1)
-            # for present in att:
-            #     present_days = present.count
-            #     total += present.count
-            row1 += [""]
-        row1 += [""]
+            row1 += [cint('0')]
+        row1 += [cint('0')]
 
         row2 = ["Shift I"]
         for line in frappe.get_list("Line"):
             att = frappe.db.sql(
                 """select count(*) as count from `tabAttendance` where
-                docstatus=1 and status='Present' and line=%s and attendance_date= %s and shift='A'""", (line["name"], filters.get("date")), as_dict=1)
+                docstatus=1 and status='Present' and line=%s and attendance_date= %s""", (line["name"], fday), as_dict=1)
             for present in att:
                 present_days = present.count
                 total += present.count
-            row2 += [present_days]
-        row2 += [total]
+            row2 += [cint(present_days)]
 
-        row3 = ["Shift II"]
-        for line in frappe.get_list("Line"):
-            att = frappe.db.sql(
-                """select count(*) as count from `tabAttendance` where
-                docstatus=1 and status='Present' and line=%s and attendance_date= %s and shift='B'""", (line["name"], filters.get("date")), as_dict=1)
-            for present in att:
-                present_days = present.count
-                total += present.count
-            row3 += [present_days]
-        row3 += [total]
+    # row3 = ["Shift II"]
+    # for line in frappe.get_list("Line"):
+    #     att = frappe.db.sql(
+    #         """select count(*) as count from `tabAttendance` where
+    #         docstatus=1 and status='Present' and line=%s and attendance_date= %s and shift='B'""", (line["name"], filters.get("date")), as_dict=1)
+    #     for present in att:
+    #         present_days = present.count
+    #         total += present.count
+    #     row3 += [present_days]
+    # row3 += [total]
 
-        row4 = ["Shift III"]
-        for line in frappe.get_list("Line"):
-            att = frappe.db.sql(
-                """select count(*) as count from `tabAttendance` where
-                docstatus=1 and status='Present' and line=%s and attendance_date= %s and shift='C'""", (line["name"], filters.get("date")), as_dict=1)
-            for present in att:
-                present_days = present.count
-                total += present.count
-            row4 += [present_days]
-        row4 += [total]
-
+    # row4 = ["Shift III"]
+    # for line in frappe.get_list("Line"):
+    #     att = frappe.db.sql(
+    #         """select count(*) as count from `tabAttendance` where
+    #         docstatus=1 and status='Present' and line=%s and attendance_date= %s and shift='C'""", (line["name"], filters.get("date")), as_dict=1)
+    #     for present in att:
+    #         present_days = present.count
+    #         total += present.count
+    #     row4 += [present_days]
+    # row4 += [total]
+    # row2 += [total]
         data.append(row1)
         data.append(row2)
-        data.append(row3)
-        data.append(row4)
+        # data.append(row3)
+        # data.append(row4)
 
     return columns, data
 
@@ -83,6 +76,6 @@ def get_columns(filters):
     # for contractor in frappe.get_list("Contractor"):
     for line in frappe.get_list("Line"):
         columns.append(_(line["name"]) + "::90")
-    columns.append(_("Total") + ":Int:120")
+    # columns.append(_("Total") + ":Int:120")
 
     return columns

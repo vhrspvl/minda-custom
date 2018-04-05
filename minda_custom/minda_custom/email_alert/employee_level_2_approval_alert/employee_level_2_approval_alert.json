@@ -1,0 +1,27 @@
+{
+ "attach_print": 0, 
+ "condition": "doc.workflow_state == 'Level 1 Approved'", 
+ "creation": "2018-03-07 21:38:28.952538", 
+ "days_in_advance": 0, 
+ "docstatus": 0, 
+ "doctype": "Email Alert", 
+ "document_type": "Employee", 
+ "enabled": 1, 
+ "event": "Value Change", 
+ "idx": 0, 
+ "is_standard": 1, 
+ "message": "<h3>{{_(\"Employee Creation - Pending Level 2 Approval\")}}</h3>\n\n<h4>{{_(\"Employee Details\")}}</h4>\n{{_(\"Employee\")}}: {{ frappe.utils.get_link_to_form(doc.doctype, doc.name) }}\n\n{{_(\"Employee Name\")}}: {{ doc.employee_name }}\n\n{{_(\"Contractor\")}}: {{ doc.contractor }}\n\n<h3>Above Employee is Created and Pending for your Approval</h3>\n\n<p>You can Approve by visiting this link {{ frappe.utils.get_link_to_form(doc.doctype, doc.name) }}</p>", 
+ "modified": "2018-03-09 16:13:30.765140", 
+ "modified_by": "Administrator", 
+ "module": "Minda Custom", 
+ "name": "Employee Level 2 Approval Alert", 
+ "owner": "Administrator", 
+ "recipients": [
+  {
+   "cc": "", 
+   "email_by_role": "HR Manager"
+  }
+ ], 
+ "subject": "Employee Approval Pending Alert ", 
+ "value_changed": "workflow_state"
+}

@@ -154,23 +154,48 @@ def execute(filters=None):
                     grand_van_rate += earned_van_rate
                     total_earnings += earned_van_rate
                 else:
+<<<<<<< HEAD
+                    row += ["0"]
+=======
                     row += [""]
+>>>>>>> 9ec32a7902711a4c89764bb36011ecfb4e471495
                 if earned_accomodation:
                     row += [round(earned_accomodation)]
                     grand_accomodation += earned_accomodation
                     total_earnings += earned_accomodation
                 else:
+<<<<<<< HEAD
+                    row += ["0"]
+=======
                     row += [""]
+>>>>>>> 9ec32a7902711a4c89764bb36011ecfb4e471495
                 if earned_line_leader:
                     row += [round(earned_line_leader)]
                     grand_line_leader += earned_line_leader
                     total_earnings += earned_line_leader
                 else:
+<<<<<<< HEAD
+                    row += ["0"]
+=======
                     row += [""]
+>>>>>>> 9ec32a7902711a4c89764bb36011ecfb4e471495
                 if total_earnings:
                     grand_earnings += total_earnings
                     row += [round(total_earnings)]
                 else:
+<<<<<<< HEAD
+                    row += ["0"]
+            else:
+                row += [""]
+        else:
+            row += ["0"]
+        totals = ["Totals", "", "", "", "", "", "", "", "", "",
+                  "", "", "", "", "", "", "", grand_basic, grand_allowance, grand_dearness_allowance, grand_van_rate, grand_accomodation, grand_line_leader, grand_earnings]
+        data.append(row)
+
+    data.append(totals)
+
+=======
                     row += [""]
             else:
                 row += ["", "", "", "", "", "", ""]
@@ -179,6 +204,7 @@ def execute(filters=None):
                     "", "", "", ""]
         data.append(row)
 
+>>>>>>> 9ec32a7902711a4c89764bb36011ecfb4e471495
     return columns, data
 
 
