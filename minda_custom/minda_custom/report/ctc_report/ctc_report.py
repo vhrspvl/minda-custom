@@ -173,14 +173,11 @@ def execute(filters=None):
                 else:
                     row += ["0"]
             else:
-                row += [""]
+                row += ["", "", "", "", "", "", ""]
         else:
-            row += ["0"]
-        totals = ["Totals", "", "", "", "", "", "", "", "", "",
-                  "", "", "", "", "", "", "", grand_basic, grand_allowance, grand_dearness_allowance, grand_van_rate, grand_accomodation, grand_line_leader, grand_earnings]
+            row += ["", "", "", "", "", "", "", "", "",
+                    "", "", "", ""]
         data.append(row)
-
-    data.append(totals)
 
     return columns, data
 

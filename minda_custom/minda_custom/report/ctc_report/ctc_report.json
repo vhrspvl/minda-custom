@@ -1,5 +1,5 @@
 {
- "add_total_row": 0, 
+ "add_total_row": 1, 
  "apply_user_permissions": 1, 
  "creation": "2018-04-03 14:37:01.811215", 
  "disabled": 0, 
@@ -7,7 +7,7 @@
  "doctype": "Report", 
  "idx": 0, 
  "is_standard": "Yes", 
- "modified": "2018-04-04 19:57:19.090588", 
+ "modified": "2018-04-05 14:31:15.589566", 
  "modified_by": "Administrator", 
  "module": "Minda Custom", 
  "name": "CTC Report", 
