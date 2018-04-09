@@ -16,7 +16,7 @@ app_license = "MIT"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/minda_custom/css/minda_custom.css"
-# app_include_js = "/assets/minda_custom/js/minda_custom.js"
+app_include_js = "/assets/minda_custom/js/minda_custom.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/minda_custom/css/minda_custom.css"
@@ -94,8 +94,8 @@ scheduler_events = {
     # 	"all": [
     # 		"minda_custom.tasks.all"
     # 	],
-    
-     "daily_long": [
+
+    "daily_long": [
         "minda_custom.custom.emp_absent_today",
         "minda_custom.custom.send_daily_att_report",
         "minda_custom.custom.send_daily_linewise_report",
