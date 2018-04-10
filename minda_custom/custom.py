@@ -255,17 +255,16 @@ def get_leave(emp, day):
 
 
 @frappe.whitelist()
-def get_employee_attendance(employee, start_date, end_date):
-    holidays = get_holidays_for_employee(employee, start_date, end_date)
+def get_employee_attendance(doc,method):
+    holidays = get_holidays_for_employee(doc.employee, doc.start_date, doc.end_date)
     employee_attendance = frappe.db.sql("""select name,attendance_date from `tabAttendance` where \
-            docstatus = 1 and status = 'Present' and employee= %s and attendance_date between %s and %s""", (employee, start_date, end_date), as_dict=1)
+            docstatus = 1 and status = 'Present' and employee= %s and attendance_date between %s and %s""", (doc.employee, doc.start_date, doc.end_date), as_dict=1)
     present_days = len(employee_attendance)
-
     for present in employee_attendance:
         if (present["attendance_date"].strftime('%Y-%m-%d')) in holidays:
             present_days -= 1
 
-    return present_days
+    doc.present_days = present_days
 
 
 def get_holidays_for_employee(employee, start_date, end_date):
