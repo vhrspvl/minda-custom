@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 
 import frappe
+import math
 from frappe import _, msgprint
 from frappe.utils import (cint, cstr, date_diff, flt, getdate, money_in_words,
                           nowdate, rounded, today)
@@ -35,9 +36,10 @@ def execute(filters=None):
     working_days = monthrange(
         cint(from_date.year), from_date.month)[1]
     payable_days = 0
+    service_charges = 0
     for emp in active_employees:
         row = [emp.name, emp.employee_name, emp.designation,
-               emp.department]
+               emp.department, emp.grade]
 
         emp_present_days = get_employee_attendance(emp.name, filters)
 
@@ -92,12 +94,12 @@ def execute(filters=None):
                 row += [round(act_basic)]
                 total_actuals += act_basic
             else:
-                row += ["0"]
+                row += [""]
             if act_allowance:
                 row += [round(act_allowance)]
                 total_actuals += act_allowance
             else:
-                row += ["0"]
+                row += [""]
             if act_dearness_allowance:
                 row += [round(act_dearness_allowance)]
                 total_actuals += act_dearness_allowance
@@ -118,7 +120,7 @@ def execute(filters=None):
                 row += [round(act_line_leader)]
                 total_actuals += act_line_leader
             else:
-                row += ["0"]
+                row += [""]
 
             if present_days > 0:
                 earned_basic = flt(act_basic) * flt(payable_days)
@@ -136,19 +138,20 @@ def execute(filters=None):
                     grand_basic += earned_basic
                     total_earnings += earned_basic
                 else:
-                    row += ["0"]
+                    row += [""]
                 if earned_allowance:
                     row += [round(earned_allowance)]
                     grand_allowance += earned_allowance
                     total_earnings += earned_allowance
                 else:
-                    row += ["0"]
+                    row += [""]
+
                 if earned_dearness_allowance:
                     row += [round(earned_dearness_allowance)]
                     grand_dearness_allowance += earned_dearness_allowance
                     total_earnings += earned_dearness_allowance
                 else:
-                    row += ["0"]
+                    row += [""]
                 if earned_van_rate:
                     row += [round(earned_van_rate)]
                     grand_van_rate += earned_van_rate
@@ -172,11 +175,35 @@ def execute(filters=None):
                     row += [round(total_earnings)]
                 else:
                     row += [""]
+                if earned_basic and earned_dearness_allowance:
+                    pf = (earned_basic+earned_dearness_allowance)*0.1315
+                    total_deduction = 0
+                    row += [round(pf)]
+                else:
+                    row += [""]
+                if earned_basic and earned_dearness_allowance:
+                    esic = (earned_basic+earned_dearness_allowance)*0.0475
+                    total_deduction = 0
+                    row += [math.ceil(esic)]
+                else:
+                    row += [""]
+                if act_basic and act_dearness_allowance and act_allowance:
+                    other = (act_basic +
+                             act_dearness_allowance + act_allowance)
+                    row += [round(other)]
+                else:
+                    row += [""]
+                if pf and esic:
+                    total_deduction = (
+                        pf+esic)
+                    row += [round(total_deduction)]
+                else:
+                    row += [""]
             else:
-                row += ["", "", "", "", "", "", ""]
+                row += ["", "", "", "", "", "", "", "", "", "", "", ""]
         else:
             row += ["", "", "", "", "", "", "", "", "",
-                    "", "", "", ""]
+                    "", "", "", "", "", "", "", "", ""]
         data.append(row)
 
     return columns, data
@@ -188,6 +215,7 @@ def get_columns(attendance):
         _("Employee Name") + ":Data:150",
         _("Designation") + ":Data:180",
         _("Department") + ":Data:180",
+        _("Grade") + ":Data:180",
         _("PD") + ":Int:50",
         _("Holidays") + ":Int:50",
         _("Payable Days") + ":Int:50",
@@ -203,7 +231,11 @@ def get_columns(attendance):
         _("Earned Van Rate") + ":Currency:100",
         _("Earned Accomodation") + ":Currency:100",
         _("Earned Line Leader") + ":Currency:100",
-        _("Total Earnings") + ":Currency:100"
+        _("PF") + ":Currency:100",
+        _("ESIC") + ":Currency:100",
+        _("Basic + DA + Others") + ":Currency:100",
+        _("Total Earnings") + ":Currency:100",
+        _("Total Deduction") + ":Currency:100"
 
     ]
     return columns
@@ -211,7 +243,7 @@ def get_columns(attendance):
 
 def get_active_employees():
     active_employees = frappe.db.sql(
-        """select emp.name,emp.employee_name,emp.department,emp.designation from `tabEmployee` emp where emp.status = "Active" order by emp.name""", as_dict=1)
+        """select emp.name,emp.employee_name,emp.department,emp.designation,emp.grade from `tabEmployee` emp where emp.status = "Active" order by emp.name""", as_dict=1)
     return active_employees
 
 
