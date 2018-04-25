@@ -24,8 +24,9 @@ def execute(filters=None):
     # conditions_emp = get_conditions(filters)
     # active_employees = get_active_employees(filters, conditions_emp)
     active_employees = get_active_employees()
+    frappe.errprint(len(active_employees))
     grand_total = 0
-    grand_van_rate = 0
+    grand_rate = 0
     from_date = datetime.strptime(filters.get("from_date"), '%Y-%m-%d')
     present_days = 0
     working_days = monthrange(
@@ -50,23 +51,23 @@ def execute(filters=None):
         #     row += [""]
 
         sse = frappe.db.get_value("Van Route", emp.van_route, [
-            'van_rate'], as_dict=1)
+            'rate'], as_dict=1)
 
         if sse:
-            act_van_rate = flt(sse.van_rate)
+            act_rate = flt(sse.rate)
             total_actuals = 0
-            if act_van_rate:
-                row += [round(act_van_rate)]
-                total_actuals += act_van_rate
+            if act_rate:
+                row += [round(act_rate)]
+                total_actuals += act_rate
             else:
                 row += [""]
             if present_days > 0:
-                earned_van_rate = flt(act_van_rate) * flt(present_days)
+                earned_rate = flt(act_rate) * flt(present_days)
                 total = 0
-                if earned_van_rate:
-                    row += [round(earned_van_rate)]
-                    grand_van_rate += earned_van_rate
-                    total += earned_van_rate
+                if earned_rate:
+                    row += [round(earned_rate)]
+                    grand_rate += earned_rate
+                    total += earned_rate
                 else:
                     row += [""]
                 if total:
