@@ -1,5 +1,5 @@
 {
- "add_total_row": 0, 
+ "add_total_row": 1, 
  "apply_user_permissions": 1, 
  "creation": "2018-03-04 21:09:21.682287", 
  "disabled": 0, 
@@ -7,8 +7,8 @@
  "doctype": "Report", 
  "idx": 0, 
  "is_standard": "Yes", 
- "json": "{\"add_total_row\": 0, \"sort_by\": \"Wage Monitor.modified\", \"add_totals_row\": 1, \"sort_order\": \"desc\", \"sort_by_next\": null, \"filters\": [], \"sort_order_next\": \"desc\", \"columns\": [[\"date\", \"Wage Monitor\"], [\"line\", \"Wage Monitor\"], [\"present\", \"Wage Monitor\"], [\"absent\", \"Wage Monitor\"], [\"wage\", \"Wage Monitor\"], [\"calculated_wages\", \"Wage Monitor\"]]}", 
- "modified": "2018-03-04 21:15:30.101706", 
+ "json": "{\"add_total_row\": 1, \"sort_by\": \"Wage Monitor.modified\", \"add_totals_row\": 0, \"sort_order\": \"desc\", \"sort_by_next\": null, \"filters\": [[\"Wage Monitor\", \"date\", \"=\", \"2018-05-29\"]], \"sort_order_next\": \"desc\", \"columns\": [[\"date\", \"Wage Monitor\"], [\"line\", \"Wage Monitor\"], [\"roll_a\", \"Wage Monitor\"], [\"shift_a\", \"Wage Monitor\"], [\"a_absent\", \"Wage Monitor\"], [\"roll_b\", \"Wage Monitor\"], [\"shift_b\", \"Wage Monitor\"], [\"b_absent\", \"Wage Monitor\"], [\"roll_c\", \"Wage Monitor\"], [\"shift_c\", \"Wage Monitor\"], [\"c_absent\", \"Wage Monitor\"], [\"roll_g\", \"Wage Monitor\"], [\"shift_g\", \"Wage Monitor\"], [\"g_absent\", \"Wage Monitor\"], [\"present\", \"Wage Monitor\"], [\"absent\", \"Wage Monitor\"], [\"wage\", \"Wage Monitor\"], [\"calculated_wages\", \"Wage Monitor\"]]}", 
+ "modified": "2018-05-31 16:26:30.387780", 
  "modified_by": "Administrator", 
  "module": "Minda Custom", 
  "name": "Wage Monitor Report", 

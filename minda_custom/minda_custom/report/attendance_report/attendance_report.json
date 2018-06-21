@@ -7,12 +7,12 @@
  "doctype": "Report", 
  "idx": 1, 
  "is_standard": "Yes", 
- "modified": "2018-03-14 12:50:29.803687", 
+ "modified": "2018-05-30 19:52:30.048934", 
  "modified_by": "Administrator", 
  "module": "Minda Custom", 
  "name": "Attendance Report", 
  "owner": "Administrator", 
- "query": "SELECT\n    `tabEmployee`.name as \"Employee:Link/Employee:120\",\n    `tabEmployee`.biometric_id as \"Employee ID::120\",\n    `tabEmployee`.employee_name as \"Employee Name::120\",\t\n    `tabEmployee`.contractor as \"Contractor:Link/Contractor:120\",\n    `tabEmployee`.department as \"Department::120\",\n    `tabAttendance`.attendance_date as \"Attendance Date:Date:120\", \n    `tabAttendance`.in_time as \"In Time::120\",\n    `tabAttendance`.out_time as \"Out Time::120\",\n    `tabAttendance`.status as \"Status::120\"\t\t   \nFROM\n    `tabAttendance`\n     left join `tabEmployee` on (\n\t\t\t`tabAttendance`.employee =`tabEmployee`.name\n\t)\nWHERE\n     `tabEmployee`.status = 'Active'\t\nAND\n     `tabAttendance`.attendance_date = CURDATE()\nORDER BY\n     `tabEmployee`.name asc", 
+ "query": "SELECT\n    `tabEmployee`.name as \"Employee:Link/Employee:120\",\n    `tabEmployee`.biometric_id as \"Employee ID::120\",\n    `tabEmployee`.employee_name as \"Employee Name::120\",\t\n    `tabEmployee`.contractor as \"Contractor:Link/Contractor:120\",\n    `tabEmployee`.department as \"Department::120\",\n    `tabAttendance`.attendance_date as \"Attendance Date:Date:120\", \n    `tabAttendance`.in_time as \"In Time::120\",\n    `tabAttendance`.out_time as \"Out Time::120\",\n    `tabAttendance`.status as \"Status::120\"\t\t   \nFROM\n    `tabAttendance`\n     left join `tabEmployee` on (\n\t\t\t`tabAttendance`.employee =`tabEmployee`.name\n\t)\nWHERE\n     `tabEmployee`.status = 'Active'\t\nORDER BY\n     `tabAttendance`.attendance_date asc", 
  "ref_doctype": "Attendance", 
  "report_name": "Attendance Report", 
  "report_type": "Query Report", 
@@ -25,6 +25,9 @@
   }, 
   {
    "role": "HR Manager"
+  }, 
+  {
+   "role": "DEO"
   }
  ]
 }

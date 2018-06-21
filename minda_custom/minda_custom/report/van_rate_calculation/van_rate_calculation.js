@@ -17,6 +17,18 @@ frappe.query_reports["Van Rate Calculation"] = {
 			"fieldtype": "Date",
 			"default": [frappe.datetime.add_months(frappe.datetime.get_today())],
 			"reqd": 1
-		}
+        },
+        {
+			"fieldname": "line",
+			"label": __("Line"),
+            "fieldtype": "Link",
+            "options":"Line"
+        },
+        {
+			"fieldname": "contractor",
+			"label": __("Contractor"),
+            "fieldtype": "Link",
+            "options":"Contractor"
+		},
 	]
 }

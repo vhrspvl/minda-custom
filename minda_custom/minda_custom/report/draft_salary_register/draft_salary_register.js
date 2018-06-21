@@ -16,6 +16,12 @@ frappe.query_reports["Draft Salary Register"] = {
 			"label": __("Employee"),
 			"fieldtype": "Link",
 			"options": "Employee"
+        },
+        {
+			"fieldname":"contractor",
+			"label": __("Contractor"),
+			"fieldtype": "Link",
+			"options": "Contractor"
 		},
 		{
 			"fieldname":"company",

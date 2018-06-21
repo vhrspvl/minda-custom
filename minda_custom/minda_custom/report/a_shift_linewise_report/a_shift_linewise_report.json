@@ -1,0 +1,33 @@
+{
+ "add_total_row": 1, 
+ "apply_user_permissions": 1, 
+ "creation": "2018-05-21 20:05:28.209122", 
+ "disabled": 1, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "modified": "2018-06-02 16:16:20.594166", 
+ "modified_by": "Administrator", 
+ "module": "Minda Custom", 
+ "name": "A Shift Linewise Report", 
+ "owner": "Administrator", 
+ "query": "SELECT  `tabAttendance`.`line` AS `line:Link/Line:100`, \n        count(*) AS `count`\nFROM `tabAttendance`\nWHERE (date(`tabAttendance`.`attendance_date`) = date(now())\n   AND `tabAttendance`.`shift` = 'A')\nGROUP BY `tabAttendance`.`line`\nORDER BY `tabAttendance`.`line` ASC, `tabAttendance`.`shift` ASC", 
+ "ref_doctype": "Attendance", 
+ "report_name": "A Shift Linewise Report", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "System Manager"
+  }, 
+  {
+   "role": "HR User"
+  }, 
+  {
+   "role": "HR Manager"
+  }, 
+  {
+   "role": "DEO"
+  }
+ ]
+}

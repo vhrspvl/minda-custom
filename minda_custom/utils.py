@@ -42,8 +42,9 @@ def attendance():
         doc = frappe.get_doc("Employee", employee)
         prev_day = False
         if time.strptime(time_m, '%H:%M:%S') < min_time:
+            date = add_days(date, -1)
             attendance_id = frappe.db.get_value("Attendance", {
-                "employee": employee, "attendance_date": add_days(date, -1)})
+                "employee": employee, "attendance_date": date})
             prev_day = True
         else:
             attendance_id = frappe.db.get_value("Attendance", {
@@ -56,6 +57,7 @@ def attendance():
             # return in_time.seconds
             times = [out_time, str(in_time)]
             if not prev_day:
+                attendance.out_date = date
                 attendance.out_time = max(times)
                 attendance.in_time = min(times)
                 attendance.db_update()
@@ -63,6 +65,7 @@ def attendance():
                 frappe.response.type = "text"
                 return "ok"
             else:
+                attendance.out_date = date
                 attendance.out_time = out_time
                 attendance.db_update()
                 frappe.db.commit()

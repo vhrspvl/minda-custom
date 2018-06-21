@@ -17,6 +17,8 @@ def send_wage_report():
     report = frappe.get_doc('Report', "Wage Monitor Report")
     columns, data = report.get_data(
         limit=100, filters=custom_filter, as_dict=True)
+    html = frappe.render_template(
+        'frappe/templates/include/print_table.html', {'columns': columns, 'data': data})    
     spreadsheet_data = get_spreadsheet_data(columns, data)
     xlsx_file = make_xlsx(spreadsheet_data, "Minda Custom")
     data = xlsx_file.getvalue()
@@ -25,12 +27,12 @@ def send_wage_report():
         'fcontent': data
     }]
     frappe.sendmail(
-        recipients=['loganathan.k@mindasai.com', 'jayapradha@mindasai.com',
-                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com', 'sqlmurugan@mindasai.com', 'abdulla.pi@voltechgroup.com'],
+        recipients=['loganathan.k@mindasai.com',
+                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com','abdulla.pi@voltechgroup.com'],
         subject='Wage Monitor Report - ' +
         formatdate(add_days(today(), -1)),
-        message='Kindly find the attached Excel Sheet of Daily Attendance Report of' + formatdate(
-            add_days(today(), -1)),
+        message='Kindly find the attached Excel Sheet of Wage Monitor Report of ' + formatdate(
+            add_days(today(), -1)) + html,
         attachments=attachments
     )
 
@@ -48,8 +50,8 @@ def send_daily_att_report():
         'fcontent': data
     }]
     frappe.sendmail(
-        recipients=['loganathan.k@mindasai.com', 'jayapradha@mindasai.com',
-                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com', 'sqlmurugan@mindasai.com', 'abdulla.pi@voltechgroup.com'],
+        recipients=['loganathan.k@mindasai.com',
+                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com', 'abdulla.pi@voltechgroup.com'],
         subject='Employee Attendance Report - ' +
         formatdate(add_days(today(), -1)),
         message='Kindly find the attached Excel Sheet of Daily Attendance Report of' + formatdate(
@@ -71,8 +73,8 @@ def send_daily_linewise_report():
         'fcontent': data
     }]
     frappe.sendmail(
-        recipients=['loganathan.k@mindasai.com', 'jayapradha@mindasai.com',
-                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com', 'sqlmurugan@mindasai.com', 'abdulla.pi@voltechgroup.com'],
+        recipients=['loganathan.k@mindasai.com', 
+                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com', 'abdulla.pi@voltechgroup.com'],
         subject='Employee Attendance Report - ' +
         formatdate(add_days(today(), -1)),
         message='Kindly find the attached Excel Sheet of Linewise Count Report of' + formatdate(
@@ -187,7 +189,30 @@ def emp_absent_today():
 def calculate_wages():
     day = add_days(today(), -1)
     # day = '2018-03-04'
-    for line in frappe.get_list("Line"):
+    for line in frappe.get_list("Line",fields=['name','roll','roll_b','roll_c','roll_g']):
+        a_att = frappe.db.sql(
+            """select count(*) as count from `tabAttendance` where
+                        docstatus=1 and status='Present' and shift='A' and line=%s and attendance_date= %s""", (line["name"], day), as_dict=1)
+        for a in a_att:
+            shift_a = a.count
+
+        b_att = frappe.db.sql(
+            """select count(*) as count from `tabAttendance` where
+                        docstatus=1 and status='Present' and shift='B' and line=%s and attendance_date= %s""", (line["name"], day), as_dict=1)
+        for b in b_att:
+            shift_b = b.count
+
+        g_att = frappe.db.sql("""select count(*) as count from `tabAttendance` where
+                        docstatus=1 and status='Present' and shift='G' and line=%s and attendance_date= %s""", (line["name"], day), as_dict=1)
+        for g in g_att:
+            shift_g = g.count
+
+        c_att = frappe.db.sql(
+            """select count(*) as count from `tabAttendance` where
+                        docstatus=1 and status='Present' and shift='C' and line=%s and attendance_date= %s""", (line["name"], day), as_dict=1)
+        for c in c_att:
+            shift_c = c.count
+
         att = frappe.db.sql(
             """select count(*) as count from `tabAttendance` where
                         docstatus=1 and status='Present' and line=%s and attendance_date= %s""", (line["name"], day), as_dict=1)
@@ -203,9 +228,21 @@ def calculate_wages():
         wm = frappe.new_doc("Wage Monitor")
         wm.date = day
         wm.line = line["name"]
+        wm.roll_a = line["roll"]
+        wm.roll_b = line["roll_b"]
+        wm.roll_g = line["roll_g"]
+        wm.roll_c = line["roll_c"]
+        wm.shift_a = shift_a
+        wm.shift_b = shift_b
+        wm.shift_c = shift_c
+        wm.shift_g = shift_g
+        wm.a_absent = line["roll"] - shift_a
+        wm.b_absent = line["roll_b"] - shift_b
+        wm.c_absent = line["roll_c"] - shift_c
+        wm.g_absent = line["roll_g"] - shift_g
         wm.present = present_days
-        wm.absent = absent_days
-        wm.wage = '452'
+        wm.absent = wm.a_absent + wm.b_absent + wm.c_absent + wm.g_absent
+        wm.wage = '464'
         wm.calculated_wages = flt(wm.wage) * flt(wm.present)
         wm.save(ignore_permissions=True)
 
@@ -282,3 +319,33 @@ def get_holidays_for_employee(employee, start_date, end_date):
     holidays = [cstr(i) for i in holidays]
 
     return holidays
+
+@frappe.whitelist()
+def markatt():
+    att_list = frappe.get_all("Temp Att", fields=['att_date','emp','status'])
+    for att in att_list:
+        att_det = frappe.db.get_value("Attendance", {'attendance_date': att.att_date, 'employee': att.emp}, ['name','employee', 'status'], as_dict=True)
+        if att_det:
+            at1 = frappe.get_doc("Attendance",att_det.name)
+            # at1.db_set("docstatus",2)
+            frappe.delete_doc("Attendance",at1.name)
+            frappe.db.commit()                   
+
+
+@frappe.whitelist()
+def removeduplicateatt():
+    # day = add_days(today(), -1)
+    # days = ["2018-05-01", "2018-05-02", "2018-05-03", "2018-05-04", "2018-05-05", "2018-05-06", "2018-05-07", "2018-05-08", "2018-05-09", "2018-05-10", "2018-05-11", "2018-05-12", "2018-05-13", "2018-05-14",
+    #         "2018-05-15", "2018-05-16", "2018-05-17", "2018-05-18", "2018-05-19", "2018-05-20", "2018-05-21", "2018-05-22", "2018-05-23", "2018-05-24", "2018-05-25", "2018-05-26", "2018-05-27", "2018-05-28", "2018-05-29"]
+    # days = ["2018-06-01", "2018-06-02", "2018-06-03", "2018-06-04", "2018-06-05", "2018-05-06","2018-06-07","2018-06-08", "2018-06-09", "2018-06-10", "2018-06-11", "2018-06-12"]
+    # for day in days:
+    get_att = frappe.db.sql("""SELECT name FROM `tabAttendance` WHERE attendance_date = %s GROUP BY employee
+                    HAVING COUNT(employee) >1""",(today()),as_dict=1)
+    if get_att:                 
+        for att in get_att:                 
+            obj = frappe.get_doc("Attendance",att["name"])
+            obj.db_set("docstatus", 2)
+            frappe.delete_doc("Attendance", obj.name)
+            frappe.db.commit()
+
+        

@@ -21,10 +21,9 @@ def execute(filters=None):
 
     data = []
     row = []
-    # conditions_emp = get_conditions(filters)
-    # active_employees = get_active_employees(filters, conditions_emp)
-    active_employees = get_active_employees()
-    frappe.errprint(len(active_employees))
+    conditions, filters = get_conditions(filters)
+    active_employees = get_active_employees(conditions, filters)
+    # active_employees = get_active_employees()
     grand_total = 0
     grand_rate = 0
     from_date = datetime.strptime(filters.get("from_date"), '%Y-%m-%d')
@@ -32,8 +31,8 @@ def execute(filters=None):
     working_days = monthrange(
         cint(from_date.year), from_date.month)[1]
     for emp in active_employees:
-        row = [emp.name, emp.employee_name, emp.designation,
-               emp.department, emp.van_route]
+        row = [emp.name, emp.employee_name, emp.line,
+               emp.contractor, emp.van_route]
         emp_present_days = get_employee_attendance(emp.name, filters)
 
         for present in emp_present_days:
@@ -81,15 +80,15 @@ def execute(filters=None):
             row += ["", "", "", "", ""]
         data.append(row)
 
-        return columns, data
+    return columns, data
 
 
 def get_columns(attendance):
     columns = [
         _("Employee") + ":Link/Employee:90",
         _("Employee Name") + ":Data:150",
-        _("Designation") + ":Data:180",
-        _("Department") + ":Data:180",
+        _("Line") + ":Data:180",
+        _("Contractor") + ":Data:180",
         _("Van Route") + ":Data:180",
         _("Present Days") + ":Int:100",
         _("Van Rate") + ":Currency:100",
@@ -99,9 +98,9 @@ def get_columns(attendance):
     return columns
 
 
-def get_active_employees():
+def get_active_employees(conditions, filters):
     active_employees = frappe.db.sql(
-        """select emp.name,emp.employee_name,emp.department,emp.designation,emp.van_route from `tabEmployee` emp where emp.status = "Active" order by emp.name""", as_dict=1)
+        """select emp.name,emp.employee_name,emp.line,emp.contractor,emp.van_route from `tabEmployee` emp where %s emp.status = "Active" order by emp.name""" % conditions, filters, as_dict=1)
     return active_employees
 
 
@@ -112,12 +111,9 @@ def get_employee_attendance(employee, filters):
 
 
 def get_conditions(filters):
-    conditions_emp = ""
-
-    if filters.get("department"):
-        conditions_emp += " AND emp.department = '%s'" % filters["department"]
-
-    if filters.get("designation"):
-        conditions_emp += " AND emp.designation = '%s'" % filters["designation"]
-
-    return filters, conditions_emp
+    conditions = ""
+    if filters.get("line"):
+        conditions += " emp.line = %(line)s and"
+    if filters.get("contractor"):
+        conditions += " emp.contractor = %(contractor)s and"
+    return conditions, filters
