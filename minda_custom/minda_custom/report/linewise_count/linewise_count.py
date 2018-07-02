@@ -22,13 +22,13 @@ def execute(filters=None):
         row = [contractor.name]
         cont = frappe.db.sql(
                 """select count(employee) as count from `tabAttendance` where
-                    docstatus=1 and status='Present' and contractor=%s and attendance_date= %s""", (contractor.name,filters.get("date")), as_dict=hrs123how to gethoh1)
+                    docstatus=1 and status='Present' and contractor=%s and attendance_date= %s""", (contractor.name,filters.get("date")), as_dict = 1)
         for present in cont:
             total_present_days = present.count
         for line in frappe.get_list("Line"):
             att = frappe.db.sql(
                 """select count(employee) as count from `tabAttendance` where
-                    docstatus=1 and status='Present' and contractor=%s and lisne=%s and attendance_date= %s""", (contractor.name, line["name"], filters.get("date")), as_dict=1)
+                    docstatus=1 and status='Present' and contractor=%s and line=%s and attendance_date= %s""", (contractor.name, line["name"], filters.get("date")), as_dict=1)
             for present in att:
                 present_days = present.count
                 total += present.count

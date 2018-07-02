@@ -1,0 +1,33 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2018-06-23 15:03:20.489033", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "modified": "2018-06-25 19:09:46.061267", 
+ "modified_by": "Administrator", 
+ "module": "Minda Custom", 
+ "name": "Active and Left Employee Report", 
+ "owner": "Administrator", 
+ "query": "SELECT count(`tabEmployee`.`date_of_joining`) AS Active,\n       count(`tabEmployee`.`status`) AS `status`, \n        count(*) AS `count`\nFROM `tabEmployee`\nORDER BY `tabEmployee`.`status` ASC\n", 
+ "ref_doctype": "Employee", 
+ "report_name": "Active and Left Employee Report", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "Employee"
+  }, 
+  {
+   "role": "HR Manager"
+  }, 
+  {
+   "role": "HR User"
+  }, 
+  {
+   "role": "DEO"
+  }
+ ]
+}

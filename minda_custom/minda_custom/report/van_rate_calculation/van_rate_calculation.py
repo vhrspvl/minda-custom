@@ -30,15 +30,16 @@ def execute(filters=None):
     present_days = 0
     working_days = monthrange(
         cint(from_date.year), from_date.month)[1]
+    frappe.errprint(active_employees)    
     for emp in active_employees:
-        row = [emp.name, emp.employee_name, emp.line,
+        row = [emp.employee, emp.employee_name, emp.line,
                emp.contractor, emp.van_route]
-        emp_present_days = get_employee_attendance(emp.name, filters)
+        emp_present_days = get_employee_attendance(emp.employee, filters)
 
         for present in emp_present_days:
             present_days = present.count
         joining_date = frappe.db.get_value(
-            "Employee", emp.name, ["date_of_joining"])
+            "Employee", emp.employee, ["date_of_joining"])
         if emp_present_days:
             row += [present_days]
         else:
@@ -49,24 +50,27 @@ def execute(filters=None):
         # else:
         #     row += [""]
 
-        sse = frappe.db.get_value("Van Route", emp.van_route, [
-            'rate'], as_dict=1)
-
+        sse = frappe.db.get_value("Employee", {'employee': emp.employee}, ['van_route',
+            'van_rate'], as_dict=True)
         if sse:
-            act_rate = flt(sse.rate)
+            
+            act_van_rate = flt(sse.van_rate)
             total_actuals = 0
-            if act_rate:
-                row += [round(act_rate)]
-                total_actuals += act_rate
+            if act_van_rate:
+                row += [round(act_van_rate)]
+                total_actuals += act_van_rate
             else:
                 row += [""]
             if present_days > 0:
-                earned_rate = flt(act_rate) * flt(present_days)
+                if sse.van_route == "APT":
+                    earned_van_rate = flt('1000') +flt(present_days)*flt('12')
+                else:
+                    earned_van_rate = flt(act_van_rate) * flt(present_days)
                 total = 0
-                if earned_rate:
-                    row += [round(earned_rate)]
-                    grand_rate += earned_rate
-                    total += earned_rate
+                if earned_van_rate:
+                    row += [round(earned_van_rate)]
+                    grand_rate += earned_van_rate
+                    total += earned_van_rate
                 else:
                     row += [""]
                 if total:
@@ -99,8 +103,14 @@ def get_columns(attendance):
 
 
 def get_active_employees(conditions, filters):
-    active_employees = frappe.db.sql(
-        """select emp.name,emp.employee_name,emp.line,emp.contractor,emp.van_route from `tabEmployee` emp where %s emp.status = "Active" order by emp.name""" % conditions, filters, as_dict=1)
+    
+    from_date = filters.get("from_date")
+    to_date = filters.get("to_date")
+    active_employees = frappe.db.sql("""select distinct `tabAttendance`.employee,`tabAttendance`.employee_name,`tabAttendance`.contractor, `tabEmployee`.van_route from `tabAttendance` 
+          Join `tabEmployee` ON `tabEmployee`.name =`tabAttendance`.employee where  
+        `tabAttendance`.docstatus = 1 and `tabAttendance`.status = 'Present' and `tabAttendance`.attendance_date between %s and %s order by `tabAttendance`.contractor""", (filters.get("from_date"), filters.get("to_date")), as_dict=1)
+    # active_employees = frappe.db.sql(
+    #     """select emp.name,emp.employee_name,emp.line,emp.contractor,emp.van_route from `tabEmployee` emp where %s emp.status = "Active" order by emp.name""" % conditions, filters, as_dict=1)
     return active_employees
 
 
@@ -113,7 +123,7 @@ def get_employee_attendance(employee, filters):
 def get_conditions(filters):
     conditions = ""
     if filters.get("line"):
-        conditions += " emp.line = %(line)s and"
+        conditions += "line = %(line)s and"
     if filters.get("contractor"):
-        conditions += " emp.contractor = %(contractor)s and"
+        conditions += "contractor = %(contractor)s and"
     return conditions, filters

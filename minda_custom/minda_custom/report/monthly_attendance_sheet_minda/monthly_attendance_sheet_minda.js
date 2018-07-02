@@ -9,7 +9,7 @@ frappe.query_reports["Monthly Attendance Sheet Minda"] = {
 			"label": __("Month"),
 			"fieldtype": "Select",
 			"options": "Jan\nFeb\nMar\nApr\nMay\nJun\nJul\nAug\nSep\nOct\nNov\nDec",
-			"default": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov",
+			"default": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Nov",
 				"Dec"][frappe.datetime.str_to_obj(frappe.datetime.get_today()).getMonth()],
 		},
 		{
