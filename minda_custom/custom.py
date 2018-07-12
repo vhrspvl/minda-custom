@@ -328,7 +328,33 @@ def emp_sunday_attendance():
             sunday_attendance.submit()
             frappe.db.commit()
 
-
+def van_rate_calculator():
+    from_date = '2018-06-01'
+    to_date = '2018-06-30'
+    for contractor in frappe.get_list("Contractor"):
+        salary_slips = frappe.get_all("Salary Slip",fields=['employee','payment_days','contractor'],filters={'start_date':from_date,'end_date':to_date,'contractor':contractor['name']})
+        for slip in salary_slips:
+            for employee in frappe.get_list("Employee",fields=['name','van_route','van_rate'],filters={'name':slip['employee']}):
+                vrc_id = frappe.get_list("Van Rate Calculation",filters={'from_date':from_date,'to_date':to_date,'employee':employee})
+                if vrc_id:
+                    pass
+                else:    
+                    vrc = frappe.new_doc("Van Rate Calculation")
+                    if employee['van_route'] == 'APT':
+                        total = flt(slip['payment_days']) * flt('12') + flt('1000')
+                    else:
+                        total = flt(slip['payment_days']) * flt(employee['van_rate'])    
+                    vrc.update({
+                        'from_date':from_date,
+                        'to_date':to_date,
+                        'van_route':employee['van_route'],
+                        'van_rate':employee['van_rate'],
+                        'employee':employee['name'],
+                        'present_days':slip['payment_days'],
+                        'contractor':slip['contractor'],
+                        'total':total
+                    })
+                    vrc.save(ignore_permissions=True)
 
 
 

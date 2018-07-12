@@ -26,21 +26,20 @@ def execute(filters=None):
     # active_employees = get_active_employees()
     grand_total = 0
     grand_rate = 0
-    from_date = datetime.strptime(filters.get("from_date"), '%Y-%m-%d')
+    # from_date = datetime.strptime(filters.get("from_date"), '%Y-%m-%d')
     present_days = 0
-    working_days = monthrange(
-        cint(from_date.year), from_date.month)[1]
-    frappe.errprint(active_employees)    
+    # working_days = monthrange(
+    #     cint(from_date.year), from_date.month)[1]
     for emp in active_employees:
         row = [emp.employee, emp.employee_name, emp.line,
                emp.contractor, emp.van_route]
-        emp_present_days = get_employee_attendance(emp.employee, filters)
-
-        for present in emp_present_days:
-            present_days = present.count
+        # emp_present_days = get_employee_attendance(emp.employee, filters)
+        present_days = emp.payment_days
+        # for present in emp_present_days:
+        #     present_days = present.count
         joining_date = frappe.db.get_value(
             "Employee", emp.employee, ["date_of_joining"])
-        if emp_present_days:
+        if present_days:
             row += [present_days]
         else:
             row += [""]
@@ -94,7 +93,7 @@ def get_columns(attendance):
         _("Line") + ":Data:180",
         _("Contractor") + ":Data:180",
         _("Van Route") + ":Data:180",
-        _("Present Days") + ":Int:100",
+        _("Payment Days") + ":Int:100",
         _("Van Rate") + ":Currency:100",
         _("Total") + ":Currency:100"
 
@@ -103,27 +102,22 @@ def get_columns(attendance):
 
 
 def get_active_employees(conditions, filters):
+    filters.update({"from_date": filters.get("from_date"), "to_date":filters.get("to_date")})
+    conditions, filters = get_conditions(filters)
+    active_employees = frappe.db.sql("""select distinct ss.employee,ss.employee_name,ss.payment_days,emp.van_route,emp.line,ss.contractor from `tabSalary Slip` ss Join `tabEmployee` emp ON emp.name =ss.employee 
+                        where ss.docstatus=0 %s order by ss.contractor""" % conditions, filters, as_dict=1)
+    if not active_employees:
+		frappe.throw(_("No salary slip found between {0} and {1}").format(
+			filters.get("from_date"), filters.get("to_date")))
     
-    from_date = filters.get("from_date")
-    to_date = filters.get("to_date")
-    active_employees = frappe.db.sql("""select distinct `tabAttendance`.employee,`tabAttendance`.employee_name,`tabAttendance`.contractor, `tabEmployee`.van_route from `tabAttendance` 
-          Join `tabEmployee` ON `tabEmployee`.name =`tabAttendance`.employee where  
-        `tabAttendance`.docstatus = 1 and `tabAttendance`.status = 'Present' and `tabAttendance`.attendance_date between %s and %s order by `tabAttendance`.contractor""", (filters.get("from_date"), filters.get("to_date")), as_dict=1)
-    # active_employees = frappe.db.sql(
-    #     """select emp.name,emp.employee_name,emp.line,emp.contractor,emp.van_route from `tabEmployee` emp where %s emp.status = "Active" order by emp.name""" % conditions, filters, as_dict=1)
     return active_employees
-
-
-def get_employee_attendance(employee, filters):
-    employee_attendance = frappe.db.sql("""select count(*) as count from `tabAttendance` where \
-        docstatus = 1 and status = 'Present' and employee= %s and attendance_date between %s and %s""", (employee, filters.get("from_date"), filters.get("to_date")), as_dict=1)
-    return employee_attendance
 
 
 def get_conditions(filters):
     conditions = ""
-    if filters.get("line"):
-        conditions += "line = %(line)s and"
-    if filters.get("contractor"):
-        conditions += "contractor = %(contractor)s and"
+    if filters.get("from_date"): conditions += " and ss.start_date >= %(from_date)s"
+    if filters.get("to_date"): conditions += " and ss.end_date <= %(to_date)s"
+    if filters.get("line"):conditions += "and emp.line = %(line)s "
+    if filters.get("contractor"):conditions += "and ss.contractor = %(contractor)s"
+
     return conditions, filters

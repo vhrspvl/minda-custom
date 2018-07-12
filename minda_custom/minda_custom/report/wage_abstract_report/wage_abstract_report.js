@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Van Rate Calculation"] = {
+frappe.query_reports["Wage Abstract Report"] = {
 	"filters": [
 		{
 			"fieldname": "from_date",
@@ -17,19 +17,6 @@ frappe.query_reports["Van Rate Calculation"] = {
 			"fieldtype": "Date",
 			"default": [frappe.datetime.add_months(frappe.datetime.get_today())],
 			"reqd": 1
-        },
-        // {
-		// 	"fieldname":"date_range",
-		// 	"label": __("Date Range"),
-		// 	"fieldtype": "DateRange",
-		// 	"default": [frappe.datetime.add_months(frappe.datetime.get_today(),-1), frappe.datetime.get_today()],
-		// 	"reqd": 1
-		// },
-        {
-			"fieldname": "line",
-			"label": __("Line"),
-            "fieldtype": "Link",
-            "options":"Line"
         },
         {
 			"fieldname": "contractor",
