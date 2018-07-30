@@ -356,6 +356,16 @@ def van_rate_calculator():
                     })
                     vrc.save(ignore_permissions=True)
 
+@frappe.whitelist()
+def check_duplicate_employee():
+    from frappeclient import FrappeClient
+    client = FrappeClient("http://59.144.18.187", "Administrator", "mindaadmin@1234")
+    emp = client.get_doc('Employee',fields=["employee_name", "biometric_id"])
+    print emp
+
+
+                        
+
 
 
 
