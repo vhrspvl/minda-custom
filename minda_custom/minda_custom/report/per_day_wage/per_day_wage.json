@@ -1,0 +1,20 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2018-07-31 17:11:57.286403", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "modified": "2018-07-31 17:11:57.286403", 
+ "modified_by": "Administrator", 
+ "module": "Minda Custom", 
+ "name": "per Day Wage", 
+ "owner": "Administrator", 
+ "query": "select employee,sd.`amount` AS `poa` \nFROM `tabSalary Slip` ss\nJOIN `tabSalary Detail` sd on sd.parent = ss.name\nwhere ss.start_date = date('2018-06-02') \nand \nsd.`salary_component`= 'Per Day Basic'\nand\nss.name = 38285\n", 
+ "ref_doctype": "Salary Slip", 
+ "report_name": "per Day Wage", 
+ "report_type": "Query Report", 
+ "roles": []
+}
