@@ -32,6 +32,10 @@ def execute(filters=None):
         if ss.employee_name:row += [ss.employee_name]
         else:row += [""]
 
+        doj = frappe.db.get_value("Employee", {'employee':ss.employee},['date_of_joining'])
+        if doj:row += [doj]
+        else:row += [""]
+
         if ss.contractor:row += [ss.contractor]
         else:row += [""]
 
@@ -151,6 +155,7 @@ def get_columns():
         _("Salary Slip Id") + ":Data:150",
         _("Employee") + ":Data:100",
         _("Employee Name") + ":Data:120",
+        _("Date of Joining") + ":Date:120",
         _("Contractor") + ":Data:100",
         _("Grade") + ":Data:100",
         _("Leave Without Pay") + ":Data:100",
