@@ -80,7 +80,11 @@ def execute(filters=None):
         if oa:row += [oa]
         else:row += [""]  
 
-        total = flt(basic) + flt(da) + flt(oa)    
+        wg = frappe.db.get_value("Salary Detail", {'salary_component':'Wages','parent':ss.name},['amount'])
+        if wg:row += [wg]
+        else:row += [""]
+
+        total = flt(basic) + flt(da) + flt(oa) + flt(wg)    
         if total:row += [ total ]
         else:row += [""]
         
@@ -160,6 +164,7 @@ def get_columns():
         _("Basic") + ":Currency:120",
         _("DA") + ":Currency:120",
         _("Other Allowance") + ":Currency:120",
+        _("Wages") + ":Currency:120",
         _("Total") + ":Currency:120",
         _("Employer PF") + ":Currency:120",
         _("Employer ESIC") + ":Currency:100",
