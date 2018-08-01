@@ -19,13 +19,10 @@ def execute(filters=None):
     data = []
     row = []
     conditions, filters = get_conditions(filters)
-    # employees = get_employees(conditions, filters)
-    # for employee in employees:
     total = 0
     salary_slips = get_salary_slips(conditions,filters)
-    # basic,da,oa,ot,wg,pf,esic,canteen,pt,otesic,sc,otsc,eesic,eotesic,epf =  get_ss(filters)
+    
     for ss in salary_slips:
-        # frappe.errprint(ss)
         if ss.name:row = [ss.name]
         else:row = [""]
 
@@ -54,22 +51,25 @@ def execute(filters=None):
         else:row += [""]
 
         basic = frappe.db.get_value("Salary Detail", {'salary_component':'Basic ','parent':ss.name},['amount'])
-        per_day_basic = flt(basic)/flt(ss.md)
         
+        per_day_basic = flt(basic)/flt(ss.md)
         if per_day_basic:row += [per_day_basic]
         else:row += [""]
         
         da = frappe.db.get_value("Salary Detail", {'salary_component':'Dearness Allowance ','parent':ss.name},['amount'])
+        
         per_day_da = flt(da)/flt(ss.md)
-
         if per_day_da:row += [per_day_da]
         else:row += [""]
 
-        per_day_oa = frappe.db.sql("""select variable from `tabSalary Structure Employee` where `tabSalary Structure Employee`.employee = %s""",(ss['employee']),as_dict=1)
-        
+        per_day_oa = frappe.db.get_value("Salary Structure Employee", {'employee':ss.employee},['variable'])
         if per_day_oa:row += [per_day_oa]
         else:row += [""]
         
+        per_day_total = flt(per_day_basic) + flt(per_day_da) + flt(per_day_oa)    
+        if per_day_total:row += [ per_day_total ]
+        else:row += [""]
+
         if basic:row += [basic]
         else:row += [""]
         
@@ -141,76 +141,6 @@ def execute(filters=None):
 
     return columns, data
 
-def get_ss(filters):
-    from_date = filters.get("from_date")
-    to_date = filters.get("to_date")
-    b_total = da_total = oa_total = ot_total = wg_total = pf_total = esic_total = canteen_total = pt_total = otesic_total = sc_total = otsc_total = eesic_total = eotesic_total = epf_total = 0
-    ssp = frappe.get_all("Salary Slip",filters={'start_date':from_date,'end_date':to_date})
-    
-    for ss in ssp:
-        basics = frappe.db.sql("""select td.amount as basic from `tabSalary Detail` td where 
-            td.salary_component='Basic' and td.parent=%s""",(ss['name']),as_dict=1)
-        for b in basics:
-            b_total = b['basic']
-        da = frappe.db.sql("""select td.amount as da from `tabSalary Detail` td where 
-            td.salary_component='Dearness Allowance' and td.parent=%s""",(ss['name']),as_dict=1)
-        for d in da:
-            da_total = d['da']
-        oa = frappe.db.sql("""select td.amount as oa from `tabSalary Detail` td where 
-            td.salary_component='Other Allowances' and td.parent=%s""",(ss['name']),as_dict=1)
-        for o in oa:
-            oa_total = o['oa']  
-        ot = frappe.db.sql("""select td.amount as ot from `tabSalary Detail` td where 
-            td.salary_component='Overtime' and td.parent=%s""",(ss['name']),as_dict=1)
-        for t in ot:
-            ot_total = t['ot'] 
-        wg = frappe.db.sql("""select td.amount as wg from `tabSalary Detail` td where 
-            td.salary_component='Wages' and td.parent=%s""",(ss['name']),as_dict=1)
-        for w in wg:
-            wg_total = w['wg']
-        pf = frappe.db.sql("""select td.amount as pf from `tabSalary Detail` td where 
-            td.salary_component='Provident Fund' and td.parent=%s""",(ss['name']),as_dict=1)
-        for p in pf:
-            pf_total = p['pf'] 
-        esic = frappe.db.sql("""select td.amount as esic from `tabSalary Detail` td where 
-            td.salary_component='ESIC' and td.parent=%s""",(ss['name']),as_dict=1)
-        for e in esic:
-            esic_total = e['esic'] 
-        canteen = frappe.db.sql("""select td.amount as canteen from `tabSalary Detail` td where 
-            td.salary_component='Canteen' and td.parent=%s""",(ss['name']),as_dict=1)
-        for c in canteen:
-            canteen_total = c['canteen']     
-        ptax = frappe.db.sql("""select td.amount as pt from `tabSalary Detail` td where 
-            td.salary_component='Professional Tax' and td.parent=%s""",(ss['name']),as_dict=1)
-        for pt in ptax:
-            pt_total = pt['pt'] 
-        otesic = frappe.db.sql("""select td.amount as otesic from `tabSalary Detail` td where 
-            td.salary_component='OT ESIC' and td.parent=%s""",(ss['name']),as_dict=1)
-        for ote in otesic:
-            otesic_total = ote['otesic']
-        sc = frappe.db.sql("""select td.amount as sc from `tabSalary Detail` td where 
-            td.salary_component='Service Charge' and td.parent=%s""",(ss['name']),as_dict=1)
-        for s in sc:
-            sc_total = s['sc']   
-        otsc = frappe.db.sql("""select td.amount as otsc from `tabSalary Detail` td where 
-            td.salary_component='OT Service Charge' and td.parent=%s""",(ss['name']),as_dict=1)
-        for os in otsc:
-            otsc_total = os['otsc']
-        eesic = frappe.db.sql("""select td.amount as eesic from `tabSalary Detail` td where 
-            td.salary_component='Employer ESIC' and td.parent=%s""",(ss['name']),as_dict=1)
-        for ee in eesic:
-            eesic_total = ee['eesic']
-        eotesic = frappe.db.sql("""select td.amount as eotesic from `tabSalary Detail` td where 
-            td.salary_component='Employer OT ESIC' and td.parent=%s""",(ss['name']),as_dict=1)
-        for eote in eotesic:
-            eotesic_total = eote['eotesic']    
-        epf = frappe.db.sql("""select td.amount as epf from `tabSalary Detail` td where 
-            td.salary_component='Employer PF' and td.parent=%s""",(ss['name']),as_dict=1)
-        for ep in epf:
-            epf_total = ep['epf'] 
-        
-    return b_total,da_total,oa_total,ot_total,wg_total,pf_total,esic_total,canteen_total,pt_total,otesic_total,sc_total,otsc_total,eesic_total,eotesic_total,epf_total
-
 
 def get_columns():
     columns = [
@@ -226,6 +156,7 @@ def get_columns():
         _("Per Day Basic") + ":Currency:100",
         _("Per Day DA") + ":Currency:100",
         _("Per Day OA") + ":Currency:100",
+        _("Per Day Total") + ":Currency:100",
         _("Basic") + ":Currency:120",
         _("DA") + ":Currency:120",
         _("Other Allowance") + ":Currency:120",
