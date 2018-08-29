@@ -125,15 +125,15 @@ def update_in_biometric_machine(uid, uname):
 def delete_bulk():
     left_employees = frappe.get_list(
         "Employee", fields=["biometric_id"], filters={"status": "Left"})
-    print len(left_employees)    
-    # for l in left_employees:
-    #     stgids = frappe.db.get_all("Service Tag")
-    #     for stgid in stgids:
-    #         uid = l.biometric_id
-    #         url = "http://robot.camsunit.com/external/1.0/user/delete?uid=%s&stgid=%s" % (
-    #             uid, stgid.name)
-    #         r = requests.post(url)
-    #         print r.content
+    # print len(left_employees)    
+    for l in left_employees:
+        stgids = frappe.db.get_all("Service Tag")
+        for stgid in stgids:
+            uid = l.biometric_id
+            url = "http://robot.camsunit.com/external/1.0/user/delete?uid=%s&stgid=%s" % (
+                uid, stgid.name)
+            r = requests.post(url)
+            print r.content
 
 
 @frappe.whitelist()

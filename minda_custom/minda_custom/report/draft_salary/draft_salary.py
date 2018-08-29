@@ -56,19 +56,28 @@ def execute(filters=None):
 
         basic = frappe.db.get_value("Salary Detail", {'salary_component':'Basic ','parent':ss.name},['amount'])
         
-        per_day_basic = flt(basic)/flt(ss.md)
-        if per_day_basic:row += [per_day_basic]
-        else:row += [""]
+        if ss.md:
+            per_day_basic = flt(basic)/flt(ss.md)
+            if per_day_basic:row += [per_day_basic]
+            else:row += [""]
         
         da = frappe.db.get_value("Salary Detail", {'salary_component':'Dearness Allowance ','parent':ss.name},['amount'])
         
-        per_day_da = flt(da)/flt(ss.md)
-        if per_day_da:row += [per_day_da]
-        else:row += [""]
+        if ss.md:
+            per_day_da = flt(da)/flt(ss.md)
+            if per_day_da:row += [per_day_da]
+            else:row += [""]
 
-        per_day_oa = frappe.db.get_value("Salary Structure Employee", {'employee':ss.employee},['variable'])
-        if per_day_oa:row += [per_day_oa]
-        else:row += [""]
+        oa = frappe.db.get_value("Salary Detail", {'salary_component':'Other Allowances','parent':ss.name},['amount'])
+        
+        if ss.md:
+            per_day_oa = flt(oa)/flt(ss.md)
+            if per_day_oa:row += [per_day_oa]
+            else:row += [""]
+
+        # per_day_oa = frappe.db.get_value("Salary Structure Employee", {'employee':ss.employee},['variable'])
+        # if per_day_oa:row += [per_day_oa]
+        # else:row += [""]
         
         per_day_total = flt(per_day_basic) + flt(per_day_da) + flt(per_day_oa)    
         if per_day_total:row += [ per_day_total ]
@@ -80,7 +89,6 @@ def execute(filters=None):
         if da:row += [da]
         else:row += [""]
 
-        oa = frappe.db.get_value("Salary Detail", {'salary_component':'Other Allowances','parent':ss.name},['amount'])
         if oa:row += [oa]
         else:row += [""]  
 
