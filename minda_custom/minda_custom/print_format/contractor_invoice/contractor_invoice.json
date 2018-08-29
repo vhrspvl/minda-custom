@@ -1,0 +1,22 @@
+{
+ "align_labels_right": 0, 
+ "creation": "2018-07-27 15:43:29.312517", 
+ "custom_format": 0, 
+ "disabled": 0, 
+ "doc_type": "Contractor Invoice", 
+ "docstatus": 0, 
+ "doctype": "Print Format", 
+ "font": "Default", 
+ "format_data": "[{\"fieldname\": \"print_heading_template\", \"fieldtype\": \"Custom HTML\", \"options\": \"\\t\\t\\t\\t\\n<center><h1 style=\\\"text-align:center;\\\">INVOICE</h1>\\n\"}, {\"fieldtype\": \"Section Break\", \"label\": \"\"}, {\"fieldtype\": \"Column Break\"}, {\"print_hide\": 0, \"options\": \"\\n <table class=\\\"table table-bordered\\\">\\n  <tr>\\n    <th>Sl No </th>\\n    <th>Particulars<br>\\n     Description of Service Provided to the Service Receiver</th> \\n    <th>HSN/SAC</th>\\n    <th>Quantity</th>\\n    <th>Rate</th>\\n    <th>Amount</th>\\n </tr>\\n  <tr>\\n  <td></td>\\n  <td><strong>Total Mandays</td></strong>\\n  <td></td>\\n  <td>{{ doc.total_mandays}}</td>\\n  <td></td>\\n  <td></td>\\n</tr>\\n<tr>\\n  <td></td>\\n  <td><strong>Basic + DA</td></strong>\\n  <td></td>\\n  <td></td>\\n  <td></td>\\n  <td>{{ doc.basic}}</td>\\n<tr>\\n<tr>\\n  <td></td>\\n <td> <strong>Other Allowances</td></strong>\\n  <td></td>\\n  <td></td>\\n  <td></td>\\n  <td>{{ doc.other_allowance}}</td>\\n<tr>\\n<tr>\\n    <td></td>\\n    <td class=\\\"text-right\\\"><strong>Total</td></strong>\\n    <td></td>\\n    <td></td>\\n    <td></td>\\n    <td>{{ doc.total}}</td>\\n </tr>\\n<tr> \\n<td>\\n<strong>Rupee\\n</td></strong>\\n<td colspan=\\\"5\\\">{{ frappe.utils.money_in_words(doc.total)}}</td>\\n</tr>\\n</table>\\n\", \"fieldname\": \"_custom_html\", \"fieldtype\": \"HTML\", \"label\": \"Custom HTML\"}]", 
+ "idx": 0, 
+ "line_breaks": 0, 
+ "modified": "2018-08-28 20:40:51.596589", 
+ "modified_by": "Administrator", 
+ "module": "Minda Custom", 
+ "name": "Contractor Invoice", 
+ "owner": "Administrator", 
+ "print_format_builder": 1, 
+ "print_format_type": "Server", 
+ "show_section_headings": 0, 
+ "standard": "Yes"
+}
