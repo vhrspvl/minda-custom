@@ -6,9 +6,5 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 
-class AdditionalVanCost(Document):
-    def validate(self):
-        self.total = self.head_count*self.rate
-     
-        
-         
+class BulkDeletefromMachine(Document):
+	pass

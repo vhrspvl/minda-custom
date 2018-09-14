@@ -124,7 +124,7 @@ def update_in_biometric_machine(uid, uname):
 @frappe.whitelist()
 def delete_bulk():
     left_employees = frappe.get_list(
-        "Employee", fields=["biometric_id"], filters={"status": "Left"})
+        "Employee", fields=["biometric_id","name"], filters={"status": "Left","is_deleted":0})
     # print len(left_employees)    
     for l in left_employees:
         stgids = frappe.db.get_all("Service Tag")
@@ -133,7 +133,13 @@ def delete_bulk():
             url = "http://robot.camsunit.com/external/1.0/user/delete?uid=%s&stgid=%s" % (
                 uid, stgid.name)
             r = requests.post(url)
-            print r.content
+            if r.content == "OK":
+                emp = frappe.get_doc("Employee", l.name)
+                emp.is_deleted = 1
+                emp.db_update()
+                frappe.db.commit()
+                return r.content
+           
 
 
 @frappe.whitelist()
@@ -282,16 +288,16 @@ def get_holidays_for_employee(employee, start_date, end_date):
 
     return holidays
 
-@frappe.whitelist()
-def markatt():
-    att_list = frappe.get_all("Temp Att", fields=['att_date','emp','status'])
-    for att in att_list:
-        att_det = frappe.db.get_value("Attendance", {'attendance_date': att.att_date, 'employee': att.emp}, ['name','employee', 'status'], as_dict=True)
-        if att_det:
-            at1 = frappe.get_doc("Attendance",att_det.name)
-            # at1.db_set("docstatus",2)
-            frappe.delete_doc("Attendance",at1.name)
-            frappe.db.commit()                   
+# @frappe.whitelist()
+# def markatt():
+#     att_list = frappe.get_all("Temp Att", fields=['att_date','emp','status'])
+#     for att in att_list:
+#         att_det = frappe.db.get_value("Attendance", {'attendance_date': att.att_date, 'employee': att.emp}, ['name','employee', 'status'], as_dict=True)
+#         if att_det:
+#             at1 = frappe.get_doc("Attendance",att_det.name)
+#             at1.db_set("status","Half Day")
+#             # frappe.delete_doc("Attendance",at1.name)
+#             frappe.db.commit()                   
 
 
 @frappe.whitelist()
@@ -362,6 +368,38 @@ def check_duplicate_employee():
     client = FrappeClient("http://59.144.18.187", "Administrator", "mindaadmin@1234")
     emp = client.get_doc('Employee',fields=["employee_name", "biometric_id"])
     print emp
+
+
+@ frappe.whitelist()
+def holiday_att():
+    employees = frappe.get_list('Employee', filters={"status": "Active"})
+    for employee in employees:
+        pre_day = frappe.db.get_value("Attendance", {
+                        "employee": employee.name, "attendance_date": '2018-08-14'})
+        next_day = frappe.db.get_value("Attendance", {
+                        "employee": employee.name, "attendance_date": '2018-08-16'})
+        if pre_day and next_day: 
+            emp = frappe.get_doc("Employee", employee['name'])                      
+            att_id = frappe.db.get_value("Attendance", {
+                        "employee": employee.name, "attendance_date": '2018-08-15'})
+            if att_id:
+                pass
+            else:
+                att = frappe.new_doc("Attendance")
+                att.update({
+                    "employee":emp.employee,
+                    "employee_name":emp.employee_name,
+                    "biometric_id":emp.biometric_id,
+                    "attendance_date":'2018-08-15',
+                    "status": "Present",
+                    "company":emp.company,
+                    "department":emp.department,
+                    "contractor":emp.contractor
+                })
+                att.save(ignore_permissions=True)
+                att.submit()
+                frappe.db.commit()
+
 
 
                         

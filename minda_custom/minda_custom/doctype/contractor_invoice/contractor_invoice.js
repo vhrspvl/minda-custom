@@ -12,12 +12,11 @@ frappe.ui.form.on('Contractor Invoice', {
 				freeze: true,
 				freeze_message: __("Fetching"),
 				callback:function(r) {
-						console.log(r.message)
 						frm.set_value("basic",r.message[1][0])
 						frm.set_value("total_mandays",r.message[0])
 						frm.set_value("da",r.message[1][1])
-						frm.set_value("basic_da",r.message[1][2])
-						frm.set_value("other_allowance",r.message[1][3])
+						frm.set_value("basic_da",r.message[1][3])
+						frm.set_value("other_allowance",r.message[1][2])
 						frm.set_value("total",r.message[1][4])
 				}
 				

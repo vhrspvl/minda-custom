@@ -55,18 +55,31 @@ def execute(filters=None):
         else:row += [""]
 
         basic = frappe.db.get_value("Salary Detail", {'salary_component':'Basic ','parent':ss.name},['amount'])
+        wg = frappe.db.get_value("Salary Detail", {'salary_component':'Wages','parent':ss.name},['amount'])
+        lla = frappe.db.get_value("Salary Detail", {'salary_component':'Line Leader Allowance','parent':ss.name},['amount'])
         
         if ss.md:
             per_day_basic = flt(basic)/flt(ss.md)
             if per_day_basic:row += [per_day_basic]
             else:row += [""]
-        
+        else:
+            row += ["",""]
+
+        if ss.md:
+            per_day_wages = flt(wg)/flt(ss.md)
+            if per_day_wages:row += [per_day_wages]
+            else:row += [""]
+        else:
+            row += ["",""]
+
         da = frappe.db.get_value("Salary Detail", {'salary_component':'Dearness Allowance ','parent':ss.name},['amount'])
         
         if ss.md:
             per_day_da = flt(da)/flt(ss.md)
             if per_day_da:row += [per_day_da]
             else:row += [""]
+        else:
+            row += ["",""]
 
         oa = frappe.db.get_value("Salary Detail", {'salary_component':'Other Allowances','parent':ss.name},['amount'])
         
@@ -74,7 +87,10 @@ def execute(filters=None):
             per_day_oa = flt(oa)/flt(ss.md)
             if per_day_oa:row += [per_day_oa]
             else:row += [""]
+        else:
+            row += ["",""]
 
+           
         # per_day_oa = frappe.db.get_value("Salary Structure Employee", {'employee':ss.employee},['variable'])
         # if per_day_oa:row += [per_day_oa]
         # else:row += [""]
@@ -90,13 +106,18 @@ def execute(filters=None):
         else:row += [""]
 
         if oa:row += [oa]
-        else:row += [""]  
+        else:row += [""] 
+        
+        if ss.md:
+            if lla:row += [lla]
+            else:row += [""]
+        else:
+            row += ["",""] 
 
-        wg = frappe.db.get_value("Salary Detail", {'salary_component':'Wages','parent':ss.name},['amount'])
         if wg:row += [wg]
         else:row += [""]
 
-        total = flt(basic) + flt(da) + flt(oa) + flt(wg)    
+        total = flt(basic) + flt(da) + flt(oa) + flt(wg) + flt(lla)    
         if total:row += [ total ]
         else:row += [""]
         
@@ -171,12 +192,14 @@ def get_columns():
         _("Payment Days") + ":Int:100",
         _("OT Hours") + ":Float:100",
         _("Per Day Basic") + ":Currency:100",
+        _("Per Day Wages") + ":Currency:100",
         _("Per Day DA") + ":Currency:100",
         _("Per Day OA") + ":Currency:100",
         _("Per Day Total") + ":Currency:100",
         _("Basic") + ":Currency:120",
         _("DA") + ":Currency:120",
         _("Other Allowance") + ":Currency:120",
+        _("Line Leader") + ":Currency:120",
         _("Wages") + ":Currency:120",
         _("Total") + ":Currency:120",
         _("Employer PF") + ":Currency:120",
