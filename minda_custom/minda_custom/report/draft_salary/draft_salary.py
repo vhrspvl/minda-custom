@@ -117,7 +117,11 @@ def execute(filters=None):
         if wg:row += [wg]
         else:row += [""]
 
-        total = flt(basic) + flt(da) + flt(oa) + flt(wg) + flt(lla)    
+        arrear= frappe.db.get_value("Salary Detail", {'salary_component':'Arrear','parent':ss.name},['amount'])
+        if arrear:row += [arrear]
+        else:row += [""]
+
+        total = flt(basic) + flt(da) + flt(oa) + flt(wg) + flt(lla) + flt(arrear)    
         if total:row += [ total ]
         else:row += [""]
         
@@ -181,7 +185,7 @@ def execute(filters=None):
 
 def get_columns():
     columns = [
-        _("Salary Slip Id") + ":Data:150",
+        _("Salary Slip Id") + ":Link/Salary Slip:150",
         _("Employee") + ":Data:100",
         _("Employee Name") + ":Data:120",
         _("Date of Joining") + ":Date:120",
@@ -201,6 +205,7 @@ def get_columns():
         _("Other Allowance") + ":Currency:120",
         _("Line Leader") + ":Currency:120",
         _("Wages") + ":Currency:120",
+        _("Arrear") + ":Currency:100",
         _("Total") + ":Currency:120",
         _("Employer PF") + ":Currency:120",
         _("Employer ESIC") + ":Currency:100",
@@ -222,13 +227,13 @@ def get_columns():
 
 def get_salary_slips(conditions,filters):
     salary_slips = frappe.db.sql("""select ss.contractor as contractor,ss.employee as employee,ss.employee_name as employee_name,ss.name as name, ss.grade as grade,ss.leave_without_pay as lwp, ss.total_working_days as twd,ss.payment_days as md,ss.total_working_hours as twh,ss.gross_pay as gp,ss.total_deduction as td,ss.gross_pay as gp,ss.rounded_total as rt from `tabSalary Slip` ss 
-    where ss.docstatus = 0 %s order by employee""" % conditions, filters, as_dict=1)
+    where  %s order by employee""" % conditions, filters, as_dict=1)
     return salary_slips
 
 
 def get_conditions(filters):
     conditions = ""
-    if filters.get("from_date"): conditions += " and start_date >= %(from_date)s"
+    if filters.get("from_date"): conditions += " start_date >= %(from_date)s"
     if filters.get("to_date"): conditions += " and end_date >= %(to_date)s"   
     if filters.get("employee"): conditions += " and employee = %(employee)s"
     return conditions, filters

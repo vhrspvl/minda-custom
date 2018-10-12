@@ -375,13 +375,13 @@ def holiday_att():
     employees = frappe.get_list('Employee', filters={"status": "Active"})
     for employee in employees:
         pre_day = frappe.db.get_value("Attendance", {
-                        "employee": employee.name, "attendance_date": '2018-08-14'})
+                        "employee": employee.name, "attendance_date": '2018-09-12'})
         next_day = frappe.db.get_value("Attendance", {
-                        "employee": employee.name, "attendance_date": '2018-08-16'})
-        if pre_day and next_day: 
+                        "employee": employee.name, "attendance_date": '2018-09-14'})
+        if pre_day and next_day:
             emp = frappe.get_doc("Employee", employee['name'])                      
             att_id = frappe.db.get_value("Attendance", {
-                        "employee": employee.name, "attendance_date": '2018-08-15'})
+                        "employee": employee.name, "attendance_date": '2018-09-13'})
             if att_id:
                 pass
             else:
@@ -390,7 +390,7 @@ def holiday_att():
                     "employee":emp.employee,
                     "employee_name":emp.employee_name,
                     "biometric_id":emp.biometric_id,
-                    "attendance_date":'2018-08-15',
+                    "attendance_date":'2018-09-13',
                     "status": "Present",
                     "company":emp.company,
                     "department":emp.department,
