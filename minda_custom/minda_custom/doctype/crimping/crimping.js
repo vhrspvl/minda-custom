@@ -14,7 +14,7 @@ frappe.ui.form.on("Crimping",{
         },
         callback: function(r) {
         if (!r.exc) {
-            frm.set_value("data_1",r.message.employee_name)
+            frm.set_value("associate",r.message.employee_name)
             frm.set_value("date_of_joining",r.message.date_of_joining)
             frm.set_value("line_name",r.message.line)
     
@@ -587,30 +587,6 @@ frappe.ui.form.on("Crimping",{
             frm.set_value("iwc","");
         }
     },
-    'ok_4': function(frm) {
-        if(frm.doc.ok_4){
-            frm.set_value("iwc","1");
-        }
-        else{
-            frm.set_value("iwc","");
-        }
-    },
-    'partially_ok4': function(frm) {
-        if(frm.doc.partially_ok4){
-            frm.set_value("iwc","0.5");
-        }
-        else{
-            frm.set_value("iwc","");
-        }
-    },
-    'not_ok4': function(frm) {
-        if(frm.doc.not_ok4){
-            frm.set_value("iwc","0");
-        }
-        else{
-            frm.set_value("iwc","");
-        }
-    },
     'ok_5': function(frm) {
         if(frm.doc.ok_5){
             frm.set_value("mi","1");
@@ -659,25 +635,1371 @@ frappe.ui.form.on("Crimping",{
             frm.set_value("si","");
         }
     },
-    iws:function(frm){
-        frm.set_value("mark_obtained_a", flt(frm.doc.iws));
+    'ok_14': function(frm) {
+        if(frm.doc.ok_14){
+            frm.set_value("d_1","1");
+        }
+        else{
+            frm.set_value("d_1","");
+        }
     },
-    wslm:function(frm){
-        frm.set_value("mark_obtained_a", flt(frm.doc.iws)+flt(frm.doc.wslm));
+    'partially_ok_14': function(frm) {
+        if(frm.doc.partially_ok_14){
+            frm.set_value("d_1","0.5");
+        }
+        else{
+            frm.set_value("d_1","");
+        }
     },
-    tcsch:function(frm){
-        frm.set_value("mark_obtained_a", flt(frm.doc.iws)+flt(frm.doc.wslm)+flt(frm.doc.tcsch));
+    'not_ok_14': function(frm) {
+        if(frm.doc.not_ok_14){
+            frm.set_value("d_1","0");
+        }
+        else{
+            frm.set_value("d_1","");
+        }
     },
-    chslc:function(frm){
-        frm.set_value("mark_obtained_a", flt(frm.doc.iws)+flt(frm.doc.wslm)+flt(frm.doc.tcsch)+flt(frm.doc.chslc));
+
+    'ok_15': function(frm) {
+        if(frm.doc.ok_15){
+            frm.set_value("d_2","1");
+        }
+        else{
+            frm.set_value("d_2","");
+        }
     },
-    iwc:function(frm){
-        frm.set_value("mark_obtained_a", flt(frm.doc.iws)+flt(frm.doc.wslm)+flt(frm.doc.tcsch)+flt(frm.doc.chslc)+flt(frm.doc.iwc));
+    'partially_ok_15': function(frm) {
+        if(frm.doc.partially_ok_15){
+            frm.set_value("d_2","0.5");
+        }
+        else{
+            frm.set_value("d_2","");
+        }
     },
-    mi:function(frm){
-        frm.set_value("mark_obtained_a", flt(frm.doc.iws)+flt(frm.doc.wslm)+flt(frm.doc.tcsch)+flt(frm.doc.chslc)+flt(frm.doc.iwc)+flt(frm.doc.mi));
+    'not_ok_15': function(frm) {
+        if(frm.doc.not_ok_15){
+            frm.set_value("d_2","0");
+        }
+        else{
+            frm.set_value("d_2","");
+        }
     },
-    si:function(frm){
+    'ok_16': function(frm) {
+        if(frm.doc.ok_16){
+            frm.set_value("d_3","1");
+        }
+        else{
+            frm.set_value("d_3","");
+        }
+    },
+    'partially_ok_16': function(frm) {
+        if(frm.doc.partially_ok_16){
+            frm.set_value("d_3","0.5");
+        }
+        else{
+            frm.set_value("d_3","");
+        }
+    },
+    'not_ok_16': function(frm) {
+        if(frm.doc.not_ok_16){
+            frm.set_value("d_3","0");
+        }
+        else{
+            frm.set_value("d_3","");
+        }
+    },
+
+    'ok_17': function(frm) {
+        if(frm.doc.ok_17){
+            frm.set_value("d_4","1");
+        }
+        else{
+            frm.set_value("d_4","");
+        }
+    },
+    'partially_ok_17': function(frm) {
+        if(frm.doc.partially_ok_17){
+            frm.set_value("d_4","0.5");
+        }
+        else{
+            frm.set_value("d_4","");
+        }
+    },
+    'not_ok_17': function(frm) {
+        if(frm.doc.not_ok_17){
+            frm.set_value("d_4","0");
+        }
+        else{
+            frm.set_value("d_4","");
+        }
+    },
+    'ok_18': function(frm) {
+        if(frm.doc.ok_18){
+            frm.set_value("d_5","1");
+        }
+        else{
+            frm.set_value("d_5","");
+        }
+    },
+    'partially_ok_118': function(frm) {
+        if(frm.doc.partially_ok_118){
+            frm.set_value("d_5","0.5");
+        }
+        else{
+            frm.set_value("d_5","");
+        }
+    },
+    'not_ok_18': function(frm) {
+        if(frm.doc.not_ok_18){
+            frm.set_value("d_5","0");
+        }
+        else{
+            frm.set_value("d_5","");
+        }
+    },
+    'ok_19': function(frm) {
+        if(frm.doc.ok_19){
+            frm.set_value("d_6","1");
+        }
+        else{
+            frm.set_value("d_6","");
+        }
+    },
+    'partially_ok_19': function(frm) {
+        if(frm.doc.partially_ok_19){
+            frm.set_value("d_6","0.5");
+        }
+        else{
+            frm.set_value("d_6","");
+        }
+    },
+    'not_ok_19': function(frm) {
+        if(frm.doc.not_ok_19){
+            frm.set_value("d_6","0");
+        }
+        else{
+            frm.set_value("d_6","");
+        }
+    },
+    'ok_20': function(frm) {
+        if(frm.doc.ok_20){
+            frm.set_value("d_7","1");
+        }
+        else{
+            frm.set_value("d_7","");
+        }
+    },
+    'partially_ok_20': function(frm) {
+        if(frm.doc.partially_ok_20){
+            frm.set_value("d_7","0.5");
+        }
+        else{
+            frm.set_value("d_7","");
+        }
+    },
+    'not_ok_20': function(frm) {
+        if(frm.doc.not_ok_20){
+            frm.set_value("d_7","0");
+        }
+        else{
+            frm.set_value("d_7","");
+        }
+    },
+    'ok_21': function(frm) {
+        if(frm.doc.ok_21){
+            frm.set_value("d_8","1");
+        }
+        else{
+            frm.set_value("d_8","");
+        }
+    },
+    'partially_ok_21': function(frm) {
+        if(frm.doc.partially_ok_21){
+            frm.set_value("d_8","0.5");
+        }
+        else{
+            frm.set_value("d_8","");
+        }
+    },
+    'not_ok_21': function(frm) {
+        if(frm.doc.not_ok_21){
+            frm.set_value("d_8","0");
+        }
+        else{
+            frm.set_value("d_8","");
+        }
+    },
+    'ok_22': function(frm) {
+        if(frm.doc.ok_22){
+            frm.set_value("d_9","1");
+        }
+        else{
+            frm.set_value("d_9","");
+        }
+    },
+    'partially_ok_22': function(frm) {
+        if(frm.doc.partially_ok_22){
+            frm.set_value("d_9","0.5");
+        }
+        else{
+            frm.set_value("d_9","");
+        }
+    },
+    'not_ok_22': function(frm) {
+        if(frm.doc.not_ok_22){
+            frm.set_value("d_9","0");
+        }
+        else{
+            frm.set_value("d_9","");
+        }
+    },
+    'ok_23': function(frm) {
+        if(frm.doc.ok_23){
+            frm.set_value("d_10","1");
+        }
+        else{
+            frm.set_value("d_10","");
+        }
+    },
+    'partially_ok_23': function(frm) {
+        if(frm.doc.partially_ok_23){
+            frm.set_value("d_10","0.5");
+        }
+        else{
+            frm.set_value("d_10","");
+        }
+    },
+    'not_ok_23': function(frm) {
+        if(frm.doc.not_ok_23){
+            frm.set_value("d_10","0");
+        }
+        else{
+            frm.set_value("d_10","");
+        }
+    },
+    'ok_24': function(frm) {
+        if(frm.doc.ok_24){
+            frm.set_value("d_11","1");
+        }
+        else{
+            frm.set_value("d_11","");
+        }
+    },
+    'partially_ok_24': function(frm) {
+        if(frm.doc.partially_ok_24){
+            frm.set_value("d_11","0.5");
+        }
+        else{
+            frm.set_value("d_11","");
+        }
+    },
+    'not_ok_24': function(frm) {
+        if(frm.doc.not_ok_24){
+            frm.set_value("d_11","0");
+        }
+        else{
+            frm.set_value("d_11","");
+        }
+    },
+    'ok_25': function(frm) {
+        if(frm.doc.ok_25){
+            frm.set_value("d_12","1");
+        }
+        else{
+            frm.set_value("d_12","");
+        }
+    },
+    'partially_ok_25': function(frm) {
+        if(frm.doc.partially_ok_25){
+            frm.set_value("d_12","0.5");
+        }
+        else{
+            frm.set_value("d_12","");
+        }
+    },
+    'not_ok_25': function(frm) {
+        if(frm.doc.not_ok_25){
+            frm.set_value("d_12","0");
+        }
+        else{
+            frm.set_value("d_12","");
+        }
+    },
+    'ok_26': function(frm) {
+        if(frm.doc.ok_26){
+            frm.set_value("d_13","1");
+        }
+        else{
+            frm.set_value("d_13","");
+        }
+    },
+    'partially_ok_26': function(frm) {
+        if(frm.doc.partially_ok_26){
+            frm.set_value("d_13","0.5");
+        }
+        else{
+            frm.set_value("d_13","");
+        }
+    },
+    'not_ok_26': function(frm) {
+        if(frm.doc.not_ok_26){
+            frm.set_value("d_13","0");
+        }
+        else{
+            frm.set_value("d_13","");
+        }
+    },
+    'ok_27': function(frm) {
+        if(frm.doc.ok_27){
+            frm.set_value("d_14","1");
+        }
+        else{
+            frm.set_value("d_14","");
+        }
+    },
+    'partially_ok_27': function(frm) {
+        if(frm.doc.partially_ok_27){
+            frm.set_value("d_14","0.5");
+        }
+        else{
+            frm.set_value("d_14","");
+        }
+    },
+    'not_ok_27': function(frm) {
+        if(frm.doc.not_ok_27){
+            frm.set_value("d_14","0");
+        }
+        else{
+            frm.set_value("d_14","");
+        }
+    },
+    'ok_28': function(frm) {
+        if(frm.doc.ok_28){
+            frm.set_value("d_15","1");
+        }
+        else{
+            frm.set_value("d_15","");
+        }
+    },
+    'partially_ok_28': function(frm) {
+        if(frm.doc.partially_ok_28){
+            frm.set_value("d_15","0.5");
+        }
+        else{
+            frm.set_value("d_15","");
+        }
+    },
+    'not_ok_28': function(frm) {
+        if(frm.doc.not_ok_28){
+            frm.set_value("d_15","0");
+        }
+        else{
+            frm.set_value("d_15","");
+        }
+    },
+    'ok_29': function(frm) {
+        if(frm.doc.ok_29){
+            frm.set_value("d_16","1");
+        }
+        else{
+            frm.set_value("d_16","");
+        }
+    },
+    'partially_ok_29': function(frm) {
+        if(frm.doc.partially_ok_29){
+            frm.set_value("d_16","0.5");
+        }
+        else{
+            frm.set_value("d_16","");
+        }
+    },
+    'not_ok_29': function(frm) {
+        if(frm.doc.not_ok_29){
+            frm.set_value("d_16","0");
+        }
+        else{
+            frm.set_value("d_16","");
+        }
+    },
+    'ok_30': function(frm) {
+        if(frm.doc.ok_30){
+            frm.set_value("d_17","1");
+        }
+        else{
+            frm.set_value("d_17","");
+        }
+    },
+    'partially_ok_30': function(frm) {
+        if(frm.doc.partially_ok_30){
+            frm.set_value("d_17","0.5");
+        }
+        else{
+            frm.set_value("d_17","");
+        }
+    },
+    'not_ok_30': function(frm) {
+        if(frm.doc.not_ok_30){
+            frm.set_value("d_17","0");
+        }
+        else{
+            frm.set_value("d_17","");
+        }
+    },
+    'ok_31': function(frm) {
+        if(frm.doc.ok_31){
+            frm.set_value("d_18","1");
+        }
+        else{
+            frm.set_value("d_18","");
+        }
+    },
+    'partially_ok_31': function(frm) {
+        if(frm.doc.partially_ok_31){
+            frm.set_value("d_18","0.5");
+        }
+        else{
+            frm.set_value("d_18","");
+        }
+    },
+    'not_ok_31': function(frm) {
+        if(frm.doc.not_ok_31){
+            frm.set_value("d_18","0");
+        }
+        else{
+            frm.set_value("d_18","");
+        }
+    },
+    'ok_32': function(frm) {
+        if(frm.doc.ok_32){
+            frm.set_value("d_19","1");
+        }
+        else{
+            frm.set_value("d_19","");
+        }
+    },
+    'partially_ok_32': function(frm) {
+        if(frm.doc.partially_ok_32){
+            frm.set_value("d_19","0.5");
+        }
+        else{
+            frm.set_value("d_19","");
+        }
+    },
+    'not_ok_32': function(frm) {
+        if(frm.doc.not_ok_32){
+            frm.set_value("d_19","0");
+        }
+        else{
+            frm.set_value("d_19","");
+        }
+    },
+    'ok_33': function(frm) {
+        if(frm.doc.ok_33){
+            frm.set_value("d_20","1");
+        }
+        else{
+            frm.set_value("d_20","");
+        }
+    },
+    'partially_ok_33': function(frm) {
+        if(frm.doc.partially_ok_33){
+            frm.set_value("d_20","0.5");
+        }
+        else{
+            frm.set_value("d_20","");
+        }
+    },
+    'not_ok_33': function(frm) {
+        if(frm.doc.not_ok_33){
+            frm.set_value("d_20","0");
+        }
+        else{
+            frm.set_value("d_20","");
+        }
+    },
+    'ok_34': function(frm) {
+        if(frm.doc.ok_34){
+            frm.set_value("d_21","1");
+        }
+        else{
+            frm.set_value("d_21","");
+        }
+    },
+    'partially_ok_34': function(frm) {
+        if(frm.doc.partially_ok_34){
+            frm.set_value("d_21","0.5");
+        }
+        else{
+            frm.set_value("d_21","");
+        }
+    },
+    'not_ok_34': function(frm) {
+        if(frm.doc.not_ok_34){
+            frm.set_value("d_21","0");
+        }
+        else{
+            frm.set_value("d_21","");
+        }
+    },
+    'ok_7': function(frm) {
+        if(frm.doc.ok_7){
+            frm.set_value("clit_1","1");
+        }
+        else{
+            frm.set_value("clit_1","");
+        }
+    },
+    'partially_ok_7': function(frm) {
+        if(frm.doc.partially_ok_7){
+            frm.set_value("clit_1","0.5");
+        }
+        else{
+            frm.set_value("clit_1","");
+        }
+    },
+    'not_ok7': function(frm) {
+        if(frm.doc.not_ok7){
+            frm.set_value("clit_1","0");
+        }
+        else{
+            frm.set_value("clit_1","");
+        }
+    },
+
+    'ok_8': function(frm) {
+        if(frm.doc.ok_8){
+            frm.set_value("clit_2","1");
+        }
+        else{
+            frm.set_value("clit_2","");
+        }
+    },
+    'partially_ok_8': function(frm) {
+        if(frm.doc.partially_ok_8){
+            frm.set_value("clit_2","0.5");
+        }
+        else{
+            frm.set_value("clit_2","");
+        }
+    },
+    'not_ok_8': function(frm) {
+        if(frm.doc.not_ok_8){
+            frm.set_value("clit_2","0");
+        }
+        else{
+            frm.set_value("clit_2","");
+        }
+    },
+    'ok_9': function(frm) {
+        if(frm.doc.ok_9){
+            frm.set_value("clit_3","1");
+        }
+        else{
+            frm.set_value("clit_3","");
+        }
+    },
+    'partially_ok_9': function(frm) {
+        if(frm.doc.partially_ok_9){
+            frm.set_value("clit_3","0.5");
+        }
+        else{
+            frm.set_value("clit_3","");
+        }
+    },
+    'not_ok_9': function(frm) {
+        if(frm.doc.not_ok_9){
+            frm.set_value("clit_3","0");
+        }
+        else{
+            frm.set_value("clit_3","");
+        }
+    },
+
+    'ok_10': function(frm) {
+        if(frm.doc.ok_10){
+            frm.set_value("clit_4","1");
+        }
+        else{
+            frm.set_value("clit_4","");
+        }
+    },
+    'partially_ok_10': function(frm) {
+        if(frm.doc.partially_ok_10){
+            frm.set_value("clit_4","0.5");
+        }
+        else{
+            frm.set_value("clit_4","");
+        }
+    },
+    'not_ok_10': function(frm) {
+        if(frm.doc.not_ok_10){
+            frm.set_value("clit_4","0");
+        }
+        else{
+            frm.set_value("clit_4","");
+        }
+    },
+    'ok_11': function(frm) {
+        if(frm.doc.ok_11){
+            frm.set_value("clit_6","1");
+        }
+        else{
+            frm.set_value("clit_6","");
+        }
+    },
+    'partially_ok_11': function(frm) {
+        if(frm.doc.partially_ok_11){
+            frm.set_value("clit_6","0.5");
+        }
+        else{
+            frm.set_value("clit_6","");
+        }
+    },
+    'not_ok_11': function(frm) {
+        if(frm.doc.not_ok_11){
+            frm.set_value("clit_6","0");
+        }
+        else{
+            frm.set_value("clit_6","");
+        }
+    },
+    'ok_12': function(frm) {
+        if(frm.doc.ok_12){
+            frm.set_value("clit_5","1");
+        }
+        else{
+            frm.set_value("clit_5","");
+        }
+    },
+    'partially_ok_12': function(frm) {
+        if(frm.doc.partially_ok_12){
+            frm.set_value("clit_5","0.5");
+        }
+        else{
+            frm.set_value("clit_5","");
+        }
+    },
+    'not_ok_12': function(frm) {
+        if(frm.doc.not_ok_12){
+            frm.set_value("clit_5","0");
+        }
+        else{
+            frm.set_value("clit_5","");
+        }
+    },
+    'ok_13': function(frm) {
+        if(frm.doc.ok_13){
+            frm.set_value("clit_7","1");
+        }
+        else{
+            frm.set_value("clit_7","");
+        }
+    },
+    'partially_ok_13': function(frm) {
+        if(frm.doc.partially_ok_13){
+            frm.set_value("clit_7","0.5");
+        }
+        else{
+            frm.set_value("clit_7","");
+        }
+    },
+    'not_ok_13': function(frm) {
+        if(frm.doc.not_ok_13){
+            frm.set_value("clit_7","0");
+        }
+        else{
+            frm.set_value("clit_7","");
+        }
+    },
+    'ok_35': function(frm) {
+        if(frm.doc.ok_35){
+            frm.set_value("safe_1","1");
+        }
+        else{
+            frm.set_value("safe_1","");
+        }
+    },
+    'partially_ok_35': function(frm) {
+        if(frm.doc.partially_ok_35){
+            frm.set_value("safe_1","0.5");
+        }
+        else{
+            frm.set_value("safe_1","");
+        }
+    },
+    'not_ok_35': function(frm) {
+        if(frm.doc.not_ok_35){
+            frm.set_value("safe_1","0");
+        }
+        else{
+            frm.set_value("safe_1","");
+        }
+    },
+
+    'ok_36': function(frm) {
+        if(frm.doc.ok_36){
+            frm.set_value("safe_2","1");
+        }
+        else{
+            frm.set_value("safe_2","");
+        }
+    },
+    'partially_ok_36': function(frm) {
+        if(frm.doc.partially_ok_36){
+            frm.set_value("safe_2","0.5");
+        }
+        else{
+            frm.set_value("safe_2","");
+        }
+    },
+    'not_ok_36': function(frm) {
+        if(frm.doc.not_ok_36){
+            frm.set_value("safe_2","0");
+        }
+        else{
+            frm.set_value("safe_2","");
+        }
+    },
+    'ok_37': function(frm) {
+        if(frm.doc.ok_37){
+            frm.set_value("safe_3","1");
+        }
+        else{
+            frm.set_value("safe_3","");
+        }
+    },
+    'partially_ok_37': function(frm) {
+        if(frm.doc.partially_ok_37){
+            frm.set_value("safe_3","0.5");
+        }
+        else{
+            frm.set_value("safe_3","");
+        }
+    },
+    'not_ok_37': function(frm) {
+        if(frm.doc.not_ok_37){
+            frm.set_value("safe_3","0");
+        }
+        else{
+            frm.set_value("safe_3","");
+        }
+    },
+
+    'ok_38': function(frm) {
+        if(frm.doc.ok_38){
+            frm.set_value("safe_4","1");
+        }
+        else{
+            frm.set_value("safe_4","");
+        }
+    },
+    'partially_ok_38': function(frm) {
+        if(frm.doc.partially_ok_38){
+            frm.set_value("safe_4","0.5");
+        }
+        else{
+            frm.set_value("safe_4","");
+        }
+    },
+    'not_ok_38': function(frm) {
+        if(frm.doc.not_ok_38){
+            frm.set_value("safe_4","0");
+        }
+        else{
+            frm.set_value("safe_4","");
+        }
+    },
+    'ok_39': function(frm) {
+        if(frm.doc.ok_39){
+            frm.set_value("safe_5","1");
+        }
+        else{
+            frm.set_value("safe_5","");
+        }
+    },
+    'partially_ok_39': function(frm) {
+        if(frm.doc.partially_ok_39){
+            frm.set_value("safe_5","0.5");
+        }
+        else{
+            frm.set_value("safe_5","");
+        }
+    },
+    'not_ok_39': function(frm) {
+        if(frm.doc.not_ok_39){
+            frm.set_value("safe_5","0");
+        }
+        else{
+            frm.set_value("safe_5","");
+        }
+    },
+    'ok_40': function(frm) {
+        if(frm.doc.ok_40){
+            frm.set_value("safe_6","1");
+        }
+        else{
+            frm.set_value("safe_6","");
+        }
+    },
+    'partially_ok_40': function(frm) {
+        if(frm.doc.partially_ok_40){
+            frm.set_value("safe_6","0.5");
+        }
+        else{
+            frm.set_value("safe_6","");
+        }
+    },
+    'not_ok_40': function(frm) {
+        if(frm.doc.not_ok_40){
+            frm.set_value("safe_6","0");
+        }
+        else{
+            frm.set_value("safe_6","");
+        }
+    },
+    'ok_41': function(frm) {
+        if(frm.doc.ok_41){
+            frm.set_value("safe_7","1");
+        }
+        else{
+            frm.set_value("safe_7","");
+        }
+    },
+    'partially_ok_41': function(frm) {
+        if(frm.doc.partially_ok_41){
+            frm.set_value("safe_7","0.5");
+        }
+        else{
+            frm.set_value("safe_7","");
+        }
+    },
+    'not_ok_41': function(frm) {
+        if(frm.doc.not_ok_41){
+            frm.set_value("safe_7","0");
+        }
+        else{
+            frm.set_value("safe_7","");
+        }
+    },
+    'ok_42': function(frm) {
+        if(frm.doc.ok_42){
+            frm.set_value("work_1","1");
+        }
+        else{
+            frm.set_value("work_1","");
+        }
+    },
+    'partially_ok_42': function(frm) {
+        if(frm.doc.partially_ok_42){
+            frm.set_value("work_1","0.5");
+        }
+        else{
+            frm.set_value("work_1","");
+        }
+    },
+    'not_ok_42': function(frm) {
+        if(frm.doc.not_ok_42){
+            frm.set_value("work_1","0");
+        }
+        else{
+            frm.set_value("work_1","");
+        }
+    },
+
+    'ok_43': function(frm) {
+        if(frm.doc.ok_43){
+            frm.set_value("work_2","1");
+        }
+        else{
+            frm.set_value("work_2","");
+        }
+    },
+    'partially_ok_43': function(frm) {
+        if(frm.doc.partially_ok_43){
+            frm.set_value("work_2","0.5");
+        }
+        else{
+            frm.set_value("work_2","");
+        }
+    },
+    'not_ok_43': function(frm) {
+        if(frm.doc.not_ok_43){
+            frm.set_value("work_2","0");
+        }
+        else{
+            frm.set_value("work_2","");
+        }
+    },
+    'ok_44': function(frm) {
+        if(frm.doc.ok_44){
+            frm.set_value("work_3","1");
+        }
+        else{
+            frm.set_value("work_3","");
+        }
+    },
+    'partially_ok_44': function(frm) {
+        if(frm.doc.partially_ok_44){
+            frm.set_value("work_3","0.5");
+        }
+        else{
+            frm.set_value("work_3","");
+        }
+    },
+    'not_ok_44': function(frm) {
+        if(frm.doc.not_ok_44){
+            frm.set_value("work_3","0");
+        }
+        else{
+            frm.set_value("work_3","");
+        }
+    },
+
+    'ok_45': function(frm) {
+        if(frm.doc.ok_45){
+            frm.set_value("work_4","1");
+        }
+        else{
+            frm.set_value("work_4","");
+        }
+    },
+    'partially_ok_45': function(frm) {
+        if(frm.doc.partially_ok_45){
+            frm.set_value("work_4","0.5");
+        }
+        else{
+            frm.set_value("work_4","");
+        }
+    },
+    'not_ok_45': function(frm) {
+        if(frm.doc.not_ok_45){
+            frm.set_value("work_4","0");
+        }
+        else{
+            frm.set_value("work_4","");
+        }
+    },
+    'ok_46': function(frm) {
+        if(frm.doc.ok_46){
+            frm.set_value("wotk_5","1");
+        }
+        else{
+            frm.set_value("wotk_5","");
+        }
+    },
+    'partially_ok_46': function(frm) {
+        if(frm.doc.partially_ok_46){
+            frm.set_value("wotk_5","0.5");
+        }
+        else{
+            frm.set_value("wotk_5","");
+        }
+    },
+    'not_ok_46': function(frm) {
+        if(frm.doc.not_ok_46){
+            frm.set_value("wotk_5","0");
+        }
+        else{
+            frm.set_value("wotk_5","");
+        }
+    },
+    'ok_47': function(frm) {
+        if(frm.doc.ok_47){
+            frm.set_value("work_6","1");
+        }
+        else{
+            frm.set_value("work_6","");
+        }
+    },
+    'partially_ok_47': function(frm) {
+        if(frm.doc.partially_ok_47){
+            frm.set_value("work_6","0.5");
+        }
+        else{
+            frm.set_value("work_6","");
+        }
+    },
+    'not_ok_47': function(frm) {
+        if(frm.doc.not_ok_47){
+            frm.set_value("work_6","0");
+        }
+        else{
+            frm.set_value("work_6","");
+        }
+    },
+    'ok_48': function(frm) {
+        if(frm.doc.ok_48){
+            frm.set_value("work_7","1");
+        }
+        else{
+            frm.set_value("work_7","");
+        }
+    },
+    'partially_ok_48': function(frm) {
+        if(frm.doc.partially_ok_48){
+            frm.set_value("work_7","0.5");
+        }
+        else{
+            frm.set_value("work_7","");
+        }
+    },
+    'not_ok_48': function(frm) {
+        if(frm.doc.not_ok_48){
+            frm.set_value("work_7","0");
+        }
+        else{
+            frm.set_value("work_7","");
+        }
+    },
+    'ok_49': function(frm) {
+        if(frm.doc.ok_49){
+            frm.set_value("f1","1");
+        }
+        else{
+            frm.set_value("f1","");
+        }
+    },
+    'partially_ok_49': function(frm) {
+        if(frm.doc.partially_ok_49){
+            frm.set_value("f1","0.5");
+        }
+        else{
+            frm.set_value("f1","");
+        }
+    },
+    'not_ok_49': function(frm) {
+        if(frm.doc.not_ok_49){
+            frm.set_value("f1","0");
+        }
+        else{
+            frm.set_value("f1","");
+        }
+    },
+
+    'ok_50': function(frm) {
+        if(frm.doc.ok_50){
+            frm.set_value("f2","1");
+        }
+        else{
+            frm.set_value("f2","");
+        }
+    },
+    'partially_ok_50': function(frm) {
+        if(frm.doc.partially_ok_50){
+            frm.set_value("f2","0.5");
+        }
+        else{
+            frm.set_value("f2","");
+        }
+    },
+    'not_ok_50': function(frm) {
+        if(frm.doc.not_ok_50){
+            frm.set_value("f2","0");
+        }
+        else{
+            frm.set_value("f2","");
+        }
+    },
+    'ok_51': function(frm) {
+        if(frm.doc.ok_51){
+            frm.set_value("f3","1");
+        }
+        else{
+            frm.set_value("f3","");
+        }
+    },
+    'partially_ok_51': function(frm) {
+        if(frm.doc.partially_ok_51){
+            frm.set_value("f3","0.5");
+        }
+        else{
+            frm.set_value("f3","");
+        }
+    },
+    'not_ok_51': function(frm) {
+        if(frm.doc.not_ok_51){
+            frm.set_value("f3","0");
+        }
+        else{
+            frm.set_value("f3","");
+        }
+    },
+
+    'ok_52': function(frm) {
+        if(frm.doc.ok_52){
+            frm.set_value("f4","1");
+        }
+        else{
+            frm.set_value("f4","");
+        }
+    },
+    'partially_ok_52': function(frm) {
+        if(frm.doc.partially_ok_52){
+            frm.set_value("f4","0.5");
+        }
+        else{
+            frm.set_value("f4","");
+        }
+    },
+    'not_ok_52': function(frm) {
+        if(frm.doc.not_ok_52){
+            frm.set_value("f4","0");
+        }
+        else{
+            frm.set_value("f4","");
+        }
+    },
+    'ok_53': function(frm) {
+        if(frm.doc.ok_53){
+            frm.set_value("f5","1");
+        }
+        else{
+            frm.set_value("f5","");
+        }
+    },
+    'partially_ok_53': function(frm) {
+        if(frm.doc.partially_ok_53){
+            frm.set_value("f5","0.5");
+        }
+        else{
+            frm.set_value("f5","");
+        }
+    },
+    'not_ok_53': function(frm) {
+        if(frm.doc.not_ok_53){
+            frm.set_value("f5","0");
+        }
+        else{
+            frm.set_value("f5","");
+        }
+    },
+    'ok_54': function(frm) {
+        if(frm.doc.ok_54){
+            frm.set_value("f6","1");
+        }
+        else{
+            frm.set_value("f6","");
+        }
+    },
+    'partially_ok_54': function(frm) {
+        if(frm.doc.partially_ok_54){
+            frm.set_value("f6","0.5");
+        }
+        else{
+            frm.set_value("f6","");
+        }
+    },
+    'not_ok_54': function(frm) {
+        if(frm.doc.not_ok_54){
+            frm.set_value("f6","0");
+        }
+        else{
+            frm.set_value("f6","");
+        }
+    },
+    'ok_55': function(frm) {
+        if(frm.doc.ok_55){
+            frm.set_value("f7","1");
+        }
+        else{
+            frm.set_value("f7","");
+        }
+    },
+    'partially_ok_55': function(frm) {
+        if(frm.doc.partially_ok_55){
+            frm.set_value("f7","0.5");
+        }
+        else{
+            frm.set_value("f7","");
+        }
+    },
+    'not_ok_55': function(frm) {
+        if(frm.doc.not_ok_55){
+            frm.set_value("f7","0");
+        }
+        else{
+            frm.set_value("f7","");
+        }
+    },
+    'ok_56': function(frm) {
+        if(frm.doc.ok_56){
+            frm.set_value("s1","1");
+        }
+        else{
+            frm.set_value("s1","");
+        }
+    },
+    'partially_ok_56': function(frm) {
+        if(frm.doc.partially_ok_56){
+            frm.set_value("s1","0.5");
+        }
+        else{
+            frm.set_value("s1","");
+        }
+    },
+    'not_ok_56': function(frm) {
+        if(frm.doc.not_ok_56){
+            frm.set_value("s1","0");
+        }
+        else{
+            frm.set_value("s1","");
+        }
+    },
+    'ok_57': function(frm) {
+        if(frm.doc.ok_57){
+            frm.set_value("s2","1");
+        }
+        else{
+            frm.set_value("s2","");
+        }
+    },
+    'partially_ok_57': function(frm) {
+        if(frm.doc.partially_ok_57){
+            frm.set_value("s2","0.5");
+        }
+        else{
+            frm.set_value("s2","");
+        }
+    },
+    'not_ok_57': function(frm) {
+        if(frm.doc.not_ok_57){
+            frm.set_value("s2","0");
+        }
+        else{
+            frm.set_value("s2","");
+        }
+    },
+
+    'ok_58': function(frm) {
+        if(frm.doc.ok_58){
+            frm.set_value("s3","1");
+        }
+        else{
+            frm.set_value("s3","");
+        }
+    },
+    'partially_ok_58': function(frm) {
+        if(frm.doc.partially_ok_58){
+            frm.set_value("s3","0.5");
+        }
+        else{
+            frm.set_value("s3","");
+        }
+    },
+    'not_ok_58': function(frm) {
+        if(frm.doc.not_ok_58){
+            frm.set_value("s3","0");
+        }
+        else{
+            frm.set_value("s3","");
+        }
+    },
+    'ok_59': function(frm) {
+        if(frm.doc.ok_59){
+            frm.set_value("zs","1");
+        }
+        else{
+            frm.set_value("zs","");
+        }
+    },
+    'partially_ok_59': function(frm) {
+        if(frm.doc.partially_ok_59){
+            frm.set_value("zs","0.5");
+        }
+        else{
+            frm.set_value("zs","");
+        }
+    },
+    'not_ok_59': function(frm) {
+        if(frm.doc.not_ok_59){
+            frm.set_value("zs","0");
+        }
+        else{
+            frm.set_value("zs","");
+        }
+    },
+    'ok_60': function(frm) {
+        if(frm.doc.ok_60){
+            frm.set_value("rh","1");
+        }
+        else{
+            frm.set_value("rh","");
+        }
+    },
+    'partially_ok_60': function(frm) {
+        if(frm.doc.partially_ok_60){
+            frm.set_value("rh","0.5");
+        }
+        else{
+            frm.set_value("rh","");
+        }
+    },
+    'not_ok_60': function(frm) {
+        if(frm.doc.not_ok_60){
+            frm.set_value("rh","0");
+        }
+        else{
+            frm.set_value("rh","");
+        }
+    },
+    'ok_61': function(frm) {
+        if(frm.doc.ok_61){
+            frm.set_value("cch","1");
+        }
+        else{
+            frm.set_value("cch","");
+        }
+    },
+    'partially_ok_61': function(frm) {
+        if(frm.doc.partially_ok_61){
+            frm.set_value("cch","0.5");
+        }
+        else{
+            frm.set_value("cch","");
+        }
+    },
+    'not_ok_61': function(frm) {
+        if(frm.doc.not_ok_61){
+            frm.set_value("cch","0");
+        }
+        else{
+            frm.set_value("cch","");
+        }
+    },
+    validate:function(frm){
+        if((frm.doc.iws) || (frm.doc.wslm)|| (frm.doc.tcsch)|| (frm.doc.chslc)|| (frm.doc.iwc)|| (frm.doc.mi) || (frm.doc.si)){
         frm.set_value("mark_obtained_a", flt(frm.doc.iws)+flt(frm.doc.wslm)+flt(frm.doc.tcsch)+flt(frm.doc.chslc)+flt(frm.doc.iwc)+flt(frm.doc.mi)+flt(frm.doc.si));
-    },
+    }
+        if((frm.doc.d_1) || (frm.doc.d_2)|| (frm.doc.d_3)|| (frm.doc.d_4)|| (frm.doc.d_5)|| (frm.doc.d_6) || (frm.doc.d_7) || 
+        (frm.doc.d_8) || (frm.doc.d_9)|| (frm.doc.d_10)|| (frm.doc.d_11)|| (frm.doc.d_12)|| (frm.doc.d_13) || (frm.doc.d_14)||
+        (frm.doc.d_15) || (frm.doc.d_16)|| (frm.doc.d_17)|| (frm.doc.d_18)|| (frm.doc.d_19)|| (frm.doc.d_20) || (frm.doc.d_21)){
+        frm.set_value("mark_obtained_b", flt(frm.doc.d_1)+flt(frm.doc.d_2)+flt(frm.doc.d_3)+flt(frm.doc.d_4)+flt(frm.doc.d_5)+flt(frm.doc.d_6)+flt(frm.doc.d_7)+flt(frm.doc.d_8)+flt(frm.doc.d_9)+flt(frm.doc.d_10)+
+        flt(frm.doc.d_11)+flt(frm.doc.d_12)+flt(frm.doc.d_13)+flt(frm.doc.d_14)+flt(frm.doc.d_15)+flt(frm.doc.d_16)+flt(frm.doc.d_17)+flt(frm.doc.d_18)+flt(frm.doc.d_19)+flt(frm.doc.d_20)+flt(frm.doc.d_21));
+    }
+        if((frm.doc.clit_1) || (frm.doc.clit_2)|| (frm.doc.clit_3)|| (frm.doc.clit_4)|| (frm.doc.clit_5)|| (frm.doc.clit_6) || (frm.doc.clit_7)){
+        frm.set_value("mark_obtained_c", flt(frm.doc.clit_1)+flt(frm.doc.clit_2)+flt(frm.doc.clit_3)+flt(frm.doc.clit_4)+flt(frm.doc.clit_5)+flt(frm.doc.clit_6)+flt(frm.doc.clit_7));
+    }
+        if((frm.doc.safe_1) || (frm.doc.safe_2)|| (frm.doc.safe_3)|| (frm.doc.safe_4)|| (frm.doc.safe_5)|| (frm.doc.safe_6) || (frm.doc.safe_7)){
+        frm.set_value("mark_obtained_d", flt(frm.doc.safe_1)+flt(frm.doc.safe_2)+flt(frm.doc.safe_3)+flt(frm.doc.safe_4)+flt(frm.doc.safe_5)+flt(frm.doc.safe_6)+flt(frm.doc.safe_7));
+    }
+        if((frm.doc.work_1) || (frm.doc.work_2)|| (frm.doc.work_3)|| (frm.doc.work_4)|| (frm.doc.wotk_5)|| (frm.doc.work_6) || (frm.doc.work_7)){
+        frm.set_value("mark_obtained_e", flt(frm.doc.work_1)+flt(frm.doc.work_2)+flt(frm.doc.work_3)+flt(frm.doc.work_4)+flt(frm.doc.work_5)+flt(frm.doc.work_6)+flt(frm.doc.work_7));
+    }
+        if((frm.doc.f1) || (frm.doc.f2)|| (frm.doc.f3)|| (frm.doc.f4)|| (frm.doc.f5)|| (frm.doc.f6) || (frm.doc.f7)){
+        frm.set_value("mark_obtained_f", flt(frm.doc.f1)+flt(frm.doc.f2)+flt(frm.doc.f3)+flt(frm.doc.f4)+flt(frm.doc.f5)+flt(frm.doc.f6)+flt(frm.doc.f7));
+    }
+        if((frm.doc.s1) || (frm.doc.s2)|| (frm.doc.s3)){
+        frm.set_value("mark_obtained_g", flt(frm.doc.s1)+flt(frm.doc.s2)+flt(frm.doc.s3));
+    }
+        if((frm.doc.zs) || (frm.doc.rh)|| (frm.doc.cch)){
+        frm.set_value("mark_obtained_h", flt(frm.doc.zs)+flt(frm.doc.rh)+flt(frm.doc.cch));
+    }
+        if((frm.doc.productivity) || (frm.doc.work_quality)|| (frm.doc.discipline)){
+        frm.set_value("mark_obatained_i", flt(frm.doc.productivity)+flt(frm.doc.work_quality)+flt(frm.doc.discipline));
+    }
+        if((frm.doc.mark_obtained_a) || (frm.doc.mark_obtained_b)|| (frm.doc.mark_obtained_c)|| (frm.doc.mark_obtained_d)|| (frm.doc.mark_obtained_e)|| (frm.doc.mark_obtained_f) || (frm.doc.mark_obtained_g) || (frm.doc.mark_obtained_h) || (frm.doc.mark_obatained_i) ){
+        frm.set_value("total_practical_mark_obtained", flt(frm.doc.mark_obtained_a)+flt(frm.doc.mark_obtained_b)+flt(frm.doc.mark_obtained_c)+flt(frm.doc.mark_obtained_d)+flt(frm.doc.mark_obtained_e)+flt(frm.doc.mark_obtained_f)+flt(frm.doc.mark_obtained_g)+flt(frm.doc.mark_obtained_h)+flt(frm.doc.mark_obatained_i));
+    }
+   }
 });
+    

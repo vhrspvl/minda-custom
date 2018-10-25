@@ -9,18 +9,18 @@ from frappe.model.document import Document
 class Crimping(Document):
     pass
     # def validate(self):
-    #     self.validate_levels()
+    #      self.validate_levels()
 
-    # def validate_levels(self):
-    #     if self.ok:
-    #         self.iws = '1'
-    #         if self.partially_ok:
-    #             self.iws = '0.5'
-    #             if self.not_ok:
-    #                 self.iws = '0'
-    #             else:
-    #                 self.iws = ''
-    #         else:
-    #             self.iws = ''
-    #     else:
-    #         self.iws = ''
+# def validate_levels(self):
+#     if self.ok:
+#         self.iws = '1'
+#         if self.partially_ok:
+#             self.iws = '0.5'
+#             if self.not_ok:
+#                 self.iws = '0'
+#             else:
+#                 self.iws = ''
+#         else:
+#             self.iws = ''
+#     else:
+#         self.iws = ''
