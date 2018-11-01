@@ -27,8 +27,7 @@ def send_wage_report():
         'fcontent': data
     }]
     frappe.sendmail(
-        recipients=['loganathan.k@mindasai.com',
-                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com','abdulla.pi@voltechgroup.com'],
+        recipients=['loganathan.k@mindasai.com','kennedy.j@mindasai.com'],
         subject='Wage Monitor Report - ' +
         formatdate(add_days(today(), -1)),
         message='Kindly find the attached Excel Sheet of Wage Monitor Report of ' + formatdate(
