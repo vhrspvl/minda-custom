@@ -2,6 +2,25 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Crimping",{
+    refresh:function(frm){
+        frappe.call({
+            method: 'frappe.client.get_list',
+            args: {
+                'doctype': 'Crimping Questions',
+                'fields' : ['*']
+            },
+            callback: function(r) {
+            if (!r.exc) {
+                    // code snippet
+                    (r.message || []).forEach(function (d) {
+                        $('[data-fieldname="defect_1"]').html('<h4>'+d.defect_1+'</h4>');
+                    });
+                }
+        
+            }
+        
+        })
+    },
     employee_code:function(frm){
     frappe.call({
         method: 'frappe.client.get_value',
