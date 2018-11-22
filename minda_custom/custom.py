@@ -402,7 +402,7 @@ def holiday_att():
                         
 @frappe.whitelist()
 def delete_sse():
-    get_emp = frappe.db.sql("""SELECT name,employee_number,grade,relieving_date FROM `tabEmployee` WHERE status = "Left" and relieving_date between '2018-08-01' AND '2018-10-31'""",as_dict=1)
+    get_emp = frappe.db.sql("""SELECT name,employee_number,grade,relieving_date FROM `tabEmployee` WHERE status = "Left" and relieving_date between DATE_ADD(CURDATE(), INTERVAL - 2 MONTH) AND CURDATE()""",as_dict=1)
     for emp in get_emp:
         obj = frappe.db.get_value('Salary Structure Employee',{'employee': emp.name} ,'name')
         frappe.delete_doc("Salary Structure Employee", obj)
