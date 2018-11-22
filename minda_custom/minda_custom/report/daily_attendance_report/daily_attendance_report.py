@@ -3,8 +3,11 @@
 
 from __future__ import unicode_literals
 import frappe
-from frappe.utils import cstr, cint, getdate, today, nowdate
 from frappe import msgprint, _
+from frappe.utils.data import today, get_timestamp
+from frappe.utils import getdate, cint, add_months, date_diff, add_days, nowdate, \
+    get_datetime_str, cstr, get_datetime, time_diff, time_diff_in_seconds
+from datetime import datetime, timedelta
 
 
 def execute(filters=None):
@@ -21,6 +24,7 @@ def execute(filters=None):
         frappe.throw(_("Date cannot be in the Future"))
     data = []
     row = []
+    total_working_hours = 0
     emp_list = get_employees(conditions, filters)
     for emp in emp_list:
         row = [emp.name, emp.biometric_id, emp.employee_name,
@@ -41,7 +45,7 @@ def execute(filters=None):
                 row += [shift]
             else:
                 row += [""]
-
+            
             if att_details.attendance_date:
                 row += [att_details.attendance_date]
             else:
@@ -56,6 +60,18 @@ def execute(filters=None):
                 row += [att_details.out_time]
             else:
                 row += ["00:00"]
+            if att_details.in_time and att_details.out_time:
+                in_time_f = datetime.strptime(
+                        att_details.in_time, '%H:%M:%S')
+                out_time_f = datetime.strptime(
+                    att_details.out_time, '%H:%M:%S')
+                if out_time_f and in_time_f:
+                    worked_hrs = out_time_f - in_time_f
+                    row += [worked_hrs]
+                else:
+                    row += ["00:00:00"]
+            else:
+                row += [""]
 
             if att_details.status:
                 row += [att_details.status]
@@ -70,7 +86,7 @@ def execute(filters=None):
             #     row += [""]
 
         else:
-            row += ["", "", "", "", "Absent"]
+            row += ["", "", "", "","", "Absent"]
 
         data.append(row)
     return columns, data
@@ -90,6 +106,7 @@ def get_columns(filters):
         _("Attendance Date") + ":Date:90",
         _("In Time") + "::120",
         _("Out Time") + "::120",
+        _("Working Hours") + "::120",
         _("Status") + "::120",
         # _("Remarks") + "::120",
     ]
