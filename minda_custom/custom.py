@@ -402,12 +402,38 @@ def holiday_att():
                         
 @frappe.whitelist()
 def delete_sse():
-    get_emp = frappe.db.sql("""SELECT name,employee_number,grade,relieving_date FROM `tabEmployee` WHERE status = "Left" and relieving_date between DATE_ADD(CURDATE(), INTERVAL - 2 MONTH) AND CURDATE()""",as_dict=1)
+    get_emp = frappe.db.sql("""SELECT name,employee_number,grade,relieving_date FROM `tabEmployee` WHERE status = "Left" and relieving_date < '2018-09-31'""",as_dict=1)
     for emp in get_emp:
         obj = frappe.db.get_value('Salary Structure Employee',{'employee': emp.name} ,'name')
         frappe.delete_doc("Salary Structure Employee", obj)
         frappe.db.commit() 
 
 
-
-
+@frappe.whitelist()
+def update_questions(doc, method):
+    # frappe.errprint(doc)
+    if doc.status == "Left":
+        if frappe.db.exists("Auto Cutting and Crimping", {
+                                      "employee_code": doc.name}):
+            questions = frappe.db.exists("Auto Cutting and Crimping", {
+                                        "employee_code": doc.name})
+            if questions:
+                questions_Set = frappe.get_doc("Auto Cutting and Crimping", questions)
+            else:
+                questions_Set = frappe.new_doc("Auto Cutting and Crimping")
+            questions_Set.update({
+                "status": doc.status
+            })
+            questions_Set.save(ignore_permissions=True)
+        if frappe.db.exists("Semi Auto Crimping", {
+                                      "employee_code": doc.name}):
+            questions1 = frappe.db.get_value("Semi Auto Crimping", {
+                                      "employee_code": doc.name})
+            if questions1:
+                questions_Set1 = frappe.get_doc("Semi Auto Crimping", questions1)
+            else:
+                questions_Set1 = frappe.new_doc("Semi Auto Crimping")
+            questions_Set1.update({
+                "status": doc.status
+            })
+            questions_Set1.save(ignore_permissions=True)

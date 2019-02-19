@@ -89,13 +89,20 @@ def execute(filters=None):
             else:row += [""]
         else:
             row += ["",""]
+        
+        if ss.md:
+            per_day_lla = flt(lla)/flt(ss.md)
+            if per_day_lla:row += [per_day_lla]
+            else:row += [""]
+        else:
+            row += ["",""]
 
            
         # per_day_oa = frappe.db.get_value("Salary Structure Employee", {'employee':ss.employee},['variable'])
         # if per_day_oa:row += [per_day_oa]
         # else:row += [""]
         
-        per_day_total = flt(per_day_basic) + flt(per_day_da) + flt(per_day_oa)    
+        per_day_total = flt(per_day_basic) + flt(per_day_da) + flt(per_day_oa) + flt(per_day_lla)
         if per_day_total:row += [ per_day_total ]
         else:row += [""]
 
@@ -171,6 +178,10 @@ def execute(filters=None):
         pf = frappe.db.get_value("Salary Detail", {'salary_component':'Provident Fund','parent':ss.name},['amount'])
         if pf:row += [pf]
         else:row += [""]
+
+        lwf = frappe.db.get_value("Salary Detail", {'salary_component':'Labour Welfare Fund','parent':ss.name},['amount'])
+        if lwf:row += [lwf]
+        else:row += [""]
        
         if ss.td:row += [ss.td]
         else:row += [""]
@@ -199,6 +210,7 @@ def get_columns():
         _("Per Day Wages") + ":Currency:100",
         _("Per Day DA") + ":Currency:100",
         _("Per Day OA") + ":Currency:100",
+        _("Per Day Line Leader") + ":Currency:100",
         _("Per Day Total") + ":Currency:100",
         _("Basic") + ":Currency:120",
         _("DA") + ":Currency:120",
@@ -219,6 +231,7 @@ def get_columns():
         _("OT ESIC") + ":Currency:100",
         _("Professional Tax") + ":Currency:100",
         _("Provident Fund") + ":Currency:100",
+        _("Labour Welfare Fund") + ":Currency:100",
         _("Total Deduction") + ":Currency:100",
         _("Net Pay") + ":Currency:100",
         

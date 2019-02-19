@@ -2,25 +2,7 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Crimping",{
-    refresh:function(frm){
-        frappe.call({
-            method: 'frappe.client.get_list',
-            args: {
-                'doctype': 'Crimping Questions',
-                'fields' : ['*']
-            },
-            callback: function(r) {
-            if (!r.exc) {
-                    // code snippet
-                    (r.message || []).forEach(function (d) {
-                        $('[data-fieldname="defect_1"]').html('<h4>'+d.defect_1+'</h4>');
-                    });
-                }
-        
-            }
-        
-        })
-    },
+   
     employee_code:function(frm){
     frappe.call({
         method: 'frappe.client.get_value',
@@ -314,34 +296,6 @@ frappe.ui.form.on("Crimping",{
         $(".chb37").prop('checked', false);
         $(this).prop('checked', true);
         })
-        $(cur_frm.fields_dict.ok_38.input).addClass('chb38');
-        $(cur_frm.fields_dict.partially_ok_38.input).addClass('chb38');
-        $(cur_frm.fields_dict.not_ok_38.input).addClass('chb38');
-        $(".chb38").change(function() {
-        $(".chb38").prop('checked', false);
-        $(this).prop('checked', true);
-        })
-        $(cur_frm.fields_dict.ok_39.input).addClass('chb39');
-        $(cur_frm.fields_dict.partially_ok_39.input).addClass('chb39');
-        $(cur_frm.fields_dict.not_ok_39.input).addClass('chb39');
-        $(".chb39").change(function() {
-        $(".chb39").prop('checked', false);
-        $(this).prop('checked', true);
-        })
-        $(cur_frm.fields_dict.ok_40.input).addClass('chb40');
-        $(cur_frm.fields_dict.partially_ok_40.input).addClass('chb40');
-        $(cur_frm.fields_dict.not_ok_40.input).addClass('chb40');
-        $(".chb40").change(function() {
-        $(".chb40").prop('checked', false);
-        $(this).prop('checked', true);
-        })
-        $(cur_frm.fields_dict.ok_41.input).addClass('chb41');
-        $(cur_frm.fields_dict.partially_ok_41.input).addClass('chb41');
-        $(cur_frm.fields_dict.not_ok_41.input).addClass('chb41');
-        $(".chb41").change(function() {
-        $(".chb41").prop('checked', false);
-        $(this).prop('checked', true);
-        })
         $(cur_frm.fields_dict.ok_42.input).addClass('chb42');
         $(cur_frm.fields_dict.partially_ok_42.input).addClass('chb42');
         $(cur_frm.fields_dict.not_ok_42.input).addClass('chb42');
@@ -357,7 +311,7 @@ frappe.ui.form.on("Crimping",{
         $(this).prop('checked', true);
         })
         $(cur_frm.fields_dict.ok_44.input).addClass('chb44');
-        $(cur_frm.fields_dict.partially_check_44.input).addClass('chb44');
+        $(cur_frm.fields_dict.partially_ok_44.input).addClass('chb44');
         $(cur_frm.fields_dict.not_ok_44.input).addClass('chb44');
         $(".chb44").change(function() {
         $(".chb44").prop('checked', false);
@@ -412,34 +366,6 @@ frappe.ui.form.on("Crimping",{
         $(".chb51").prop('checked', false);
         $(this).prop('checked', true);
         })
-        $(cur_frm.fields_dict.ok_52.input).addClass('chb52');
-        $(cur_frm.fields_dict.partially_ok_52.input).addClass('chb52');
-        $(cur_frm.fields_dict.not_ok_52.input).addClass('chb52');
-        $(".chb52").change(function() {
-        $(".chb52").prop('checked', false);
-        $(this).prop('checked', true);
-        })
-        $(cur_frm.fields_dict.ok_53.input).addClass('chb53');
-        $(cur_frm.fields_dict.partially_ok_53.input).addClass('chb53');
-        $(cur_frm.fields_dict.not_ok_53.input).addClass('chb53');
-        $(".chb53").change(function() {
-        $(".chb53").prop('checked', false);
-        $(this).prop('checked', true);
-        })
-        $(cur_frm.fields_dict.ok_54.input).addClass('chb54');
-        $(cur_frm.fields_dict.partially_ok_54.input).addClass('chb54');
-        $(cur_frm.fields_dict.not_ok_54.input).addClass('chb54');
-        $(".chb54").change(function() {
-        $(".chb54").prop('checked', false);
-        $(this).prop('checked', true);
-        })
-        $(cur_frm.fields_dict.ok_55.input).addClass('chb55');
-        $(cur_frm.fields_dict.partially_ok_55.input).addClass('chb55');
-        $(cur_frm.fields_dict.not_ok_55.input).addClass('chb55');
-        $(".chb55").change(function() {
-        $(".chb55").prop('checked', false);
-        $(this).prop('checked', true);
-        })
         $(cur_frm.fields_dict.ok_56.input).addClass('chb56');
         $(cur_frm.fields_dict.partially_ok_56.input).addClass('chb56');
         $(cur_frm.fields_dict.not_ok_56.input).addClass('chb56');
@@ -480,6 +406,48 @@ frappe.ui.form.on("Crimping",{
         $(cur_frm.fields_dict.not_ok_61.input).addClass('chb61');
         $(".chb61").change(function() {
         $(".chb61").prop('checked', false);
+        $(this).prop('checked', true);
+        })
+        $(cur_frm.fields_dict.ok_62.input).addClass('chb62');
+        $(cur_frm.fields_dict.partially_ok_62.input).addClass('chb62');
+        $(cur_frm.fields_dict.not_ok_62.input).addClass('chb62');
+        $(".chb62").change(function() {
+        $(".chb62").prop('checked', false);
+        $(this).prop('checked', true);
+        })
+        $(cur_frm.fields_dict.ok_63.input).addClass('chb63');
+        $(cur_frm.fields_dict.partially_ok_63.input).addClass('chb63');
+        $(cur_frm.fields_dict.not_ok_63.input).addClass('chb63');
+        $(".chb63").change(function() {
+        $(".chb63").prop('checked', false);
+        $(this).prop('checked', true);
+        })
+        $(cur_frm.fields_dict.ok_64.input).addClass('chb64');
+        $(cur_frm.fields_dict.partially_ok_64.input).addClass('chb64');
+        $(cur_frm.fields_dict.not_ok_64.input).addClass('chb64');
+        $(".chb64").change(function() {
+        $(".chb64").prop('checked', false);
+        $(this).prop('checked', true);
+        })
+        $(cur_frm.fields_dict.ok_65.input).addClass('chb65');
+        $(cur_frm.fields_dict.partially_ok_65.input).addClass('chb65');
+        $(cur_frm.fields_dict.not_ok_65.input).addClass('chb65');
+        $(".chb65").change(function() {
+        $(".chb65").prop('checked', false);
+        $(this).prop('checked', true);
+        })
+        $(cur_frm.fields_dict.ok_66.input).addClass('chb66');
+        $(cur_frm.fields_dict.partially_ok_66.input).addClass('chb66');
+        $(cur_frm.fields_dict.not_ok_66.input).addClass('chb66');
+        $(".chb66").change(function() {
+        $(".chb66").prop('checked', false);
+        $(this).prop('checked', true);
+        })
+        $(cur_frm.fields_dict.ok_67.input).addClass('chb67');
+        $(cur_frm.fields_dict.partially_ok_67.input).addClass('chb67');
+        $(cur_frm.fields_dict.not_ok_67.input).addClass('chb67');
+        $(".chb67").change(function() {
+        $(".chb67").prop('checked', false);
         $(this).prop('checked', true);
         })
     },
@@ -1744,102 +1712,6 @@ frappe.ui.form.on("Crimping",{
         }
     },
 
-    'ok_52': function(frm) {
-        if(frm.doc.ok_52){
-            frm.set_value("f4","1");
-        }
-        else{
-            frm.set_value("f4","");
-        }
-    },
-    'partially_ok_52': function(frm) {
-        if(frm.doc.partially_ok_52){
-            frm.set_value("f4","0.5");
-        }
-        else{
-            frm.set_value("f4","");
-        }
-    },
-    'not_ok_52': function(frm) {
-        if(frm.doc.not_ok_52){
-            frm.set_value("f4","0");
-        }
-        else{
-            frm.set_value("f4","");
-        }
-    },
-    'ok_53': function(frm) {
-        if(frm.doc.ok_53){
-            frm.set_value("f5","1");
-        }
-        else{
-            frm.set_value("f5","");
-        }
-    },
-    'partially_ok_53': function(frm) {
-        if(frm.doc.partially_ok_53){
-            frm.set_value("f5","0.5");
-        }
-        else{
-            frm.set_value("f5","");
-        }
-    },
-    'not_ok_53': function(frm) {
-        if(frm.doc.not_ok_53){
-            frm.set_value("f5","0");
-        }
-        else{
-            frm.set_value("f5","");
-        }
-    },
-    'ok_54': function(frm) {
-        if(frm.doc.ok_54){
-            frm.set_value("f6","1");
-        }
-        else{
-            frm.set_value("f6","");
-        }
-    },
-    'partially_ok_54': function(frm) {
-        if(frm.doc.partially_ok_54){
-            frm.set_value("f6","0.5");
-        }
-        else{
-            frm.set_value("f6","");
-        }
-    },
-    'not_ok_54': function(frm) {
-        if(frm.doc.not_ok_54){
-            frm.set_value("f6","0");
-        }
-        else{
-            frm.set_value("f6","");
-        }
-    },
-    'ok_55': function(frm) {
-        if(frm.doc.ok_55){
-            frm.set_value("f7","1");
-        }
-        else{
-            frm.set_value("f7","");
-        }
-    },
-    'partially_ok_55': function(frm) {
-        if(frm.doc.partially_ok_55){
-            frm.set_value("f7","0.5");
-        }
-        else{
-            frm.set_value("f7","");
-        }
-    },
-    'not_ok_55': function(frm) {
-        if(frm.doc.not_ok_55){
-            frm.set_value("f7","0");
-        }
-        else{
-            frm.set_value("f7","");
-        }
-    },
     'ok_56': function(frm) {
         if(frm.doc.ok_56){
             frm.set_value("s1","1");
@@ -1985,6 +1857,150 @@ frappe.ui.form.on("Crimping",{
             frm.set_value("cch","");
         }
     },
+    'ok_62': function(frm) {
+        if(frm.doc.ok_62){
+            frm.set_value("b_1","1");
+        }
+        else{
+            frm.set_value("b_1","");
+        }
+    },
+    'partially_ok_62': function(frm) {
+        if(frm.doc.partially_ok_62){
+            frm.set_value("b_1","0.5");
+        }
+        else{
+            frm.set_value("b_1","");
+        }
+    },
+    'not_ok_62': function(frm) {
+        if(frm.doc.not_ok_62){
+            frm.set_value("b_1","0");
+        }
+        else{
+            frm.set_value("b_1","");
+        }
+    },
+    'ok_63': function(frm) {
+        if(frm.doc.ok_63){
+            frm.set_value("b_2","1");
+        }
+        else{
+            frm.set_value("b_2","");
+        }
+    },
+    'partially_ok_63': function(frm) {
+        if(frm.doc.partially_ok_63){
+            frm.set_value("b_2","0.5");
+        }
+        else{
+            frm.set_value("b_2","");
+        }
+    },
+    'not_ok_63': function(frm) {
+        if(frm.doc.not_ok_63){
+            frm.set_value("b_2","0");
+        }
+        else{
+            frm.set_value("b_2","");
+        }
+    },
+    'ok_64': function(frm) {
+        if(frm.doc.ok_64){
+            frm.set_value("b_3","1");
+        }
+        else{
+            frm.set_value("b_3","");
+        }
+    },
+    'partially_ok_64': function(frm) {
+        if(frm.doc.partially_ok_64){
+            frm.set_value("b_3","0.5");
+        }
+        else{
+            frm.set_value("b_3","");
+        }
+    },
+    'not_ok_64': function(frm) {
+        if(frm.doc.not_ok_64){
+            frm.set_value("b_3","0");
+        }
+        else{
+            frm.set_value("b_3","");
+        }
+    },
+    'ok_65': function(frm) {
+        if(frm.doc.ok_65){
+            frm.set_value("b_4","1");
+        }
+        else{
+            frm.set_value("b_4","");
+        }
+    },
+    'partially_ok_65': function(frm) {
+        if(frm.doc.partially_ok_65){
+            frm.set_value("b_4","0.5");
+        }
+        else{
+            frm.set_value("b_4","");
+        }
+    },
+    'not_ok_65': function(frm) {
+        if(frm.doc.not_ok_65){
+            frm.set_value("b_4","0");
+        }
+        else{
+            frm.set_value("b_4","");
+        }
+    },
+    'ok_66': function(frm) {
+        if(frm.doc.ok_66){
+            frm.set_value("b_5","1");
+        }
+        else{
+            frm.set_value("b_5","");
+        }
+    },
+    'partially_ok_66': function(frm) {
+        if(frm.doc.partially_ok_66){
+            frm.set_value("b_5","0.5");
+        }
+        else{
+            frm.set_value("b_5","");
+        }
+    },
+    'not_ok_66': function(frm) {
+        if(frm.doc.not_ok_66){
+            frm.set_value("b_5","0");
+        }
+        else{
+            frm.set_value("b_5","");
+        }
+    },
+    'ok_67': function(frm) {
+        if(frm.doc.ok_67){
+            frm.set_value("b_6","1");
+        }
+        else{
+            frm.set_value("b_6","");
+        }
+    },
+    'partially_ok_67': function(frm) {
+        if(frm.doc.partially_ok_67){
+            frm.set_value("b_6","0.5");
+        }
+        else{
+            frm.set_value("b_6","");
+        }
+    },
+    'not_ok_67': function(frm) {
+        if(frm.doc.not_ok_67){
+            frm.set_value("b_6","0");
+        }
+        else{
+            frm.set_value("b_6","");
+        }
+    },
     validate:function(frm){
         if((frm.doc.iws) || (frm.doc.wslm)|| (frm.doc.tcsch)|| (frm.doc.chslc)|| (frm.doc.iwc)|| (frm.doc.mi) || (frm.doc.si)){
         frm.set_value("mark_obtained_a", flt(frm.doc.iws)+flt(frm.doc.wslm)+flt(frm.doc.tcsch)+flt(frm.doc.chslc)+flt(frm.doc.iwc)+flt(frm.doc.mi)+flt(frm.doc.si));
@@ -2002,7 +2018,7 @@ frappe.ui.form.on("Crimping",{
         frm.set_value("mark_obtained_d", flt(frm.doc.safe_1)+flt(frm.doc.safe_2)+flt(frm.doc.safe_3)+flt(frm.doc.safe_4)+flt(frm.doc.safe_5)+flt(frm.doc.safe_6)+flt(frm.doc.safe_7));
     }
         if((frm.doc.work_1) || (frm.doc.work_2)|| (frm.doc.work_3)|| (frm.doc.work_4)|| (frm.doc.wotk_5)|| (frm.doc.work_6) || (frm.doc.work_7)){
-        frm.set_value("mark_obtained_e", flt(frm.doc.work_1)+flt(frm.doc.work_2)+flt(frm.doc.work_3)+flt(frm.doc.work_4)+flt(frm.doc.work_5)+flt(frm.doc.work_6)+flt(frm.doc.work_7));
+        frm.set_value("mark_obtained_e", flt(frm.doc.work_1)+flt(frm.doc.work_2)+flt(frm.doc.work_3)+flt(frm.doc.work_4)+flt(frm.doc.wotk_5)+flt(frm.doc.work_6)+flt(frm.doc.work_7));
     }
         if((frm.doc.f1) || (frm.doc.f2)|| (frm.doc.f3)|| (frm.doc.f4)|| (frm.doc.f5)|| (frm.doc.f6) || (frm.doc.f7)){
         frm.set_value("mark_obtained_f", flt(frm.doc.f1)+flt(frm.doc.f2)+flt(frm.doc.f3)+flt(frm.doc.f4)+flt(frm.doc.f5)+flt(frm.doc.f6)+flt(frm.doc.f7));
@@ -2013,12 +2029,15 @@ frappe.ui.form.on("Crimping",{
         if((frm.doc.zs) || (frm.doc.rh)|| (frm.doc.cch)){
         frm.set_value("mark_obtained_h", flt(frm.doc.zs)+flt(frm.doc.rh)+flt(frm.doc.cch));
     }
-        if((frm.doc.productivity) || (frm.doc.work_quality)|| (frm.doc.discipline)){
-        frm.set_value("mark_obatained_i", flt(frm.doc.productivity)+flt(frm.doc.work_quality)+flt(frm.doc.discipline));
+        if((frm.doc.productivity) || (frm.doc.work_quality)|| (frm.doc.discipline) || (frm.doc.attendance) ){
+        frm.set_value("mark_obatained_i", flt(frm.doc.productivity)+flt(frm.doc.work_quality)+flt(frm.doc.discipline) +flt(frm.doc.attendance));
     }
-        if((frm.doc.mark_obtained_a) || (frm.doc.mark_obtained_b)|| (frm.doc.mark_obtained_c)|| (frm.doc.mark_obtained_d)|| (frm.doc.mark_obtained_e)|| (frm.doc.mark_obtained_f) || (frm.doc.mark_obtained_g) || (frm.doc.mark_obtained_h) || (frm.doc.mark_obatained_i) ){
-        frm.set_value("total_practical_mark_obtained", flt(frm.doc.mark_obtained_a)+flt(frm.doc.mark_obtained_b)+flt(frm.doc.mark_obtained_c)+flt(frm.doc.mark_obtained_d)+flt(frm.doc.mark_obtained_e)+flt(frm.doc.mark_obtained_f)+flt(frm.doc.mark_obtained_g)+flt(frm.doc.mark_obtained_h)+flt(frm.doc.mark_obatained_i));
+        if((frm.doc.b_1) || (frm.doc.b_2)|| (frm.doc.b_3) || (frm.doc.b_4) || (frm.doc.b_5)|| (frm.doc.b_6)){ 
+        frm.set_value("mark_obtained_j", flt(frm.doc.b_1)+flt(frm.doc.b_2)+flt(frm.doc.b_3)+flt(frm.doc.b_4) +flt(frm.doc.b_5) +flt(frm.doc.b_6));
+    }
+        if((frm.doc.mark_obtained_a) || (frm.doc.mark_obtained_b)|| (frm.doc.mark_obtained_c)|| (frm.doc.mark_obtained_d)|| (frm.doc.mark_obtained_e)|| (frm.doc.mark_obtained_f) || (frm.doc.mark_obtained_g) || (frm.doc.mark_obtained_h) || (frm.doc.mark_obatained_i) ||(frm.doc.mark_obtained_j) ){       
+        frm.set_value("total_practical_mark_obtained", flt(frm.doc.mark_obtained_a)+flt(frm.doc.mark_obtained_b)+flt(frm.doc.mark_obtained_c)+flt(frm.doc.mark_obtained_d)+flt(frm.doc.mark_obtained_e)+flt(frm.doc.mark_obtained_f)+flt(frm.doc.mark_obtained_g)+flt(frm.doc.mark_obtained_h)+flt(frm.doc.mark_obatained_i)+flt(frm.doc.mark_obtained_j));
     }
    }
+
 });
-    

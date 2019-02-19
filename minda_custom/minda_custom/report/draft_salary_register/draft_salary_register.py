@@ -16,7 +16,8 @@ def execute(filters=None):
 
     data = []
     for ss in salary_slips:
-        row = [ss.name, ss.employee, ss.employee_name, ss.contractor,ss.branch, ss.department, ss.designation,
+        doj = frappe.get_value("Employee",ss.employee,"date_of_joining")
+        row = [ss.name, ss.employee, ss.employee_name,doj, ss.contractor,ss.branch, ss.department, ss.designation,
             ss.grade,ss.company, ss.start_date, ss.end_date, ss.leave_without_pay, ss.total_working_days,ss.payment_days,ss.total_working_hours]
 
         if not ss.branch == None:columns[3] = columns[3].replace('-1','120')
@@ -49,7 +50,7 @@ def get_columns(salary_slips):
     ]
     """
     columns = [
-        _("Salary Slip ID") + ":Link/Salary Slip:150",_("Employee") + ":Link/Employee:120", _("Employee Name") + "::140",_("Contractor") + ":Link/Contractor:120", _("Branch") + ":Link/Branch:-1",
+        _("Salary Slip ID") + ":Link/Salary Slip:150",_("Employee") + ":Link/Employee:120",_("Employee Name") + "::140", _("DoJ") + ":Date:120",_("Contractor") + ":Link/Contractor:120", _("Branch") + ":Link/Branch:-1",
         _("Department") + ":Link/Department:-1", _("Designation") + ":Link/Designation:-1", _("Grade") + ":Link/Grade:120",
         _("Company") + ":Link/Company:120", _("Start Date") + "::80", _("End Date") + "::80", _("Leave Without Pay") + ":Float:-1",
         _("Working Days") + ":Float:120",_("Payment Days") + ":Float:120",_("OT Hours") + ":Float:120"
