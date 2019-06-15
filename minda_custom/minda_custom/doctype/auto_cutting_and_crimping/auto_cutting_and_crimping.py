@@ -10,3 +10,13 @@ class AutoCuttingandCrimping(Document):
     def autoname(self):
 		if self.employee_code and self.month_of_evaluation:
 			self.name = self.employee_code+"-"+self.month_of_evaluation
+
+
+@frappe.whitelist()
+def update_mis(employee,line):
+    doc = frappe.get_doc("Employee", employee)
+    doc.update({
+        "line": line
+    })
+    doc.save(ignore_permissions=True)
+    frappe.db.commit()

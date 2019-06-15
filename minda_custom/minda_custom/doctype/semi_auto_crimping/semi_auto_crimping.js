@@ -1560,6 +1560,22 @@ frappe.ui.form.on('Semi Auto Crimping', {
     },
     after_save:function(frm){
         frm.trigger("onload");
+        if(frm.doc.employee_code){
+            frm.add_custom_button(__('Update Employee MIS'), function () {
+                frappe.call({
+                    method: "minda_custom.minda_custom.doctype.assembly_evaluation.assembly_evaluation.update_mis",
+                    args: { 
+                        "employee": frm.doc.employee_code,
+                        "line": frm.doc.line_name
+                    },
+                    freeze: true,
+                    freeze_message: __("Updating"),
+                    callback: function(r){
+                        frappe.msgprint("Updated Successfully")
+                    }
+                })
+            });
+        }
     },
    onload: function(frm) {
         $(cur_frm.fields_dict.ok.input).addClass('chb');
@@ -1962,8 +1978,7 @@ frappe.ui.form.on('Semi Auto Crimping', {
         $(this).prop('checked', true);
         })
         $(cur_frm.fields_dict.ok_65.input).addClass('chb65');
-        $(cur_frm.fields_dict.partially_ok_65.
-        ).addClass('chb65');
+        $(cur_frm.fields_dict.partially_ok_65.input).addClass('chb65');
         $(cur_frm.fields_dict.not_ok_65.input).addClass('chb65');
         $(".chb65").change(function() {
         $(".chb65").prop('checked', false);
@@ -2036,6 +2051,9 @@ frappe.ui.form.on('Semi Auto Crimping', {
     }
         if((frm.doc.mark_obtained_a) || (frm.doc.mark_obtained_b)|| (frm.doc.mark_obtained_c)|| (frm.doc.mark_obtained_d)|| (frm.doc.mark_obtained_e)|| (frm.doc.mark_obtained_f) || (frm.doc.mark_obtained_g) || (frm.doc.mark_obtained_h) || (frm.doc.mark_obatained_i) ||(frm.doc.mark_obtained_j) ){       
         frm.set_value("total_practical_mark_obtained", flt(frm.doc.mark_obtained_a)+flt(frm.doc.mark_obtained_b)+flt(frm.doc.mark_obtained_c)+flt(frm.doc.mark_obtained_d)+flt(frm.doc.mark_obtained_e)+flt(frm.doc.mark_obtained_f)+flt(frm.doc.mark_obtained_g)+flt(frm.doc.mark_obtained_h)+flt(frm.doc.mark_obatained_i)+flt(frm.doc.mark_obtained_j));
+    }
+    if((!frm.doc.mark_obtained_a) && (!frm.doc.mark_obtained_b) && (!frm.doc.mark_obtained_c) && (!frm.doc.mark_obtained_d) && (!frm.doc.mark_obtained_e) && (!frm.doc.mark_obtained_f) && (!frm.doc.mark_obtained_g) && (!frm.doc.mark_obtained_h) && (!frm.doc.mark_obatained_i) && (!frm.doc.mark_obtained_j) ){       
+        frm.set_value("is_evaluate", 0 ) 
     }
    }
 

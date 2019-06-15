@@ -24,6 +24,9 @@ def attendance():
     g_max_time = datetime.strptime('09:30', '%H:%M')
     userid = frappe.form_dict.get("userid")
     stgid = frappe.form_dict.get("stgid")
+    time_with_date = time.strftime("%Y-%m-%d %X", time.gmtime(
+            int(frappe.form_dict.get("att_time"))))
+    # create_attlog(userid,time_with_date)
     employee = frappe.db.get_value("Employee", {
         "biometric_id": userid, "status": "Active"})
     if employee:
@@ -33,13 +36,17 @@ def attendance():
         time_m = time.strftime("%H:%M:%S", time.gmtime(
             int(frappe.form_dict.get("att_time"))))
 
-        time_with_date = time.strftime("%Y-%m-%d %X", time.gmtime(
-            int(frappe.form_dict.get("att_time"))))
-
         time_with_date_f = datetime.strptime(
             time_with_date, "%Y-%m-%d %H:%M:%S")
 
         doc = frappe.get_doc("Employee", employee)
+        
+        if doc.employment_type != 'Contract':
+            userid = frappe.form_dict.get("userid")
+            biotime = frappe.form_dict.get("att_time")
+            stgid = frappe.form_dict.get("stgid")
+            create_pr(userid,biotime,stgid)
+
         prev_day = False
         if time.strptime(time_m, '%H:%M:%S') < min_time:
             date = add_days(date, -1)
@@ -89,6 +96,7 @@ def attendance():
                 "employee": employee,
                 "employee_name": doc.employee_name,
                 "contractor": doc.contractor,
+                "employment_type": doc.employment_type,
                 "line": doc.line,
                 "attendance_date": date,
                 "status": "Present",
@@ -215,3 +223,117 @@ def attendance():
         #                 return "ok"
         #             frappe.response.type = "text"
         #             return "ok"
+@frappe.whitelist()        
+def create_pr(user,ptime,stgid):
+    date = time.strftime("%Y-%m-%d", time.gmtime(
+            int(ptime)))
+
+    attendance_date = time.strftime("%Y-%m-%d %X", time.gmtime(
+        int(ptime)))
+
+    time_m = time.strftime("%H:%M:%S", time.gmtime(
+        int(ptime)))
+    employee = frappe.db.get_value("Employee", {
+        "biometric_id": user, "status": "Active"})
+    if employee:
+        doc = frappe.get_doc("Employee", employee)
+        pr_id = frappe.db.get_value("Punch Record", {
+            "employee": employee, "attendance_date": date})
+        if pr_id:
+            pr = frappe.get_doc("Punch Record", pr_id)
+            already_exist = False
+            for t in pr.timetable:
+                if str(t.punch_time) == time_m:
+                    already_exist = True
+            if not already_exist:
+                pr.append("timetable", {
+                    "punch_time": time_m
+                })
+                pr.save(ignore_permissions=True)
+        else:
+            pr = frappe.new_doc("Punch Record")
+            pr.biotime = ptime
+            pr.stgid = stgid
+            pr.employee = employee
+            pr.employee_name = doc.employee_name
+            pr.attendance_date = date
+            pr.append("timetable", {
+                "punch_time": time_m
+            })
+            pr.insert()
+            pr.save(ignore_permissions=True)
+            frappe.db.commit()
+    else:
+        pr = frappe.new_doc("Punch Record")
+        pr.biotime = ptime
+        pr.stgid = stgid
+        pr.unregistered_employee = user
+        pr.attendance_date = date
+        pr.append("timetable", {
+            "punch_time": time_m
+        })
+        # pr.insert()
+        pr.save(ignore_permissions=True)
+        frappe.db.commit()
+
+
+
+
+
+@frappe.whitelist()
+def create_attlog(day):
+    import requests
+    from xml.etree import ElementTree
+    from lxml import etree
+    from StringIO import StringIO
+
+    employees = frappe.get_all(
+        "Employee", {"status": "Active", "employment_type":"Staff"})
+    for emp in employees:
+        emp = emp.name
+        punch_record = frappe.db.exists(
+            "Punch Record", {"attendance_date": day, "employee": emp})
+        if punch_record:
+            days = []
+            pr = frappe.get_doc("Punch Record", punch_record)
+            for t in pr.timetable:
+                time_f = datetime.strptime(str(t.punch_time),'%H:%M:%S').time()
+                day_f = datetime.combine(pr.attendance_date,time_f)
+                day_f= datetime.strftime(day_f,'%d-%b-%Y %H:%M:%S')
+                url = "http://115.124.107.68:9753/TPI/ThirdPartyIntegrationService.asmx/InsertEmployeeThumbLogFromBiometricDevice"
+                headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+                data = {'CompanyID': '122', 'MachineEnrollNo': emp, 'MachineThumbTime': day_f, 'MachineName': '192.168.137.211'}
+                r = requests.post(url,headers=headers,data=data)
+                tree = etree.parse(StringIO((r.content)))
+                res = tree.xpath('//text()')[0]
+        
+                if res == '@Thumb Log Already Saved':
+                    frappe.errprint(res)
+                    frappe.msgprint("""Attendance is Already fetched for %s and for time %s"""%(emp,day_f))
+                elif res == '@Repeated Thumb Log Within 10 Minute Discarded':
+                    frappe.errprint(res)
+                    frappe.msgprint("""Repeated Thumb Log Within 10 Minute for %s and for time %s"""%(emp,day_f))
+                elif res == '@Salary Process Completed For This Month, Cannot Add Attendance': 
+                    frappe.errprint(res)
+                    frappe.msgprint("""Salary Process Completed For This Month, Cannot Add Attendance""")   
+                elif res == 'Successfull':
+                    frappe.errprint(res)
+                    frappe.msgprint("""Attendance is updated for %s and for time %s"""%(emp,day_f))
+                else:
+                    frappe.errprint(r.url)
+                    frappe.errprint(data)
+                    frappe.msgprint(res)
+
+
+    
+
+@frappe.whitelist()
+def fetch_from_ui(from_date,to_date):
+    from_date = (datetime.strptime(str(from_date), '%Y-%m-%d')).date()
+    to_date = (datetime.strptime(str(to_date), '%Y-%m-%d')).date()
+    for preday in daterange(from_date, to_date):
+        create_attlog(preday)
+
+def daterange(date1, date2):
+    for n in range(int((date2 - date1).days)+1):
+        yield date1 + timedelta(n)

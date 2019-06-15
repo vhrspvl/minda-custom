@@ -3,6 +3,7 @@
 # For license information, please see license.txt
 
 import frappe
+import json
 from frappe.utils.data import today
 from frappe import _
 from frappe.utils import formatdate, getdate, cint, add_months, date_diff, add_days, flt, cstr
@@ -50,7 +51,7 @@ def send_daily_att_report():
     }]
     frappe.sendmail(
         recipients=['loganathan.k@mindasai.com',
-                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com', 'abdulla.pi@voltechgroup.com'],
+                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com'],
         subject='Employee Attendance Report - ' +
         formatdate(add_days(today(), -1)),
         message='Kindly find the attached Excel Sheet of Daily Attendance Report of' + formatdate(
@@ -73,7 +74,7 @@ def send_daily_linewise_report():
     }]
     frappe.sendmail(
         recipients=['loganathan.k@mindasai.com', 
-                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com', 'abdulla.pi@voltechgroup.com'],
+                    'ajay.agrawal@mindasai.com', 'kennedy.j@mindasai.com'],
         subject='Employee Attendance Report - ' +
         formatdate(add_days(today(), -1)),
         message='Kindly find the attached Excel Sheet of Linewise Count Report of' + formatdate(
@@ -119,6 +120,18 @@ def update_in_biometric_machine(uid, uname):
         r = requests.post(url)
     return r.content
 
+@frappe.whitelist()
+def delete_nc():
+    left_employees = frappe.get_list(
+        "Employee", fields=["biometric_id","name"], filters={"employment_type": ('!=',"Staff")})
+    # print left_employees
+    for l in left_employees:
+        stgid = 'ST-KY18000197'
+        uid = l.biometric_id
+        url = "http://robot.camsunit.com/external/1.0/user/delete?uid=%s&stgid=%s" % (
+            uid, stgid)
+        r = requests.post(url)
+        print r.content
 
 @frappe.whitelist()
 def delete_bulk():
@@ -309,6 +322,7 @@ def removeduplicateatt():
             obj.db_set("docstatus", 2)
             frappe.delete_doc("Attendance", obj.name)
             frappe.db.commit()
+        removeduplicateatt()    
 
 @frappe.whitelist()
 def emp_sunday_attendance():
@@ -361,12 +375,12 @@ def van_rate_calculator():
                     })
                     vrc.save(ignore_permissions=True)
 
-@frappe.whitelist()
-def check_duplicate_employee():
-    from frappeclient import FrappeClient
-    client = FrappeClient("http://59.144.18.187", "Administrator", "mindaadmin@1234")
-    emp = client.get_doc('Employee',fields=["employee_name", "biometric_id"])
-    print emp
+# @frappe.whitelist()
+# def check_duplicate_employee():
+#     from frappeclient import FrappeClient
+#     client = FrappeClient("http://59.144.18.187", "Administrator", "mindaadmin@1234")
+#     emp = client.get_doc('Employee',fields=["employee_name", "biometric_id"])
+#     print emp
 
 
 @ frappe.whitelist()
@@ -399,14 +413,27 @@ def holiday_att():
                 att.submit()
                 frappe.db.commit()
 
-                        
+@frappe.whitelist()
+def update_from_csv(filename):
+    from frappe.utils.csvutils import read_csv_content
+    from frappe.utils.file_manager import get_file
+    _file = frappe.get_doc("File", {"file_name": filename})
+    filepath = get_file(filename)
+    pps = read_csv_content(filepath[1])
+    # print len(pps)
+    for pp in pps:
+        # pp1 = datetime.strptime(pp[1], '%d-%m-%Y').strftime('%Y-%m-%d')pp[0]
+        ss = frappe.get_value("Salary Slip",{"employee":pp[0],"posting_date":'2019-05-02'})  
+        print ss
+
 @frappe.whitelist()
 def delete_sse():
-    get_emp = frappe.db.sql("""SELECT name,employee_number,grade,relieving_date FROM `tabEmployee` WHERE status = "Left" and relieving_date < '2018-09-31'""",as_dict=1)
+    get_emp = frappe.db.sql("""SELECT name,employee_number,grade,is_deleted_from_ss,biometric_id,relieving_date FROM `tabEmployee` WHERE status = "Left" and relieving_date < '2019-01-01'""",as_dict=1)
     for emp in get_emp:
         obj = frappe.db.get_value('Salary Structure Employee',{'employee': emp.name} ,'name')
         frappe.delete_doc("Salary Structure Employee", obj)
         frappe.db.commit() 
+        frappe.db.set_value("Employee",emp.name,"is_deleted_from_ss",1)
 
 
 @frappe.whitelist()
@@ -437,3 +464,48 @@ def update_questions(doc, method):
                 "status": doc.status
             })
             questions_Set1.save(ignore_permissions=True)
+
+
+
+# @frappe.whitelist()
+# def update_status(doc,method):
+#     crimping = frappe.db.exists("Auto Cutting and Crimping",{"employee_code": doc.name})
+#     if crimping:
+#         komax = frappe.get_doc("Auto Cutting and Crimping", {"employee_code":doc.name})
+#         if doc.status != komax.status:
+#             komax.update({
+#                 "status": doc.status
+#             })
+#             komax.save(ignore_permissions=True)
+#     komaxes = frappe.get_all("Semi Auto Crimping",{"employee_code": doc.name})
+#     if komaxes:
+#         komax = frappe.get_doc("Semi Auto Crimping", {"employee_code":doc.name})
+#         if doc.status != komax.status:
+#             komax.update({
+#                 "status": doc.status
+#             })
+#             komax.save(ignore_permissions=True)
+
+@frappe.whitelist()
+def approve_reject_employee(names,status):
+    names = json.loads(names)
+    for name in names:
+        emp = frappe.get_doc("Employee",name)
+        emp.update({
+            "workflow_state":status
+        })
+        emp.save(ignore_permissions=True)
+        # emp.submit()
+        frappe.db.commit()
+
+# def update_is_evaluate():
+#     komax = frappe.get_all("Auto Cutting and Crimping",fields=["name"],filters={"legend": "L1-Trainee","status": "Active"})
+#     for k in komax:
+#         ko = frappe.get_doc("Auto Cutting and Crimping", k.name)
+#         if ko.ok==1 or ko.partially_ok==1 or ko.not_ok==1:
+#             ko.update({
+#                 "is_evaluate": 1
+#             })
+#             ko.save(ignore_permissions=True)
+
+

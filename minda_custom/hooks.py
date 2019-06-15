@@ -80,9 +80,9 @@ app_license = "MIT"
 # Hook on document methods and events
 
 doc_events = {
-    "Employee": {
-        "on_update": "minda_custom.custom.update_questions"
-    },
+    # "Employee": {
+    #     "on_update": "minda_custom.custom.update_status"
+    # },
 # 		"on_update": "method",
 # 		"on_cancel": "method",
 # 		"on_trash": "method"
@@ -93,9 +93,9 @@ doc_events = {
 # ---------------
 
 scheduler_events = {
-    # 	"all": [
-    # 		"minda_custom.tasks.all"
-    # 	],
+    "all": [
+        "minda_custom.custom.removeduplicateatt"
+    ],
 
     "daily_long": [
         "minda_custom.custom.emp_absent_today",
@@ -116,9 +116,9 @@ scheduler_events = {
     #         "minda_custom.custom.send_xlsx_report"
     #     ]
     # }
-    "hourly": [
-        "minda_custom.custom.removeduplicateatt"
-    ],
+    # "hourly": [
+    #     "minda_custom.custom.removeduplicateatt"
+    # ],
     # 	"weekly": [
     # 		"minda_custom.tasks.weekly"
     # 	]

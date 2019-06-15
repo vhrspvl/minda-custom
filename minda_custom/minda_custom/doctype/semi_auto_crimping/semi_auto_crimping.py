@@ -28,3 +28,14 @@ def update_choose_question(choose_question):
         exist_cq.save(ignore_permissions=True)
         frappe.db.commit()
         return "OK"
+
+
+
+@frappe.whitelist()
+def update_mis(employee,line):
+    doc = frappe.get_doc("Employee", employee)
+    doc.update({
+        "line": line
+    })
+    doc.save(ignore_permissions=True)
+    frappe.db.commit()

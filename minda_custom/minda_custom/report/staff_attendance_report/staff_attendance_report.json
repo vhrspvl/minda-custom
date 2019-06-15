@@ -1,0 +1,34 @@
+{
+ "add_total_row": 1, 
+ "apply_user_permissions": 1, 
+ "creation": "2019-05-04 11:52:08.829301", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "Assy", 
+ "modified": "2019-05-04 11:52:08.829301", 
+ "modified_by": "Administrator", 
+ "module": "Minda Custom", 
+ "name": "Staff Attendance Report", 
+ "owner": "Administrator", 
+ "query": "SELECT\n    `tabEmployee`.name as \"Employee:Link/Employee:120\",\n    `tabEmployee`.biometric_id as \"Employee ID::120\",\n    `tabEmployee`.employee_name as \"Employee Name::120\",\t\n    `tabEmployee`.contractor as \"Contractor:Link/Contractor:120\",\n    `tabEmployee`.department as \"Department::120\",\n    `tabAttendance`.attendance_date as \"Attendance Date:Date:120\", \n    `tabAttendance`.in_time as \"In Time::120\",\n    `tabAttendance`.out_time as \"Out Time::120\",\n    `tabAttendance`.status as \"Status::120\"\t\t   \nFROM\n    `tabAttendance`\n     left join `tabEmployee` on (\n\t\t\t`tabAttendance`.employee =`tabEmployee`.name\n\t)\nWHERE\n     `tabEmployee`.status = 'Active' and `tabEmployee`.employment_type='Staff'\t\nORDER BY\n     `tabAttendance`.attendance_date asc", 
+ "ref_doctype": "Attendance", 
+ "report_name": "Staff Attendance Report", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "System Manager"
+  }, 
+  {
+   "role": "HR User"
+  }, 
+  {
+   "role": "HR Manager"
+  }, 
+  {
+   "role": "DEO"
+  }
+ ]
+}

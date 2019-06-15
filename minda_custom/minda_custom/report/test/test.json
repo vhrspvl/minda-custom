@@ -1,0 +1,28 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 0, 
+ "creation": "2019-02-20 15:13:17.777008", 
+ "disabled": 1, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "Minda - Crimping", 
+ "modified": "2019-02-27 17:43:20.841119", 
+ "modified_by": "Administrator", 
+ "module": "Minda Custom", 
+ "name": "Test", 
+ "owner": "Administrator", 
+ "query": "select `tabEmployee`.`biometric_id`,\n`tabEmployee`.`employee_name`,\n`tabEmployee`.`date_of_joining`,\n`tabEmployee`.`line`,\n`tabSemi Auto Crimping`.`date_of_skill_evaluatation`,\n`tabSemi Auto Crimping`.`month_of_evaluation`\n FROM `tabEmployee`\nleft join `tabSemi Auto Crimping` on `tabEmployee`.`biometric_id`=`tabSemi Auto Crimping`.`employee_code`\nwhere `tabEmployee`.`status` = \"Active\" and `tabEmployee`.`line` like '%%crim%%'", 
+ "ref_doctype": "Semi Auto Crimping", 
+ "report_name": "Test", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "System Manager"
+  }, 
+  {
+   "role": "Training Manager"
+  }
+ ]
+}

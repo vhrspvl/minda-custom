@@ -8,7 +8,7 @@
  "idx": 0, 
  "is_standard": "Yes", 
  "letter_head": "Minda1", 
- "modified": "2019-02-19 10:42:22.682546", 
+ "modified": "2019-02-27 12:31:31.882676", 
  "modified_by": "Administrator", 
  "module": "Minda Custom", 
  "name": "Skill Evaluation Report - Crimping", 
@@ -16,7 +16,7 @@
  "query": "SELECT\nemp.`employee` AS \"Employee Code:Link/Employee:100\",\nemp.`employee_name` AS \"Employee Name:Data:100\",\nemp.`date_of_joining` AS \"DoJ:Date:100\",\nemp.`line` AS \"Line:Link/Line:100\",\nCASE\nWHEN `tabSemi Auto Crimping`.`month_of_evaluation` != \"\" THEN  `tabSemi Auto Crimping`.`month_of_evaluation`\nELSE \"-\"\nEND AS \"MoE::100\"\nFROM\n`tabEmployee` emp\nLEFT JOIN\n`tabSemi Auto Crimping`\nON emp.`employee` = `tabSemi Auto Crimping`.`employee_code`\nWHERE\nemp.`status`='Active'\nORDER BY emp.`date_of_joining` ASC", 
  "ref_doctype": "Semi Auto Crimping", 
  "report_name": "Skill Evaluation Report - Crimping", 
- "report_type": "Query Report", 
+ "report_type": "Script Report", 
  "roles": [
   {
    "role": "System Manager"

@@ -8,15 +8,15 @@
  "idx": 0, 
  "is_standard": "Yes", 
  "letter_head": "Minda1", 
- "modified": "2019-02-13 17:40:35.515113", 
+ "modified": "2019-02-27 12:29:45.286868", 
  "modified_by": "Administrator", 
  "module": "Minda Custom", 
  "name": "Skill Evaluation Report", 
  "owner": "Administrator", 
- "query": "SELECT\nemp.`employee` AS \"Employee Code:Link/Employee:100\",\nemp.`employee_name` AS \"Employee Name:Data:100\",\nemp.`date_of_joining` AS \"DoJ:Date:100\",\nemp.`line` AS \"Line:Link/Line:100\",\nCASE\nWHEN `tabAuto Cutting and Crimping`.`month_of_evaluation` != \"\" THEN  `tabAuto Cutting and Crimping`.`month_of_evaluation`\nELSE \"-\"\nEND AS \"MoE::100\"\nFROM\n`tabEmployee` emp\nLEFT JOIN\n`tabAuto Cutting and Crimping`\nON emp.`employee` = `tabAuto Cutting and Crimping`.`employee_code`\nWHERE\nemp.`status`='Active'\nORDER BY emp.`date_of_joining` ASC\n\n", 
+ "query": "select `tabEmployee`.`biometric_id`,\n`tabEmployee`.`employee_name`,\n`tabEmployee`.`date_of_joining`,\n`tabEmployee`.`line`,\n`tabAuto Cutting and Crimping`.`date_of_skill_evaluatation`,\n`tabAuto Cutting and Crimping`.`month_of_evaluation`\n FROM `tabEmployee`\nleft join `tabAuto Cutting and Crimping` on `tabEmployee`.`biometric_id`=`tabAuto Cutting and Crimping`.`employee_code`\nwhere `tabEmployee`.`status` = \"Active\" and `tabEmployee`.`line` = 'komax'", 
  "ref_doctype": "Auto Cutting and Crimping", 
  "report_name": "Skill Evaluation Report", 
- "report_type": "Query Report", 
+ "report_type": "Script Report", 
  "roles": [
   {
    "role": "System Manager"

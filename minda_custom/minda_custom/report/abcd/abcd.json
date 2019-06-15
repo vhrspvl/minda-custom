@@ -1,0 +1,28 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2019-02-20 14:57:56.607056", 
+ "disabled": 1, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "Minda - Crimping", 
+ "modified": "2019-02-27 17:43:31.688111", 
+ "modified_by": "Administrator", 
+ "module": "Minda Custom", 
+ "name": "abcd", 
+ "owner": "Administrator", 
+ "query": "select `tabEmployee`.`employee_name` from `tabEmployee`,`tabSemi Auto Crimping` where `tabEmployee`.`employee`!=`tabSemi Auto Crimping`.`employee_code` group by `tabEmployee`.`employee_name`;", 
+ "ref_doctype": "Semi Auto Crimping", 
+ "report_name": "abcd", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "System Manager"
+  }, 
+  {
+   "role": "Training Manager"
+  }
+ ]
+}

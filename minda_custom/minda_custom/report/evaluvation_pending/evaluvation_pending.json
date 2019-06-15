@@ -1,0 +1,28 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 0, 
+ "creation": "2019-02-23 12:08:28.434259", 
+ "disabled": 1, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "Minda1", 
+ "modified": "2019-03-09 11:41:50.400179", 
+ "modified_by": "Administrator", 
+ "module": "Minda Custom", 
+ "name": "evaluvation pending", 
+ "owner": "Administrator", 
+ "query": "select `tabEmployee`.`biometric_id`\n FROM `tabEmployee`\nwhere  ,`tabEmployee`.`status` = \"Active\" ,`tabEmployee`.`biometric_id` NOT EXISTS{\nselect `tabAuto Cutting and Crimping`.`employee_code` \nfrom `tabAuto Cutting and Crimping`\nwhere `tabAuto Cutting and Crimping`.`status` = \"Active\"\n}\n", 
+ "ref_doctype": "Auto Cutting and Crimping", 
+ "report_name": "evaluvation pending", 
+ "report_type": "Script Report", 
+ "roles": [
+  {
+   "role": "System Manager"
+  }, 
+  {
+   "role": "Training Manager"
+  }
+ ]
+}

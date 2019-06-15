@@ -204,7 +204,7 @@ def get_columns():
         _("Grade") + ":Data:100",
         _("Leave Without Pay") + ":Data:100",
         _("Working Days") + ":Data:100",
-        _("Payment Days") + ":Int:100",
+        _("Payment Days") + ":Float:100",
         _("OT Hours") + ":Float:100",
         _("Per Day Basic") + ":Currency:100",
         _("Per Day Wages") + ":Currency:100",
